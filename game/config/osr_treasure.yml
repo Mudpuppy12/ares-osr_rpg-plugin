@@ -1,0 +1,24 @@
+---
+osr:
+  treasure_tables:
+    dungeon_loot:
+      name: Dungeon Loot (gp)
+      dice: 3d6
+      multiplier: 10
+    minor_hoard:
+      name: Minor Hoard (gp)
+      dice: 2d6
+      multiplier: 100
+    major_hoard:
+      name: Major Hoard (gp)
+      dice: 1d6
+      multiplier: 1000
+  monster_xp:
+    by_hd:
+      '1': 10
+      '2': 20
+      '3': 35
+      '4': 75
+      '5': 175
+      '6': 275
+      default: 400

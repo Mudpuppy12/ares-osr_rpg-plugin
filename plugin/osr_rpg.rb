@@ -38,6 +38,48 @@ module AresMUSH
           return ResetCmd
         when 'levelup'
           return LevelupCmd
+        when 'attack'
+          return AttackCmd
+        when 'save'
+          return SaveCmd
+        when 'skill'
+          return SkillRollCmd
+        when 'check'
+          return CheckCmd
+        when 'dice'
+          return DiceCmd
+        when 'hp'
+          return HpCmd
+        when 'hp/set'
+          return HpCmd
+        when 'ac'
+          return AcCmd
+        when 'prepare'
+          return PrepareCmd
+        when 'cast'
+          return CastCmd
+        when 'learn'
+          return LearnCmd
+        when 'rest'
+          return RestCmd
+        when 'combat'
+          return CombatCmd
+        when 'backstab'
+          return BackstabCmd
+        when 'turn'
+          return TurnCmd
+        when 'track'
+          return TrackCmd
+        when 'explore'
+          return ExploreCmd
+        when 'equip', 'unequip'
+          return EquipCmd
+        when 'gear'
+          return GearCmd
+        when 'treasure'
+          return TreasureCmd
+        when 'npc'
+          return NpcCmd
         when 'xp'
           return XpCmd if cmd.args.blank?
           return XpAwardCmd
@@ -62,8 +104,16 @@ module AresMUSH
         return SceneSheetRequestHandler
       when 'osrRpgSceneRoll'
         return SceneRollRequestHandler
+      when 'osrRpgSceneCombat'
+        return SceneCombatRequestHandler
       when 'osrRpgLevelUp'
         return LevelUpRequestHandler
+      when 'osrRpgAdjustHp'
+        return AdjustHpRequestHandler
+      when 'osrRpgSpendExpertise'
+        return SpendExpertiseRequestHandler
+      when 'osrRpgSpellAction'
+        return SpellActionRequestHandler
       end
       nil
     end
@@ -85,6 +135,5 @@ module AresMUSH
     end
   end
 
-  # Ares plugin loader matches folder name `osr_rpg` to constant Osr_rpg (case-insensitive).
   Osr_rpg = OsrRpg unless const_defined?(:Osr_rpg)
 end

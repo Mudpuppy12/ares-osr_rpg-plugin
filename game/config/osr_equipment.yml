@@ -1,0 +1,35 @@
+---
+osr:
+  equipment:
+    armor:
+      none:
+        name: Unarmored
+        ac: 9
+      leather:
+        name: Leather
+        ac: 7
+      chain:
+        name: Chain Mail
+        ac: 5
+      plate:
+        name: Plate Mail
+        ac: 3
+      shield:
+        name: Shield
+        ac_bonus: -1
+    weapons:
+      dagger:
+        name: Dagger
+        damage: 1d4
+      sword:
+        name: Sword
+        damage: 1d8
+      mace:
+        name: Mace
+        damage: 1d6
+      spear:
+        name: Spear
+        damage: 1d6
+      bow:
+        name: Short Bow
+        damage: 1d6

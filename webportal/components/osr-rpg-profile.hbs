@@ -34,8 +34,11 @@
             <span class="text-muted">Need {{this.sheet.xp_to_next_level}} XP for next level.</span>
           {{/if}}
           {{#if (gt this.sheet.expertise_unspent 0)}}
-            <span class="osr-rpg-pool-chip">{{this.sheet.expertise_unspent}} expertise unspent — use <code>osr_rpg/skills</code></span>
+            <span class="osr-rpg-pool-chip">{{this.sheet.expertise_unspent}} expertise unspent</span>
           {{/if}}
+          <button type="button" class="btn btn-sm btn-outline-secondary" disabled={{this.isBusy}} {{on 'click' (fn this.adjustHp -1)}}>-1 HP</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" disabled={{this.isBusy}} {{on 'click' (fn this.adjustHp 1)}}>+1 HP</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" disabled={{this.isBusy}} {{on 'click' this.restSpells}}>Rest</button>
           {{#if this.sheet.playtest}}
             <span class="osr-rpg-pool-chip text-warning">Playtest class</span>
           {{/if}}
@@ -91,6 +94,7 @@
         <div class="osr-rpg-sheet-section-title">Combat</div>
         <div class="osr-rpg-combat-strip">
           <span class="osr-rpg-combat-chip">HP <b>{{this.sheet.hp}}</b>/{{this.sheet.hp_max}}</span>
+          <span class="osr-rpg-combat-chip">AC <b>{{this.sheet.ac}}</b></span>
           <span class="osr-rpg-combat-chip">THAC0 <b>{{this.sheet.thac0}}</b></span>
           {{#if this.sheet.hd_display}}
             <span class="osr-rpg-combat-chip">HD <b>{{this.sheet.hd_display}}</b></span>
@@ -146,6 +150,19 @@
               <p class="osr-rpg-spell-note">Full {{this.sheet.spell_tradition}} list access</p>
             {{/if}}
 
+            {{#if this.sheet.prepared_spells}}
+              <div class="osr-rpg-spell-slots">
+                <span class="osr-rpg-spell-label">Prepared:</span>
+                {{#each this.sheet.prepared_spells as |prep|}}
+                  <span class="osr-rpg-skill-chip">L{{prep.level}}:
+                    {{#each prep.spells as |spell idx|}}{{unless (eq idx 0) ', '}}{{spell}}{{/each}}
+                  </span>
+                {{/each}}
+              </div>
+            {{/if}}
+            {{#if this.sheet.equipment}}
+              <p class="osr-rpg-spell-note">Gear: {{#each this.sheet.equipment as |item|}}<span class="osr-rpg-skill-chip">{{item.name}}</span>{{/each}}</p>
+            {{/if}}
             {{#if this.sheet.spell_book}}
               {{#each-in this.sheet.spell_book as |lvl spells|}}
                 {{#if (eq lvl "1")}}

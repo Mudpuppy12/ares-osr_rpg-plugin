@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { A } from '@ember/array';
 
 export default Component.extend({
   tagName: '',
@@ -18,18 +17,18 @@ export default Component.extend({
   showCombatTracker: false,
 
   sheet: null,
+  combat: null,
   saveCategory: 'death',
   skillKey: null,
   abilityKey: 'str',
   abilityTarget: '',
+  attackTargetAc: '',
   diceString: '1d20',
   isRolling: false,
-
-  combatants: null,
+  isCombatLoading: false,
 
   didInsertElement() {
     this._super(...arguments);
-    this.set('combatants', A([]));
     this.loadSheet();
   },
 
@@ -47,8 +46,8 @@ export default Component.extend({
     return (this.sheet && this.sheet.thief_skills) || [];
   }),
 
-  sortedCombatants: computed('combatants.@each.initiative', function() {
-    return (this.combatants || []).slice().sort((a, b) => (b.initiative || 0) - (a.initiative || 0));
+  sortedCombatants: computed('combat.combatants.@each.initiative', function() {
+    return (this.combat && this.combat.combatants) || [];
   }),
 
   playDiceSound() {
@@ -76,6 +75,21 @@ export default Component.extend({
       });
   },
 
+  loadCombat() {
+    let sceneId = this.get('scene.id');
+    if (!sceneId) { return Promise.resolve(); }
+    this.set('isCombatLoading', true);
+    return this.gameApi.requestOne('osrRpgSceneCombat', { id: sceneId, action: 'get' }, null)
+      .then((response) => {
+        if (!response.error) {
+          this.set('combat', response);
+        }
+      })
+      .finally(() => {
+        this.set('isCombatLoading', false);
+      });
+  },
+
   sceneRoll(rollType, extra) {
     let api = this.gameApi;
     let sceneId = this.get('scene.id');
@@ -96,6 +110,19 @@ export default Component.extend({
       })
       .finally(() => {
         this.set('isRolling', false);
+      });
+  },
+
+  combatAction(action, extra = {}) {
+    let sceneId = this.get('scene.id');
+    if (!sceneId) { return Promise.resolve(); }
+    return this.gameApi.requestOne('osrRpgSceneCombat', { id: sceneId, action: action, ...extra }, null)
+      .then((response) => {
+        if (response.error) {
+          this.flashMessages.danger(response.error);
+        } else {
+          this.set('combat', response);
+        }
       });
   },
 
@@ -134,13 +161,21 @@ export default Component.extend({
 
   @action
   toggleCombatTracker() {
-    this.set('showCombatTracker', !this.showCombatTracker);
+    let show = !this.showCombatTracker;
+    this.set('showCombatTracker', show);
+    if (show) {
+      this.loadCombat();
+    }
   },
 
   @action
   rollAttack() {
     this.set('showAttackRoll', false);
-    this.sceneRoll('attack');
+    let extra = {};
+    if (this.attackTargetAc) {
+      extra.target_ac = parseInt(this.attackTargetAc, 10);
+    }
+    this.sceneRoll('attack', extra);
   },
 
   @action
@@ -192,42 +227,27 @@ export default Component.extend({
   },
 
   @action
+  attackTargetAcChanged(event) {
+    this.set('attackTargetAc', event.target.value);
+  },
+
+  @action
   diceStringChanged(event) {
     this.set('diceString', event.target.value);
   },
 
   @action
-  addCombatant() {
-    let list = this.combatants || A([]);
-    list.pushObject({
-      id: Date.now(),
-      name: '',
-      initiative: 0,
-      hp: 0,
-      hp_max: 0
-    });
-    this.set('combatants', list);
+  startCombat() {
+    this.combatAction('start');
   },
 
   @action
-  removeCombatant(combatant) {
-    (this.combatants || []).removeObject(combatant);
+  endCombat() {
+    this.combatAction('end');
   },
 
   @action
-  combatantFieldChanged(combatant, field, event) {
-    let val = event.target.value;
-    if (field === 'name') {
-      set(combatant, 'name', val);
-    } else {
-      set(combatant, field, parseInt(val, 10) || 0);
-    }
-  },
-
-  @action
-  rollInitiative(combatant) {
-    let roll = Math.floor(Math.random() * 20) + 1;
-    set(combatant, 'initiative', roll);
-    this.playDiceSound();
+  joinCombat() {
+    this.combatAction('join');
   }
 });

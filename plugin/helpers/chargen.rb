@@ -145,7 +145,11 @@ module AresMUSH
           osr_thief_expertise_unspent: 0,
           osr_starting_gold: nil,
           osr_xp_bonus: 0,
-          osr_ability_roll_count: 0
+          osr_ability_roll_count: 0,
+          osr_ac: nil,
+          osr_prepared_spells: {},
+          osr_spell_slots_used: {},
+          osr_equipment: []
         )
       end
 
@@ -374,7 +378,11 @@ module AresMUSH
           osr_thief_skills: final_thief_skills,
           osr_thief_expertise_unspent: 0,
           osr_xp_bonus: Tables.prime_req_xp_bonus(class_key, scores),
-          osr_starting_gold: char.osr_starting_gold || Tables.roll_starting_gold
+          osr_starting_gold: char.osr_starting_gold || Tables.roll_starting_gold,
+          osr_ac: CommandHelpers.default_ac,
+          osr_prepared_spells: {},
+          osr_spell_slots_used: {},
+          osr_equipment: []
         )
       end
 
@@ -574,7 +582,11 @@ module AresMUSH
           hd: cfg ? Tables.val(cfg, 'hd') : nil,
           hp: char.osr_hp,
           hp_max: char.osr_hp_max,
+          ac: Resources.current_ac(char),
           thac0: char.osr_thac0,
+          prepared_spells: Spellcasting.prepared_display(char),
+          spell_slots_remaining: Spellcasting.slots_remaining_display(char),
+          equipment: EquipmentHelper.gear_display(char),
           saves: char.osr_saving_throws,
           spell_slots: char.osr_spell_slots,
           spell_tradition: tradition,

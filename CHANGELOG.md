@@ -1,5 +1,16 @@
 # Changelog
 
+## v3.0.0 — 2026-06-08
+
+Hybrid OSR play layer.
+
+- Telnet play commands: attack, save, skill, check, dice, explore, backstab, turn, track
+- HP/AC management, spell prepare/cast/rest/learn
+- Server-side scene combat tracker (web + telnet)
+- Equipment catalog, NPC templates, treasure tables
+- Web profile HP adjust and rest; live scene AC on attack rolls
+- Extended spell lists; Drow darkness fix; tightrope_walking skill key
+
 ## v2.0.0 — 2026-06-07
 
 Rename and Chargen V2.

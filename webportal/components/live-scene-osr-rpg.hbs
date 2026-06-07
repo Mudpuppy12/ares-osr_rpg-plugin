@@ -11,7 +11,7 @@
 {{#if this.showSheet}}
   <div class="osr-rpg-live-sheet">
     {{#if this.sheet}}
-      <p><b>{{this.sheet.class_name}}</b> L{{this.sheet.level}} — HP {{this.sheet.hp}}/{{this.sheet.hp_max}} THAC0 {{this.sheet.thac0}}</p>
+      <p><b>{{this.sheet.class_name}}</b> L{{this.sheet.level}} — HP {{this.sheet.hp}}/{{this.sheet.hp_max}} AC {{this.sheet.ac}} THAC0 {{this.sheet.thac0}}</p>
       {{#if this.sheet.saves}}
         <p class="text-muted">Saves: D{{this.sheet.saves.death}} W{{this.sheet.saves.wands}} P{{this.sheet.saves.paralysis}} B{{this.sheet.saves.breath}} S{{this.sheet.saves.spells}}</p>
       {{/if}}
@@ -24,25 +24,34 @@
 {{#if this.showCombatTracker}}
   <div class="osr-rpg-combat-tracker">
     <div class="osr-rpg-combat-toolbar">
-      <b>Initiative Tracker</b>
-      <button type="button" class="btn btn-sm btn-outline-secondary" {{on 'click' this.addCombatant}}>+ Add</button>
+      <b>Scene Combat</b>
+      {{#if this.combat.active}}
+        <button type="button" class="btn btn-sm btn-outline-primary" {{on 'click' this.joinCombat}}>Join</button>
+        <button type="button" class="btn btn-sm btn-outline-danger" {{on 'click' this.endCombat}}>End</button>
+      {{else}}
+        <button type="button" class="btn btn-sm btn-outline-primary" {{on 'click' this.startCombat}}>Start</button>
+      {{/if}}
     </div>
-    {{#each this.sortedCombatants as |c|}}
-      <div class="osr-rpg-combat-row">
-        <Input @type="text" @value={{c.name}} placeholder="Name" {{on 'input' (fn this.combatantFieldChanged c 'name')}} class="form-control form-control-sm" />
-        <button type="button" class="btn btn-sm btn-outline-secondary" {{on 'click' (fn this.rollInitiative c)}}>d20</button>
-        <span class="osr-rpg-init-badge">{{c.initiative}}</span>
-        <Input @type="number" @value={{c.hp}} {{on 'input' (fn this.combatantFieldChanged c 'hp')}} class="form-control form-control-sm osr-rpg-hp-input" />
-        <span>/</span>
-        <Input @type="number" @value={{c.hp_max}} {{on 'input' (fn this.combatantFieldChanged c 'hp_max')}} class="form-control form-control-sm osr-rpg-hp-input" />
-        <button type="button" class="btn btn-sm btn-link text-danger" {{on 'click' (fn this.removeCombatant c)}}>×</button>
-      </div>
-    {{/each}}
+    {{#if this.isCombatLoading}}
+      <p class="text-muted">Loading…</p>
+    {{else}}
+      {{#each this.sortedCombatants as |c|}}
+        <div class="osr-rpg-combat-row">
+          <span class="osr-rpg-combat-name">{{c.name}}</span>
+          <span class="osr-rpg-init-badge">Init {{c.initiative}}</span>
+          <span>HP {{c.hp}}/{{c.hp_max}}</span>
+          <span>AC {{c.ac}}</span>
+        </div>
+      {{else}}
+        <p class="text-muted"><i>No combatants.</i></p>
+      {{/each}}
+    {{/if}}
   </div>
 {{/if}}
 
 <BsModalSimple @title="Roll Attack" @closeTitle="Cancel" @submitTitle="Roll" @open={{this.showAttackRoll}} @onSubmit={{this.rollAttack}} @onHide={{(fn this.setShowAttackRoll false)}}>
   <p>Roll d20 attack using pose character THAC0.</p>
+  <p><label>Target AC (optional):</label> <Input @type="number" @value={{this.attackTargetAc}} {{on 'input' this.attackTargetAcChanged}} /></p>
 </BsModalSimple>
 
 <BsModalSimple @title="Roll Save" @closeTitle="Cancel" @submitTitle="Roll" @open={{this.showSaveRoll}} @onSubmit={{this.rollSave}} @onHide={{(fn this.setShowSaveRoll false)}}>

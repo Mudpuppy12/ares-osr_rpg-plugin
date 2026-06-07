@@ -63,3 +63,5 @@ osr_rpg/xp Bob
 osr_rpg/levelup Bob
 sheet Bob
 ```
+
+See also `help play` for combat rolls, HP, spells, and scene combat.

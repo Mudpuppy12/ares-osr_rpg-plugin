@@ -11,6 +11,7 @@ osr:
       - Purify Food and Water
       - Remove Fear
       - Resist Cold
+      - Darkness
       '2':
       - Bless
       - Find Traps
@@ -120,6 +121,40 @@ osr:
       - Protection from Evil 10' Radius
       - Protection from Normal Missiles
       - Water Breathing
+      '4':
+      - Charm Monster
+      - Confusion
+      - Dimension Door
+      - Growth of Plants
+      - Massmorph
+      - Polymorph Others
+      - Polymorph Self
+      - Remove Curse
+      - Wall of Fire
+      - Wall of Ice
+      - Wizard Eye
+      '5':
+      - Animate Dead
+      - Cloudkill
+      - Feeblemind
+      - Hold Monster
+      - Magic Jar
+      - Passwall
+      - Telekinesis
+      - Teleport
+      - Wall of Force
+      - Wall of Stone
+      '6':
+      - Anti-Magic Shell
+      - Death Spell
+      - Disintegrate
+      - Geas
+      - Invisible Stalker
+      - Lower Water
+      - Move Earth
+      - Part Water
+      - Project Image
+      - Reincarnation
     illusionist:
       '1':
       - Auditory Illusion
@@ -147,6 +182,49 @@ osr:
       - Mirror Image
       - Quasimorph
       - Whispering Wind
+      '3':
+      - Clairaudience
+      - Daylight
+      - Dispel Magic
+      - Fear
+      - Hallucinatory Terrain
+      - Illusory Script
+      - Invisibility 10' Radius
+      - Paralysis
+      - Rope Trick
+      - Spectral Force
+      - Suggestion
+      - Water Breathing
+      '4':
+      - Confusion
+      - Emotion
+      - Illusionary Wall
+      - Massmorph
+      - Minor Globe of Invulnerability
+      - Phantasmal Killer
+      - Polymorph Others
+      - Rainbow Pattern
+      - Shadow Monsters
+      - Solid Fog
+      '5':
+      - Advanced Illusion
+      - Cloudkill
+      - Dream
+      - Feeblemind
+      - Major Creation
+      - Mislead
+      - Persistent Image
+      - Project Image
+      - Shadow Door
+      - Shadow Magic
+      '6':
+      - Anti-Magic Shell
+      - Mass Suggestion
+      - Permanent Illusion
+      - Programmed Illusion
+      - Shades
+      - True Sight
+      - Veil
     necromancer:
       '1':
       - Chill Touch
@@ -174,3 +252,27 @@ osr:
       - Silence 15' Radius
       - Speak With Dead
       - Spectral Hand
+      '3':
+      - Animate Dead
+      - Bestow Curse
+      - Death Ward
+      - Speak With Dead
+      - Spirit Guard
+      - Vampiric Touch
+      '4':
+      - Contagion
+      - Death Spell
+      - Enervation
+      - Fear
+      - Wraithform
+      '5':
+      - Animate Dead
+      - Cloudkill
+      - Magic Jar
+      - Raise Dead
+      - Summon Shadow
+      '6':
+      - Anti-Magic Shell
+      - Death Spell
+      - Disintegrate
+      - Reincarnation

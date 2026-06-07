@@ -55,7 +55,7 @@ Manually set ability scores (3-18). Separate multiple abilities with `/` or spac
 
 Allocate L1 expertise points for d6 skill classes (Thief, Acrobat, Assassin, Half-Orc). Each point adds +1-in-6 to a skill, up to 5-in-6 total. You must spend exactly the required number of points (usually 4).
 
-Use skill keys from `osr_rpg/classes` (e.g. `hide_in_shadows`, `move_silently`, `climb_walls`).
+Use skill keys from `osr_rpg/classes` (e.g. `hide_in_shadows`, `move_silently`, `climb_sheer`).
 
 ### osr_rpg/spell
 
@@ -98,7 +98,7 @@ Thief example:
 osr_rpg/class thief
 osr_rpg/alignment Neutrality
 osr_rpg/roll
-osr_rpg/thief hide_in_shadows=2 climb_walls=1 move_silently=1
+osr_rpg/thief hide_in_shadows=2 climb_sheer=1 move_silently=1
 osr_rpg/finish
 ```
 

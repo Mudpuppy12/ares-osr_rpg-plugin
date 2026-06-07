@@ -13,21 +13,17 @@ module AresMUSH
         return { error: t('osr_rpg.no_sheet_for_levelup') } unless Leveling.sheet_ready?(sender)
 
         roll_type = request.args['roll_type'].to_s
-        result = case roll_type
-                 when 'attack'
-                   Rolls.roll_attack(sender)
-                 when 'save'
-                   Rolls.roll_save(sender, request.args['save_category'])
-                 when 'skill'
-                   Rolls.roll_thief_skill(sender, request.args['skill'])
-                 when 'ability'
-                   Rolls.roll_ability_check(sender, request.args['ability'], request.args['target'])
-                 when 'generic'
-                   Rolls.roll_generic(sender.name, request.args['dice_string'])
-                 else
-                   { error: t('osr_rpg.invalid_roll_type', type: roll_type) }
-                 end
-
+        options = {
+          ac: request.args['target_ac'] || request.args['ac'],
+          category: request.args['save_category'],
+          skill: request.args['skill'],
+          ability: request.args['ability'],
+          target: request.args['target'],
+          dice_string: request.args['dice_string'],
+          hd: request.args['hd'],
+          exploration_skill: request.args['exploration_skill']
+        }
+        result = Rolls.perform_roll(sender, roll_type, options)
         return result if result[:error]
 
         Rolls.emit_to_scene(scene, result[:message])

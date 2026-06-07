@@ -17,6 +17,7 @@ export default Component.extend({
   flashMessages: service(),
   session: service(),
   isLeveling: false,
+  isBusy: false,
 
   sheet: computed('char.osr_rpg', function() {
     return this.get('char.osr_rpg') || {};
@@ -48,6 +49,12 @@ export default Component.extend({
     return mod >= 0 ? `+${mod}` : `${mod}`;
   },
 
+  updateSheet(response) {
+    if (response.sheet) {
+      this.set('char.osr_rpg', response.sheet);
+    }
+  },
+
   @action
   levelUp() {
     if (this.isLeveling) { return; }
@@ -58,13 +65,46 @@ export default Component.extend({
           this.flashMessages.danger(response.error);
           return;
         }
-        if (response.sheet) {
-          this.set('char.osr_rpg', response.sheet);
-        }
+        this.updateSheet(response);
         this.flashMessages.success(`Level ${response.level}! +${response.hp_added} HP.`);
       })
       .finally(() => {
         this.set('isLeveling', false);
+      });
+  },
+
+  @action
+  adjustHp(amount) {
+    if (this.isBusy) { return; }
+    this.set('isBusy', true);
+    this.gameApi.requestOne('osrRpgAdjustHp', { amount: amount }, null)
+      .then((response) => {
+        if (response.error) {
+          this.flashMessages.danger(response.error);
+          return;
+        }
+        this.updateSheet(response);
+      })
+      .finally(() => {
+        this.set('isBusy', false);
+      });
+  },
+
+  @action
+  restSpells() {
+    if (this.isBusy) { return; }
+    this.set('isBusy', true);
+    this.gameApi.requestOne('osrRpgSpellAction', { action: 'rest' }, null)
+      .then((response) => {
+        if (response.error) {
+          this.flashMessages.danger(response.error);
+          return;
+        }
+        this.updateSheet(response);
+        this.flashMessages.success(response.message || 'Rested.');
+      })
+      .finally(() => {
+        this.set('isBusy', false);
       });
   }
 });

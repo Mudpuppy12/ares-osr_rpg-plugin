@@ -2,6 +2,7 @@ module AresMUSH
   module OsrRpg
     module Rolls
       SAVE_CATEGORIES = %w[death wands paralysis breath spells].freeze
+      PLAY_ROLL_TYPES = %w[attack save skill ability generic exploration backstab turn track].freeze
 
       def self.scene_sheet(char)
         return nil unless Leveling.sheet_ready?(char)
@@ -13,14 +14,18 @@ module AresMUSH
           level: sheet[:level],
           hp: sheet[:hp],
           hp_max: sheet[:hp_max],
+          ac: sheet[:ac],
           thac0: sheet[:thac0],
           saves: sheet[:saves],
           thief_skills: sheet[:thief_skills],
+          exploration_skills: sheet[:exploration_skills],
           abilities: sheet[:abilities],
           can_level_up: sheet[:can_level_up],
           xp: sheet[:xp],
           xp_to_next_level: sheet[:xp_to_next_level],
-          expertise_unspent: sheet[:expertise_unspent]
+          expertise_unspent: sheet[:expertise_unspent],
+          prepared_spells: sheet[:prepared_spells],
+          spell_slots_remaining: sheet[:spell_slots_remaining]
         }
       end
 
@@ -38,13 +43,29 @@ module AresMUSH
         end
       end
 
-      def self.roll_attack(char)
+      def self.roll_attack(char, target_ac: nil)
         roll = rand(1..20)
         thac0 = char.osr_thac0
+        hit = nil
+        needed = nil
+        if target_ac
+          needed = thac0.to_i - target_ac.to_i
+          hit = roll >= needed
+        end
+        msg_key = target_ac ? 'osr_rpg.scene_roll_attack_vs' : 'osr_rpg.scene_roll_attack'
         {
           roll: roll,
           thac0: thac0,
-          message: t('osr_rpg.scene_roll_attack', name: char.name, roll: roll, thac0: thac0)
+          target_ac: target_ac,
+          needed: needed,
+          hit: hit,
+          message: t(msg_key,
+                     name: char.name,
+                     roll: roll,
+                     thac0: thac0,
+                     ac: target_ac,
+                     needed: needed,
+                     result: hit ? t('osr_rpg.roll_hit') : t('osr_rpg.roll_miss'))
         }
       end
 
@@ -103,20 +124,28 @@ module AresMUSH
         mod = Tables.ability_modifier(score.to_i)
         roll = rand(1..20)
         total = roll + mod
+        success = target ? total >= target.to_i : nil
         msg_key = target ? 'osr_rpg.scene_roll_ability_vs' : 'osr_rpg.scene_roll_ability'
+        result_text = if target
+                        success ? t('osr_rpg.roll_success') : t('osr_rpg.roll_failure')
+                      else
+                        ''
+                      end
         {
           roll: roll,
           modifier: mod,
           total: total,
           ability: ab,
           target: target,
+          success: success,
           message: t(msg_key,
                      name: char.name,
                      ability: ab.upcase,
                      roll: roll,
                      mod: mod >= 0 ? "+#{mod}" : mod.to_s,
                      total: total,
-                     target: target)
+                     target: target,
+                     result: result_text)
         }
       end
 
@@ -128,6 +157,31 @@ module AresMUSH
         return { error: t('dice.invalid_dice_string') } unless message
 
         { message: message }
+      end
+
+      def self.perform_roll(char, roll_type, options = {})
+        case roll_type.to_s
+        when 'attack'
+          roll_attack(char, target_ac: options[:ac] || options['ac'])
+        when 'save'
+          roll_save(char, options[:category] || options['save_category'])
+        when 'skill'
+          roll_thief_skill(char, options[:skill])
+        when 'ability', 'check'
+          roll_ability_check(char, options[:ability], options[:target])
+        when 'generic', 'dice'
+          roll_generic(char.name, options[:dice_string] || options[:dice])
+        when 'exploration'
+          ClassFeatures.roll_exploration(char, options[:skill] || options[:exploration_skill])
+        when 'backstab'
+          ClassFeatures.roll_backstab(char, options[:ac] || options['ac'])
+        when 'turn'
+          ClassFeatures.roll_turn(char, options[:hd] || options['hd'] || 1)
+        when 'track'
+          ClassFeatures.roll_track(char, options[:target])
+        else
+          { error: t('osr_rpg.invalid_roll_type', type: roll_type) }
+        end
       end
 
       def self.emit_to_scene(scene, message)

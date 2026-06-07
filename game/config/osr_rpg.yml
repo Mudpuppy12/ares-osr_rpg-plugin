@@ -12,3 +12,5 @@ osr_rpg:
   public_sheets: true
   permissions:
     manage_osr_rpg_xp: Award OSR XP and level other characters.
+    manage_osr_rpg: Manage OSR HP, combat, and spell actions for others.
+  default_ac: 9
