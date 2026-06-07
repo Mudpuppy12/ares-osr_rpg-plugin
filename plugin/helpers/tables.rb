@@ -100,13 +100,14 @@ module AresMUSH
       end
 
       def self.spell_detail_key(name)
-        normalize_key(name)
+        name.to_s.strip.downcase.gsub(/\s+/, '_').gsub(/[^a-z0-9_]/, '')
       end
 
       def self.spell_detail(tradition, level, key)
         return nil if tradition.blank? || level.blank? || key.blank?
-        details = Global.read_config('osr', 'spell_details', tradition.to_s, level.to_s) || {}
-        val(details, key.to_s) || val(details, key.to_sym)
+        tradition_details = Global.read_config('osr', 'spell_details', tradition.to_s) || {}
+        level_details = val(tradition_details, level.to_s) || {}
+        val(level_details, key.to_s) || val(level_details, key.to_sym)
       end
 
       def self.prime_req_xp_bonus(class_key, scores)

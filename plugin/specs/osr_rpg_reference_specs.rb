@@ -7,16 +7,18 @@ module AresMUSH
           'cleric' => { '1' => ['Cure Light Wounds', 'Light'] },
           'magic_user' => { '1' => ['Magic Missile'] }
         })
-        allow(Global).to receive(:read_config).with('osr', 'spell_details', 'cleric', '1').and_return({
-          'cure_light_wounds' => {
-            'name' => 'Cure Light Wounds',
-            'description' => 'Heals 1d6+1 HP.',
-            'reversal' => 'Cause Light Wounds'
-          },
-          'light' => { 'name' => 'Light', 'description' => '15 radius light.' }
+        allow(Global).to receive(:read_config).with('osr', 'spell_details', 'cleric').and_return({
+          '1' => {
+            'cure_light_wounds' => {
+              'name' => 'Cure Light Wounds',
+              'description' => 'Heals 1d6+1 HP.',
+              'reversal' => 'Cause Light Wounds'
+            },
+            'light' => { 'name' => 'Light', 'description' => '15 radius light.' }
+          }
         })
-        allow(Global).to receive(:read_config).with('osr', 'spell_details', 'magic_user', '1').and_return({
-          'magic_missile' => { 'name' => 'Magic Missile', 'description' => '1d6+1 unerring damage.' }
+        allow(Global).to receive(:read_config).with('osr', 'spell_details', 'magic_user').and_return({
+          '1' => { 'magic_missile' => { 'name' => 'Magic Missile', 'description' => '1d6+1 unerring damage.' } }
         })
         allow(Global).to receive(:read_config).with('osr', 'equipment').and_return({
           'armor' => { 'leather' => { 'name' => 'Leather', 'ac' => 7, 'cost' => 20 } },
@@ -38,8 +40,32 @@ module AresMUSH
         end
       end
 
+      describe 'Tables.spell_detail' do
+        it 'reads nested spell details beyond Global.read_config depth' do
+          allow(Global).to receive(:read_config).with('osr', 'spell_details', 'cleric').and_return({
+            '1' => { 'cure_light_wounds' => { 'name' => 'Cure Light Wounds', 'description' => 'Heals.' } }
+          })
+          entry = Tables.spell_detail('cleric', '1', 'cure_light_wounds')
+          expect(entry['name']).to eq 'Cure Light Wounds'
+        end
+
+        it 'normalizes spell keys for URLs' do
+          expect(Tables.spell_detail_key("Blindness/Deafness")).to eq 'blindnessdeafness'
+          expect(Tables.spell_detail_key("Silence 15' Radius")).to eq 'silence_15_radius'
+        end
+      end
+
       describe 'ReferenceData.spell_detail_for_web' do
         it 'returns spell detail with reversal' do
+          allow(Global).to receive(:read_config).with('osr', 'spell_details', 'cleric').and_return({
+            '1' => {
+              'cure_light_wounds' => {
+                'name' => 'Cure Light Wounds',
+                'description' => 'Heals 1d6+1 HP.',
+                'reversal' => 'Cause Light Wounds'
+              }
+            }
+          })
           result = ReferenceData.spell_detail_for_web('cleric', '1', 'cure_light_wounds')
           expect(result[:name]).to eq 'Cure Light Wounds'
           expect(result[:description]).to include('1d6+1')
@@ -47,7 +73,7 @@ module AresMUSH
         end
 
         it 'returns error for unknown spell' do
-          allow(Global).to receive(:read_config).with('osr', 'spell_details', 'cleric', '1').and_return({})
+          allow(Global).to receive(:read_config).with('osr', 'spell_details', 'cleric').and_return({ '1' => {} })
           result = ReferenceData.spell_detail_for_web('cleric', '1', 'missing')
           expect(result[:error]).not_to be_nil
         end
