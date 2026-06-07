@@ -38,10 +38,27 @@ osr_rpg/levelup <name>
 
 Award or remove XP, or level another character. Admin level-up may bypass the XP requirement.
 
+### Prime requisite XP bonus
+
+When awarding XP (`osr_rpg/xp <name>=<amount>` with a positive amount), enter the **listed** monster or treasure XP. The game applies the character's prime requisite bonus automatically (stored on the sheet at chargen):
+
+| Prime ability score | Bonus |
+|---------------------|-------|
+| 16+ | +10% |
+| 13–15 | +5% |
+| 9–12 | 0% |
+| 8 or less | −10% |
+
+Example: a fighter with +10% prime requisite awarded `200` base XP receives `220` XP.
+
+XP removal (`osr_rpg/xp/remove`) always deducts the **exact** amount entered — no bonus math.
+
+Set `apply_prime_xp_bonus: false` in `game/config/osr_rpg.yml` to disable automatic adjustment.
+
 ## Example
 
 ```
-osr_rpg/xp Bob=2000
+osr_rpg/xp Bob=200
 osr_rpg/xp Bob
 osr_rpg/levelup Bob
 sheet Bob

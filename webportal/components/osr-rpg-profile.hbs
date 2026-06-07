@@ -2,86 +2,176 @@
   <div class="tab-cover">OSR Sheet</div>
 
   {{#if this.sheet.class_name}}
-    <h4>{{this.sheet.class_name}} ({{this.sheet.race}})</h4>
-    <p>Level {{this.sheet.level}} | Alignment: {{this.sheet.alignment}}</p>
-    <p>HP: {{this.sheet.hp}}/{{this.sheet.hp_max}} | THAC0: {{this.sheet.thac0}} | HD: {{this.sheet.hd_display}}</p>
-    <p>XP: {{this.sheet.xp}}{{#if this.sheet.xp_to_next_level}} (next level at {{this.sheet.xp_to_next_level}}){{/if}} ({{this.sheet.xp_bonus}}% bonus) | Gold: {{this.sheet.starting_gold}} gp</p>
-
-    {{#if this.isOwnProfile}}
-      <div class="osr-rpg-leveling-bar">
-        {{#if this.sheet.can_level_up}}
-          <button type="button" class="btn btn-sm btn-primary" disabled={{this.isLeveling}} {{on 'click' this.levelUp}}>
-            {{if this.isLeveling 'Leveling…' 'Level Up'}}
-          </button>
-        {{else if this.sheet.xp_to_next_level}}
-          <span class="text-muted">Need {{this.sheet.xp_to_next_level}} XP for next level.</span>
-        {{/if}}
-        {{#if (gt this.sheet.expertise_unspent 0)}}
-          <span class="osr-rpg-pool-chip">{{this.sheet.expertise_unspent}} expertise unspent — use <code>osr_rpg/skills</code></span>
-        {{/if}}
+    <div class="osr-rpg-sheet">
+      <div class="osr-rpg-sheet-header">
+        <div class="osr-rpg-sheet-name">{{this.displayName}}</div>
+        <div class="osr-rpg-sheet-identity">
+          <span class="osr-rpg-sheet-class">{{this.sheet.class_name}}</span>
+          {{#if this.sheet.race}}
+            <span class="osr-rpg-sheet-meta">({{this.sheet.race}})</span>
+          {{/if}}
+          {{#if this.sheet.alignment}}
+            <span class="osr-rpg-sheet-meta">· {{this.sheet.alignment}}</span>
+          {{/if}}
+        </div>
+        <div class="osr-rpg-sheet-subline">
+          <span>Level <b>{{this.sheet.level}}</b></span>
+          <span>XP <b>{{this.sheet.xp}}</b>{{#if this.sheet.xp_to_next_level}} / {{this.sheet.xp_to_next_level}}{{/if}}</span>
+          <span>({{this.sheet.xp_bonus}}% bonus)</span>
+          {{#if this.sheet.starting_gold}}
+            <span>Gold <b>{{this.sheet.starting_gold}}</b> gp</span>
+          {{/if}}
+        </div>
       </div>
-    {{/if}}
 
-    {{#if this.sheet.abilities}}
-      <p>
-        {{#each this.sheet.abilities as |ab|}}
-          <b>{{ab.name}}</b> {{ab.score}} ({{#if (gte ab.modifier 0)}}+{{/if}}{{ab.modifier}}){{#unless @last}} | {{/unless}}
-        {{/each}}
-      </p>
-    {{/if}}
-
-    {{#if this.sheet.saves}}
-      <p>Saves: D{{this.sheet.saves.death}} W{{this.sheet.saves.wands}} P{{this.sheet.saves.paralysis}} B{{this.sheet.saves.breath}} S{{this.sheet.saves.spells}}</p>
-    {{/if}}
-
-    {{#if this.sheet.spell_slots}}
-      <p>Spell Slots:
-        {{#each-in this.sheet.spell_slots as |lvl count|}}
-          L{{lvl}}:{{count}}
-        {{/each-in}}
-      </p>
-    {{/if}}
-
-    {{#if (eq this.sheet.casting_type "divine")}}
-      <p>Spells: Full {{this.sheet.spell_tradition}} list access</p>
-    {{/if}}
-
-    {{#if this.sheet.spell_book}}
-      {{#each-in this.sheet.spell_book as |lvl spells|}}
-        {{#if (eq lvl "1")}}
-          {{#if (eq this.sheet.casting_type "arcane")}}
-            <p>Spell Book L1:
-              {{#each spells as |spell|}}
-                {{spell}}{{#unless @last}}, {{/unless}}
-              {{/each}}
-            </p>
+      {{#if this.isOwnProfile}}
+        <div class="osr-rpg-leveling-bar">
+          {{#if this.sheet.can_level_up}}
+            <button type="button" class="btn btn-sm btn-primary" disabled={{this.isLeveling}} {{on 'click' this.levelUp}}>
+              {{if this.isLeveling 'Leveling…' 'Level Up'}}
+            </button>
+          {{else if this.sheet.xp_to_next_level}}
+            <span class="text-muted">Need {{this.sheet.xp_to_next_level}} XP for next level.</span>
           {{/if}}
-          {{#if (eq this.sheet.casting_type "restricted")}}
-            <p>L1 Spell:
-              {{#each spells as |spell|}}
-                {{spell}}{{#unless @last}}, {{/unless}}
-              {{/each}}
-            </p>
+          {{#if (gt this.sheet.expertise_unspent 0)}}
+            <span class="osr-rpg-pool-chip">{{this.sheet.expertise_unspent}} expertise unspent — use <code>osr_rpg/skills</code></span>
           {{/if}}
-        {{/if}}
-      {{/each-in}}
-    {{/if}}
+          {{#if this.sheet.playtest}}
+            <span class="osr-rpg-pool-chip text-warning">Playtest class</span>
+          {{/if}}
+        </div>
+      {{/if}}
 
-    {{#if (gt this.sheet.expertise_unspent 0)}}
-      <p>Skill expertise unspent: {{this.sheet.expertise_unspent}}</p>
-    {{/if}}
+      {{#if this.sheet.abilities}}
+        <div class="osr-rpg-sheet-section">
+          <div class="osr-rpg-sheet-section-title">Ability Scores</div>
+          <div class="row osr-rpg-ability-grid">
+            {{#each this.sheet.abilities as |ab|}}
+              <div class="col-md-4 col-sm-6">
+                <div class="osr-rpg-stat-cell">
+                  <div class="osr-rpg-stat-label">{{ab.name}}</div>
+                  <div class="osr-rpg-stat-score-row">
+                    <span class="osr-rpg-stat-score">{{ab.score}}</span>
+                    <span class="osr-rpg-stat-mod">({{this.modDisplay ab}})</span>
+                  </div>
+                </div>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
 
-    {{#if this.sheet.thief_skills}}
-      <p>Skills:
-        {{#each this.sheet.thief_skills as |sk|}}
-          {{sk.name}} {{sk.chance}}{{#unless @last}}, {{/unless}}
-        {{/each}}
-      </p>
-    {{/if}}
+      {{#if this.sheet.saves}}
+        <div class="osr-rpg-sheet-section">
+          <div class="osr-rpg-sheet-section-title">Saving Throws</div>
+          <div class="osr-rpg-save-row">
+            {{#each this.saveCategories as |save|}}
+              <div class="osr-rpg-save-box">
+                <span class="osr-rpg-save-abbr">{{save.abbr}}</span>
+                <span class="osr-rpg-save-label">{{save.label}}</span>
+                <span class="osr-rpg-save-value">{{save.value}}</span>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
 
-    {{#if this.sheet.playtest}}
-      <p class="text-warning"><i>Playtest class</i></p>
-    {{/if}}
+      {{#if this.sheet.special_abilities}}
+        <div class="osr-rpg-sheet-section">
+          <div class="osr-rpg-sheet-section-title">Special Abilities</div>
+          <ul class="osr-rpg-special-abilities">
+            {{#each this.sheet.special_abilities as |ability|}}
+              <li>{{ability}}</li>
+            {{/each}}
+          </ul>
+        </div>
+      {{/if}}
+
+      <div class="osr-rpg-sheet-section">
+        <div class="osr-rpg-sheet-section-title">Combat</div>
+        <div class="osr-rpg-combat-strip">
+          <span class="osr-rpg-combat-chip">HP <b>{{this.sheet.hp}}</b>/{{this.sheet.hp_max}}</span>
+          <span class="osr-rpg-combat-chip">THAC0 <b>{{this.sheet.thac0}}</b></span>
+          {{#if this.sheet.hd_display}}
+            <span class="osr-rpg-combat-chip">HD <b>{{this.sheet.hd_display}}</b></span>
+          {{/if}}
+          {{#if this.sheet.armor}}
+            <span class="osr-rpg-combat-chip">Armor <b>{{this.sheet.armor}}</b></span>
+          {{/if}}
+          {{#if this.sheet.weapons}}
+            <span class="osr-rpg-combat-chip">Weapons <b>{{this.sheet.weapons}}</b></span>
+          {{/if}}
+        </div>
+      </div>
+
+      <div class="osr-rpg-sheet-section">
+        <div class="osr-rpg-sheet-section-title">Exploration</div>
+        <div class="osr-rpg-skill-row">
+          {{#each this.explorationSkills as |sk|}}
+            <span class="osr-rpg-skill-chip">
+              <span class="osr-rpg-skill-code">{{sk.code}}</span>
+              {{sk.name}} <b>{{sk.chance}}</b>
+            </span>
+          {{/each}}
+        </div>
+      </div>
+
+      {{#if this.sheet.thief_skills}}
+        <div class="osr-rpg-sheet-section">
+          <div class="osr-rpg-sheet-section-title">Class Skills</div>
+          <div class="osr-rpg-skill-row">
+            {{#each this.sheet.thief_skills as |sk|}}
+              <span class="osr-rpg-skill-chip osr-rpg-skill-chip-class">
+                {{sk.name}} <b>{{sk.chance}}</b>
+              </span>
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
+
+      {{#if (or this.sheet.spell_slots (eq this.sheet.casting_type "divine") this.sheet.spell_book)}}
+        <div class="osr-rpg-sheet-section">
+          <div class="osr-rpg-sheet-section-title">Spells</div>
+          <div class="osr-rpg-spell-block">
+            {{#if this.sheet.spell_slots}}
+              <div class="osr-rpg-spell-slots">
+                <span class="osr-rpg-spell-label">Slots:</span>
+                {{#each-in this.sheet.spell_slots as |lvl count|}}
+                  <span class="osr-rpg-skill-chip">L{{lvl}}: <b>{{count}}</b></span>
+                {{/each-in}}
+              </div>
+            {{/if}}
+
+            {{#if (eq this.sheet.casting_type "divine")}}
+              <p class="osr-rpg-spell-note">Full {{this.sheet.spell_tradition}} list access</p>
+            {{/if}}
+
+            {{#if this.sheet.spell_book}}
+              {{#each-in this.sheet.spell_book as |lvl spells|}}
+                {{#if (eq lvl "1")}}
+                  {{#if (eq this.sheet.casting_type "arcane")}}
+                    <p class="osr-rpg-spell-note">
+                      <span class="osr-rpg-spell-label">Spell Book L1:</span>
+                      {{#each spells as |spell|}}
+                        <span class="osr-rpg-skill-chip">{{spell}}</span>
+                      {{/each}}
+                    </p>
+                  {{/if}}
+                  {{#if (eq this.sheet.casting_type "restricted")}}
+                    <p class="osr-rpg-spell-note">
+                      <span class="osr-rpg-spell-label">L1 Spell:</span>
+                      {{#each spells as |spell|}}
+                        <span class="osr-rpg-skill-chip">{{spell}}</span>
+                      {{/each}}
+                    </p>
+                  {{/if}}
+                {{/if}}
+              {{/each-in}}
+            {{/if}}
+          </div>
+        </div>
+      {{/if}}
+    </div>
   {{else}}
     <p><i>No OSR sheet configured.</i></p>
   {{/if}}

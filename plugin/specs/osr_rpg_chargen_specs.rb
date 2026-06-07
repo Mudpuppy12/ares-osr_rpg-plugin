@@ -169,6 +169,45 @@ module AresMUSH
         end
       end
 
+      describe 'build_exploration_display' do
+        before do
+          allow(CommandHelpers).to receive(:sheet_applied?).and_return(true)
+        end
+
+        it 'uses racial special ability bonus for listen at door' do
+          abilities = ['Listen at doors 2-in-6']
+          display = Chargen.build_exploration_display(@char, abilities)
+          listen = display.find { |sk| sk[:key] == 'listen_at_door' }
+          expect(listen[:chance]).to eq('2-in-6')
+        end
+
+        it 'uses thief hear_noise skill when higher than base' do
+          allow(@char).to receive(:osr_thief_skills).and_return({ 'hear_noise' => 3 })
+          display = Chargen.build_exploration_display(@char, [])
+          listen = display.find { |sk| sk[:key] == 'listen_at_door' }
+          expect(listen[:chance]).to eq('3-in-6')
+        end
+
+        it 'uses the best bonus from thief skill and special abilities' do
+          allow(@char).to receive(:osr_thief_skills).and_return({ 'find_remove_traps' => 2 })
+          abilities = ['Detect room traps 3-in-6']
+          display = Chargen.build_exploration_display(@char, abilities)
+          traps = display.find { |sk| sk[:key] == 'find_room_trap' }
+          expect(traps[:chance]).to eq('3-in-6')
+        end
+
+        it 'excludes exploration thief skills from class skill display' do
+          allow(@char).to receive(:osr_thief_skills).and_return({
+            'hear_noise' => 2,
+            'hide_in_shadows' => 1
+          })
+          display = Chargen.build_thief_display(@char)
+          keys = display.map { |sk| sk[:key] }
+          expect(keys).not_to include('hear_noise')
+          expect(keys).to include('hide_in_shadows')
+        end
+      end
+
       describe 'finish_char' do
         it 'returns alerts when sheet is incomplete' do
           allow(@char).to receive(:osr_class).and_return(nil)

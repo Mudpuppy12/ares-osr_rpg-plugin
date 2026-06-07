@@ -38,6 +38,8 @@ en:
     xp_next_level: "Next level (%{level}) at %{xp} XP."
     xp_ready_to_level: "You have enough XP. Use osr_rpg/levelup to advance."
     xp_awarded: "Awarded %{xp} XP to %{name}."
+    xp_awarded_with_bonus: "Awarded %{awarded} XP to %{name} (%{base} base + %{bonus_percent}% prime requisite)."
+    xp_prime_bonus_note: "Prime requisite XP bonus: %{bonus_percent}% on awards."
     xp_removed: "Removed %{xp} XP from %{name}."
     invalid_xp_award: "Invalid XP amount."
     class_not_allowed: "Class not allowed for chargen: %{class}."

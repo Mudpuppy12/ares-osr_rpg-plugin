@@ -45,11 +45,36 @@ module AresMUSH
         nil
       end
 
-      def self.award_xp(char, amount)
-        new_xp = (char.osr_xp || 0) + amount.to_i
-        new_xp = 0 if new_xp < 0
-        char.update(osr_xp: new_xp)
-        new_xp
+      def self.apply_prime_xp_bonus?
+        Global.read_config('osr_rpg', 'apply_prime_xp_bonus') != false
+      end
+
+      def self.adjust_xp_for_bonus(base_amount, bonus_percent)
+        (base_amount.to_i * (100 + bonus_percent.to_i) / 100.0).round
+      end
+
+      def self.award_xp(char, amount, apply_bonus: nil)
+        base = amount.to_i
+        bonus_percent = char.osr_xp_bonus || 0
+
+        if base < 0
+          awarded = base
+        elsif apply_bonus == false || !apply_prime_xp_bonus?
+          awarded = base
+        else
+          awarded = adjust_xp_for_bonus(base, bonus_percent)
+        end
+
+        new_total = (char.osr_xp || 0) + awarded
+        new_total = 0 if new_total < 0
+        char.update(osr_xp: new_total)
+
+        {
+          new_total: new_total,
+          base: base,
+          awarded: awarded,
+          bonus_percent: bonus_percent
+        }
       end
 
       def self.apply_level_up(char, bypass_xp: false)

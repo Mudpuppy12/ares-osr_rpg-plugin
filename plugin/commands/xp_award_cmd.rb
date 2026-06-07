@@ -36,12 +36,22 @@ module AresMUSH
             return
           end
 
-          new_xp = Leveling.award_xp(model, self.xp)
-          Global.logger.info "#{self.xp} OSR XP awarded by #{enactor_name} to #{model.name} (total #{new_xp})"
+          result = Leveling.award_xp(model, self.xp)
+
           if self.xp < 0
+            Global.logger.info "#{result[:awarded]} OSR XP removed by #{enactor_name} from #{model.name} (total #{result[:new_total]})"
             client.emit_success t('osr_rpg.xp_removed', name: model.name, xp: -self.xp)
           else
-            client.emit_success t('osr_rpg.xp_awarded', name: model.name, xp: self.xp)
+            Global.logger.info "#{result[:awarded]} OSR XP awarded by #{enactor_name} to #{model.name} (#{result[:base]} base, total #{result[:new_total]})"
+            if result[:awarded] == result[:base]
+              client.emit_success t('osr_rpg.xp_awarded', name: model.name, xp: result[:awarded])
+            else
+              client.emit_success t('osr_rpg.xp_awarded_with_bonus',
+                                    name: model.name,
+                                    awarded: result[:awarded],
+                                    base: result[:base],
+                                    bonus_percent: result[:bonus_percent])
+            end
           end
         end
       end

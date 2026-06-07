@@ -4,6 +4,7 @@ module AresMUSH
       before do
         allow(Global).to receive(:read_config).and_call_original
         allow(Global).to receive(:read_config).with('osr_rpg', 'hp_per_level').and_return('max')
+        allow(Global).to receive(:read_config).with('osr_rpg', 'apply_prime_xp_bonus').and_return(true)
       end
 
       describe 'Tables.hp_gain' do
@@ -76,12 +77,56 @@ module AresMUSH
         end
       end
 
+      describe 'Leveling.adjust_xp_for_bonus' do
+        it 'applies +10% bonus' do
+          expect(Leveling.adjust_xp_for_bonus(200, 10)).to eq(220)
+        end
+
+        it 'applies +5% bonus' do
+          expect(Leveling.adjust_xp_for_bonus(100, 5)).to eq(105)
+        end
+
+        it 'applies -10% penalty' do
+          expect(Leveling.adjust_xp_for_bonus(100, -10)).to eq(90)
+        end
+
+        it 'rounds fractional XP' do
+          expect(Leveling.adjust_xp_for_bonus(15, 10)).to eq(17)
+        end
+      end
+
       describe 'Leveling.award_xp' do
+        before do
+          @char = double('char', osr_xp: 0, osr_xp_bonus: 10)
+          allow(@char).to receive(:update)
+        end
+
+        it 'applies prime requisite bonus on positive awards' do
+          result = Leveling.award_xp(@char, 200)
+          expect(result[:base]).to eq(200)
+          expect(result[:awarded]).to eq(220)
+          expect(result[:new_total]).to eq(220)
+          expect(result[:bonus_percent]).to eq(10)
+        end
+
+        it 'does not apply bonus on removal' do
+          allow(@char).to receive(:osr_xp).and_return(100)
+          result = Leveling.award_xp(@char, -50)
+          expect(result[:awarded]).to eq(-50)
+          expect(result[:new_total]).to eq(50)
+        end
+
+        it 'skips bonus when config is disabled' do
+          allow(Global).to receive(:read_config).with('osr_rpg', 'apply_prime_xp_bonus').and_return(false)
+          result = Leveling.award_xp(@char, 200)
+          expect(result[:awarded]).to eq(200)
+          expect(result[:new_total]).to eq(200)
+        end
+
         it 'does not drop below zero' do
-          char = double('char', osr_xp: 50)
-          allow(char).to receive(:update)
-          xp = Leveling.award_xp(char, -100)
-          expect(xp).to eq(0)
+          allow(@char).to receive(:osr_xp).and_return(50)
+          result = Leveling.award_xp(@char, -100)
+          expect(result[:new_total]).to eq(0)
         end
       end
     end

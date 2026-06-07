@@ -450,6 +450,89 @@ module AresMUSH
         build_sheet_display(char)
       end
 
+      EXPLORATION_THIEF_KEYS = %w[hear_noise find_remove_traps].freeze
+
+      EXPLORATION_SKILLS = [
+        {
+          code: 'LD',
+          key: 'listen_at_door',
+          name: 'Listen at door',
+          thief_key: 'hear_noise',
+          patterns: [/listen\s+at\s+doors?/i]
+        },
+        {
+          code: 'OD',
+          key: 'open_stuck_door',
+          name: 'Open stuck door',
+          thief_key: nil,
+          patterns: [/open\s+stuck\s+doors?/i]
+        },
+        {
+          code: 'SD',
+          key: 'find_secret_door',
+          name: 'Find secret door',
+          thief_key: nil,
+          patterns: [/detect\s+secret\s+doors?/i, /find\s+secret\s+doors?/i]
+        },
+        {
+          code: 'FT',
+          key: 'find_room_trap',
+          name: 'Find room trap',
+          thief_key: 'find_remove_traps',
+          patterns: [/detect\s+room\s+traps?/i, /find\s+room\s+traps?/i]
+        }
+      ].freeze
+
+      def self.parse_chance_in6(text)
+        match = text.to_s.match(/(\d)-in-6/i)
+        match ? match[1].to_i : nil
+      end
+
+      def self.thief_skill_chance_for(char, skill_key)
+        skills = char.osr_thief_skills || {}
+        key = Tables.normalize_key(skill_key)
+        val = skills[key] || skills[key.to_sym]
+        return nil if val.nil?
+
+        base = Tables.base_thief_chance
+        if CommandHelpers.sheet_applied?(char)
+          val.to_i
+        else
+          base + val.to_i
+        end
+      end
+
+      def self.resolve_exploration_chance(char, defn, special_abilities)
+        chance = Tables.base_thief_chance
+
+        if defn[:thief_key]
+          thief_chance = thief_skill_chance_for(char, defn[:thief_key])
+          chance = thief_chance if thief_chance && thief_chance > chance
+        end
+
+        special_abilities.each do |ability|
+          next unless defn[:patterns].any? { |pattern| ability.match?(pattern) }
+
+          ability_chance = parse_chance_in6(ability) || 2
+          chance = ability_chance if ability_chance > chance
+        end
+
+        chance
+      end
+
+      def self.build_exploration_display(char, special_abilities)
+        special_abilities ||= []
+        EXPLORATION_SKILLS.map do |defn|
+          chance = resolve_exploration_chance(char, defn, special_abilities)
+          {
+            code: defn[:code],
+            key: defn[:key],
+            name: defn[:name],
+            chance: "#{chance}-in-6"
+          }
+        end
+      end
+
       def self.build_sheet_display(char)
         class_key = char.osr_class
         cfg = Tables.class_config(class_key)
@@ -459,7 +542,10 @@ module AresMUSH
         spell_book = char.osr_spell_book || {}
         spells = tradition ? Tables.spells_for_tradition(tradition) : {}
 
+        details = Tables.class_details(class_key)
+        special_abilities = Tables.val(details, 'special_abilities') || []
         thief_display = build_thief_display(char)
+        exploration_display = build_exploration_display(char, special_abilities)
 
         ability_display = Tables.abilities.map do |ab|
           score = char.osr_ability_scores[ab].to_i
@@ -497,11 +583,15 @@ module AresMUSH
           expertise_unspent: char.osr_thief_expertise_unspent || 0,
           spells: spells,
           thief_skills: thief_display,
+          exploration_skills: exploration_display,
+          special_abilities: special_abilities,
           abilities: ability_display,
           starting_gold: char.osr_starting_gold,
           blurb: cfg ? Tables.val(cfg, 'blurb') : nil,
           playtest: cfg ? Tables.val(cfg, 'playtest') : nil,
-          hd_display: row ? Tables.val(row, 'hd') : nil
+          hd_display: row ? Tables.val(row, 'hd') : nil,
+          armor: Tables.val(details, 'armor') || (cfg ? Tables.val(cfg, 'armor') : nil),
+          weapons: Tables.val(details, 'weapons')
         }
       end
 
@@ -515,12 +605,13 @@ module AresMUSH
                    else
                      base + value.to_i
                    end
+          key = Tables.normalize_key(skill)
           {
-            key: skill,
-            name: skill.titleize.gsub('In ', 'in '),
+            key: key,
+            name: key.titleize.gsub('In ', 'in '),
             chance: "#{chance}-in-6"
           }
-        end
+        end.reject { |sk| EXPLORATION_THIEF_KEYS.include?(sk[:key]) }
       end
 
       def self.app_review(char)

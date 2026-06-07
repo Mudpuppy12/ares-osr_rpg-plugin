@@ -360,3 +360,199 @@
   margin: 8px 0 12px;
 }
 
+/* ---- OSR profile sheet (Purist layout) ---- */
+
+.osr-rpg-sheet {
+  background: linear-gradient(180deg, rgba(42, 35, 24, 0.55) 0%, rgba(26, 22, 16, 0.85) 100%);
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  padding: 16px 18px;
+  max-width: 720px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.osr-rpg-sheet-header {
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $border-color;
+}
+
+.osr-rpg-sheet-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: $primary-outline-color;
+  margin-bottom: 4px;
+}
+
+.osr-rpg-sheet-identity {
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.osr-rpg-sheet-class {
+  font-weight: bold;
+}
+
+.osr-rpg-sheet-meta {
+  color: $faded-text-color;
+}
+
+.osr-rpg-sheet-subline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  font-size: 0.9rem;
+  color: $faded-text-color;
+
+  b {
+    color: $text-color;
+  }
+}
+
+.osr-rpg-sheet-section {
+  margin-bottom: 14px;
+}
+
+.osr-rpg-sheet-section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $primary-outline-color;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba($border-color, 0.6);
+}
+
+.osr-rpg-ability-grid {
+  margin-top: 0;
+}
+
+.osr-rpg-save-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.osr-rpg-save-box {
+  flex: 1 1 5.5rem;
+  min-width: 5.5rem;
+  background: rgba(18, 14, 10, 0.65);
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.osr-rpg-save-abbr {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: $primary-outline-color;
+  line-height: 1.2;
+}
+
+.osr-rpg-save-label {
+  display: block;
+  font-size: 0.7rem;
+  color: $faded-text-color;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+
+.osr-rpg-save-value {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: bold;
+}
+
+.osr-rpg-combat-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+.osr-rpg-combat-chip {
+  font-size: 0.9rem;
+  color: $faded-text-color;
+
+  b {
+    color: $text-color;
+  }
+}
+
+.osr-rpg-skill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+}
+
+.osr-rpg-skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid $border-color;
+  background: rgba(18, 14, 10, 0.5);
+  font-size: 0.85rem;
+
+  b {
+    color: $primary-outline-color;
+  }
+
+  &.osr-rpg-skill-chip-class {
+    border-color: rgba(201, 168, 76, 0.4);
+  }
+}
+
+.osr-rpg-skill-code {
+  font-family: 'Cinzel', serif;
+  font-weight: bold;
+  color: $primary-outline-color;
+  min-width: 1.5rem;
+}
+
+.osr-rpg-spell-block {
+  font-size: 0.9rem;
+}
+
+.osr-rpg-spell-slots {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin-bottom: 6px;
+}
+
+.osr-rpg-spell-label {
+  font-weight: bold;
+  color: $faded-text-color;
+  margin-right: 4px;
+}
+
+.osr-rpg-spell-note {
+  margin: 4px 0 0;
+  color: $faded-text-color;
+}
+
+.osr-rpg-special-abilities {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+  color: $faded-text-color;
+
+  li {
+    margin-bottom: 4px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
