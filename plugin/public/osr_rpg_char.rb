@@ -14,6 +14,8 @@ module AresMUSH
     attribute :osr_thief_skills, :type => DataType::Hash, :default => {}
     attribute :osr_thac0, :type => DataType::Integer
     attribute :osr_starting_gold, :type => DataType::Integer
+    attribute :osr_gold, :type => DataType::Integer
+    attribute :osr_inventory, :type => DataType::Hash, :default => {}
     attribute :osr_xp_bonus, :type => DataType::Integer, :default => 0
     attribute :osr_ability_roll_count, :type => DataType::Integer, :default => 0
     attribute :osr_spell_book, :type => DataType::Hash, :default => {}

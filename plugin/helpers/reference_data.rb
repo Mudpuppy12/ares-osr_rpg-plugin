@@ -52,7 +52,7 @@ module AresMUSH
         blurb = Global.read_config('osr_rpg', 'equipment_blurb')
 
         {
-          armor: build_equipment_list(catalog['armor']),
+          armor: build_equipment_list(catalog['armor'], sort_by_ac: true),
           weapons: build_equipment_list(catalog['weapons']),
           missile_weapons: build_equipment_list(catalog['missile_weapons']),
           adventuring_gear: build_equipment_list(catalog['adventuring_gear']),
@@ -80,10 +80,10 @@ module AresMUSH
         end
       end
 
-      def self.build_equipment_list(hash)
+      def self.build_equipment_list(hash, sort_by_ac: false)
         return [] unless hash
 
-        hash.sort.map do |key, data|
+        rows = hash.map do |key, data|
           entry = data.is_a?(Hash) ? data : {}
           {
             key: key.to_s,
@@ -94,6 +94,12 @@ module AresMUSH
             ac_bonus: entry['ac_bonus'],
             notes: entry['notes']
           }
+        end
+
+        if sort_by_ac
+          rows.sort_by { |row| [row[:ac].nil? ? 999 : row[:ac].to_i, row[:name].to_s.downcase] }
+        else
+          rows.sort_by { |row| row[:name].to_s.downcase }
         end
       end
 

@@ -563,6 +563,64 @@ a.osr-rpg-skill-chip {
   color: $faded-text-color;
 }
 
+/* ---- Chargen equipment shop ---- */
+
+.osr-rpg-chargen-shop {
+  margin-top: 12px;
+}
+
+.osr-rpg-shop-gold-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin-bottom: 12px;
+}
+
+.osr-rpg-shop-guidance {
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+.osr-rpg-shop-section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  margin: 16px 0 8px;
+  color: $primary-outline-color;
+}
+
+.osr-rpg-shop-table {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.osr-rpg-shop-actions {
+  white-space: nowrap;
+
+  .btn {
+    min-width: 2rem;
+    padding: 2px 8px;
+  }
+}
+
+.osr-rpg-shop-cart {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin-top: 12px;
+}
+
+.osr-rpg-cart-remove {
+  padding: 0 4px;
+  margin-left: 4px;
+  color: $faded-text-color;
+  line-height: 1;
+
+  &:hover {
+    color: $primary-outline-color;
+  }
+}
+
 .osr-rpg-special-abilities {
   margin: 0;
   padding-left: 1.2rem;

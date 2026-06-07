@@ -200,9 +200,12 @@ Gear catalog in `osr_equipment.yml` (armor, melee weapons, missile weapons, adve
 
 | Command | Description |
 |---------|-------------|
-| `osr_rpg/equip <item>` | Equip leather, chain, shield, sword, etc. |
-| `osr_rpg/unequip <item>` | Remove gear |
-| `osr_rpg/gear [name]` | List equipped items and AC |
+| `osr_rpg/buy <item> [=qty]` | Purchase gear from catalog; deducts `osr_gold` |
+| `osr_rpg/sell <item> [=qty]` | Sell carried gear at half price |
+| `osr_rpg/equip <item>` | Equip owned armor or melee weapon |
+| `osr_rpg/unequip <item>` | Unequip gear back into inventory |
+| `osr_rpg/gear [name]` | Show gold, equipped gear, inventory, and AC |
+| `osr_rpg/inventory [name]` | Alias for `gear` |
 
 ### Staff tools
 

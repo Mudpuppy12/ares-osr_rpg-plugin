@@ -74,8 +74,12 @@ module AresMUSH
           return ExploreCmd
         when 'equip', 'unequip'
           return EquipCmd
-        when 'gear'
+        when 'gear', 'inventory'
           return GearCmd
+        when 'buy'
+          return BuyCmd
+        when 'sell'
+          return SellCmd
         when 'treasure'
           return TreasureCmd
         when 'npc'

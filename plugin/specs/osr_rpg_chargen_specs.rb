@@ -12,6 +12,8 @@ module AresMUSH
         allow(@char).to receive(:osr_thac0).and_return(nil)
         allow(@char).to receive(:osr_ability_roll_count).and_return(0)
         allow(@char).to receive(:osr_spell_book).and_return({})
+        allow(@char).to receive(:osr_inventory).and_return({})
+        allow(@char).to receive(:osr_gold).and_return(nil)
       end
 
       describe 'validate' do
@@ -220,14 +222,16 @@ module AresMUSH
           allow(@char).to receive(:osr_class).and_return('fighter')
           allow(@char).to receive(:osr_alignment).and_return('Law')
           allow(@char).to receive(:osr_ability_scores).and_return(scores)
-          updates = nil
-          allow(@char).to receive(:update) { |attrs| updates = attrs }
+          allow(@char).to receive(:osr_starting_gold).and_return(100)
+          updates = {}
+          allow(@char).to receive(:update) { |attrs| updates.merge!(attrs) }
 
           alerts = Chargen.finish_char(@char)
           expect(alerts).to be_empty
           expect(updates[:osr_hp]).to be >= 1
           expect(updates[:osr_thac0]).not_to be_nil
           expect(updates[:osr_starting_gold]).to be >= 30
+          expect(updates[:osr_gold]).to be >= 0
         end
       end
     end

@@ -4,35 +4,35 @@ osr:
     goblin:
       name: Goblin
       hd: 1
-      ac: 6
+      ac: 3
       thac0: 19
       hp: 4
       xp: 10
     orc:
       name: Orc
       hd: 1
-      ac: 6
+      ac: 3
       thac0: 19
       hp: 6
       xp: 10
     skeleton:
       name: Skeleton
       hd: 1
-      ac: 7
+      ac: 2
       thac0: 19
       hp: 4
       xp: 10
     zombie:
       name: Zombie
       hd: 2
-      ac: 8
+      ac: 1
       thac0: 19
       hp: 9
       xp: 20
     ogre:
       name: Ogre
       hd: 4
-      ac: 5
+      ac: 4
       thac0: 17
       hp: 22
       xp: 75

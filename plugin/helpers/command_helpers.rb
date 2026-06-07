@@ -14,7 +14,16 @@ module AresMUSH
       end
 
       def self.default_ac
-        Global.read_config('osr_rpg', 'default_ac') || 9
+        val = Global.read_config('osr_rpg', 'default_ac')
+        val.nil? ? 0 : val.to_i
+      end
+
+      def self.ac_baseline
+        Global.read_config('osr_rpg', 'ac_baseline') || 9
+      end
+
+      def self.attack_needed_roll(thac0, target_ac)
+        thac0.to_i - ac_baseline + target_ac.to_i
       end
 
       def self.parse_target_first_arg(args, enactor_name, allow_target: false)

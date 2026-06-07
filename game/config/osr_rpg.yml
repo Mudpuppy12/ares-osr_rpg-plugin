@@ -12,10 +12,11 @@ osr_rpg:
   spells_blurb: |
     OSE Advanced Fantasy spell lists by tradition. Click a spell for its description.
   equipment_blurb: |
-    OSE Advanced Fantasy equipment reference. AC uses ascending armor class (lower is better).
+    OSE Advanced Fantasy equipment reference. AC uses ascending armor class (higher is better).
     Shield improves AC by 1. Starting gold is typically 3d6×10 gp.
   public_sheets: true
   permissions:
     manage_osr_rpg_xp: Award OSR XP and level other characters.
     manage_osr_rpg: Manage OSR HP, combat, and spell actions for others.
-  default_ac: 9
+  default_ac: 0
+  ac_baseline: 9

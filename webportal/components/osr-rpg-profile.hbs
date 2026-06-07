@@ -18,7 +18,9 @@
           <span>Level <b>{{this.sheet.level}}</b></span>
           <span>XP <b>{{this.sheet.xp}}</b>{{#if this.sheet.xp_to_next_level}} / {{this.sheet.xp_to_next_level}}{{/if}}</span>
           <span>({{this.sheet.xp_bonus}}% bonus)</span>
-          {{#if this.sheet.starting_gold}}
+          {{#if this.sheet.gold}}
+            <span>Gold <b>{{this.sheet.gold}}</b> gp</span>
+          {{else if this.sheet.starting_gold}}
             <span>Gold <b>{{this.sheet.starting_gold}}</b> gp</span>
           {{/if}}
         </div>
@@ -107,6 +109,19 @@
           {{/if}}
         </div>
       </div>
+
+      {{#if this.sheet.inventory.length}}
+        <div class="osr-rpg-sheet-section">
+          <div class="osr-rpg-sheet-section-title">Inventory</div>
+          <div class="osr-rpg-skill-row">
+            {{#each this.sheet.inventory as |item|}}
+              <span class="osr-rpg-skill-chip">
+                {{item.name}}{{#if (gt item.qty 1)}} x{{item.qty}}{{/if}}
+              </span>
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
 
       <div class="osr-rpg-sheet-section">
         <div class="osr-rpg-sheet-section-title">Exploration</div>

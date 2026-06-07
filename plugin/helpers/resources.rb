@@ -31,21 +31,7 @@ module AresMUSH
       end
 
       def self.suggest_ac_from_equipment(char)
-        equipment = char.osr_equipment || []
-        catalog = Global.read_config('osr', 'equipment', 'armor') || {}
-        ac = CommandHelpers.default_ac
-        bonus = 0
-        equipment.each do |item|
-          key = Tables.normalize_key(item)
-          entry = catalog[key] || catalog[key.to_sym]
-          next unless entry
-          if entry['ac']
-            ac = [entry['ac'].to_i, ac].min
-          elsif entry['ac_bonus']
-            bonus += entry['ac_bonus'].to_i
-          end
-        end
-        [ac + bonus, 1].max
+        EquipmentHelper.suggest_ac_for_list(char.osr_equipment || [])
       end
     end
   end

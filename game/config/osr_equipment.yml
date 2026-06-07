@@ -1,5 +1,5 @@
 # OSE Advanced Fantasy Player's Tome v1.1 equipment reference.
-# AC: unarmored 9, leather 7, chain 5, plate 3, shield +1 (stored as ac_bonus -1).
+# AC: ascending (higher is better) — unarmored 0, leather 2, chain 4, plate 6, shield +1.
 # Keys align with osr_rpg/equip command (normalize_key).
 ---
 osr:
@@ -7,27 +7,27 @@ osr:
     armor:
       none:
         name: Unarmored
-        ac: 9
+        ac: 0
         cost: 0
         notes: Default AC without armor.
       leather:
         name: Leather
-        ac: 7
+        ac: 2
         cost: 20
         notes: Light armor; no movement penalty.
       chain:
         name: Chain Mail
-        ac: 5
+        ac: 4
         cost: 75
         notes: Medium armor.
       plate:
         name: Plate Mail
-        ac: 3
+        ac: 6
         cost: 60
         notes: Heavy armor.
       shield:
         name: Shield
-        ac_bonus: -1
+        ac_bonus: 1
         cost: 10
         notes: Improves AC by 1 when used with armor.
     weapons:

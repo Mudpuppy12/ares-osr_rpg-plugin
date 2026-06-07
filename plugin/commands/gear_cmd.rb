@@ -17,12 +17,23 @@ module AresMUSH
 
       def handle
         with_play_char do |model|
-          gear = EquipmentHelper.gear_display(model)
-          if gear.empty?
-            client.emit_success t('osr_rpg.gear_empty', name: model.name)
+          EquipmentHelper.migrate_character!(model)
+          equipped = EquipmentHelper.gear_display(model)
+          inventory = EquipmentHelper.inventory_display(model)
+          gold = model.osr_gold || 0
+          ac = Resources.current_ac(model)
+
+          if equipped.empty? && inventory.empty?
+            client.emit_success t('osr_rpg.gear_empty', name: model.name, gold: gold)
           else
-            lines = gear.map { |g| g[:name] }.join(', ')
-            client.emit_success t('osr_rpg.gear_list', name: model.name, gear: lines, ac: Resources.current_ac(model))
+            equipped_line = equipped.any? ? equipped.map { |g| g[:name] }.join(', ') : t('osr_rpg.gear_none_equipped')
+            inventory_line = inventory.any? ? inventory.map { |i| i[:qty] > 1 ? "#{i[:name]} x#{i[:qty]}" : i[:name] }.join(', ') : t('osr_rpg.gear_none_carried')
+            client.emit_success t('osr_rpg.gear_full',
+                                  name: model.name,
+                                  gold: gold,
+                                  equipped: equipped_line,
+                                  inventory: inventory_line,
+                                  ac: ac)
           end
         end
       end

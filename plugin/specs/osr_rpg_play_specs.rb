@@ -9,7 +9,9 @@ module AresMUSH
                        osr_thac0: 19,
                        osr_hp: 10,
                        osr_hp_max: 10,
-                       osr_ac: 9,
+                       osr_ac: 0,
+                       osr_gold: 100,
+                       osr_inventory: {},
                        osr_saving_throws: { 'death' => 12 },
                        osr_thief_skills: { 'hide_in_shadows' => 3 },
                        osr_ability_scores: { 'str' => 14, 'dex' => 12 },
@@ -37,10 +39,12 @@ module AresMUSH
       end
 
       describe 'Rolls.perform_roll' do
-        it 'rolls attack with AC' do
+        it 'rolls attack with ascending AC' do
+          allow(Global).to receive(:read_config).with('osr_rpg', 'ac_baseline').and_return(9)
           allow(Rolls).to receive(:rand).and_return(15)
-          result = Rolls.perform_roll(@char, 'attack', ac: 9)
+          result = Rolls.perform_roll(@char, 'attack', ac: 0)
           expect(result[:hit]).to eq true
+          expect(result[:needed]).to eq 10
         end
       end
 

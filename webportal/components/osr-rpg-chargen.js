@@ -57,6 +57,7 @@ export default Component.extend({
     this.set('abilityRollCount', this.get('osr_rpg.ability_roll_count') || 0);
     this.initThiefAllocations();
     this.initSpellPicks();
+    this.initShopCart();
   },
 
   osr_rpg: computed('model.char.osr_rpg', function() {
@@ -187,6 +188,10 @@ export default Component.extend({
     'abilityRolls',
     'thiefAllocations.@each.points',
     'spellPicks.[]',
+    'cartLineItems.[]',
+    'goldRemaining',
+    'previewEquippedAc',
+    'startingGoldBudget',
     'osr_rpg.hp_per_level',
     'abilityModifiers',
     function() {
@@ -241,10 +246,18 @@ export default Component.extend({
         hpMax: hpMax,
         hpLabel: hpLabel,
         thiefSkills: thiefSkills,
-        spellSummary: this.spellSummaryForPreview()
+        spellSummary: this.spellSummaryForPreview(),
+        startingGold: this.startingGoldBudget,
+        goldRemaining: this.goldRemaining,
+        cartSummary: (this.cartLineItems || []).map(i => i.qty > 1 ? `${i.name} x${i.qty}` : i.name).join(', '),
+        previewAc: this.previewEquippedAc
       };
     }
   ),
+
+  cartQty(itemKey) {
+    return (this.shopCart || {})[itemKey] || 0;
+  },
 
   allowedAlignments: computed('selectedClass', 'osr_rpg.alignments', function() {
     let cls = this.selectedClass;
@@ -293,6 +306,74 @@ export default Component.extend({
   requiredSpellPicks: computed('selectedClass', function() {
     let cls = this.selectedClass;
     return cls ? (cls.l1_spell_slots || 0) : 0;
+  }),
+
+  startingGoldBudget: computed('osr_rpg.starting_gold', function() {
+    return this.get('osr_rpg.starting_gold') || 0;
+  }),
+
+  shopCatalogSections: computed('osr_rpg.equipment_catalog', function() {
+    let catalog = this.get('osr_rpg.equipment_catalog') || {};
+    return [
+      { key: 'armor', title: 'Armor', items: catalog.armor || [] },
+      { key: 'weapons', title: 'Melee Weapons', items: catalog.weapons || [] },
+      { key: 'missile_weapons', title: 'Missile Weapons', items: catalog.missile_weapons || [] },
+      { key: 'adventuring_gear', title: 'Adventuring Gear', items: catalog.adventuring_gear || [] }
+    ].filter(section => section.items.length > 0);
+  }),
+
+  cartTotal: computed('shopCart', function() {
+    let cart = this.shopCart || {};
+    let total = 0;
+    this.shopCatalogSections.forEach(section => {
+      section.items.forEach(item => {
+        let qty = cart[item.key] || 0;
+        total += (item.cost || 0) * qty;
+      });
+    });
+    return total;
+  }),
+
+  goldRemaining: computed('startingGoldBudget', 'cartTotal', function() {
+    return (this.startingGoldBudget || 0) - (this.cartTotal || 0);
+  }),
+
+  cartLineItems: computed('shopCart', 'shopCatalogSections', function() {
+    let cart = this.shopCart || {};
+    let lines = [];
+    this.shopCatalogSections.forEach(section => {
+      section.items.forEach(item => {
+        let qty = cart[item.key] || 0;
+        if (qty > 0) {
+          lines.push({
+            key: item.key,
+            name: item.name,
+            qty: qty,
+            lineTotal: (item.cost || 0) * qty
+          });
+        }
+      });
+    });
+    return lines;
+  }),
+
+  previewEquippedAc: computed('shopCart', 'shopCatalogSections', function() {
+    let cart = this.shopCart || {};
+    let ac = 0;
+    let bonus = 0;
+    let armorItems = (this.shopCatalogSections.find(s => s.key === 'armor') || {}).items || [];
+    ['leather', 'chain', 'plate'].forEach(armorKey => {
+      if ((cart[armorKey] || 0) > 0) {
+        let item = armorItems.find(i => i.key === armorKey);
+        if (item && item.ac != null) {
+          ac = Math.max(ac, item.ac);
+        }
+      }
+    });
+    if ((cart.shield || 0) > 0) {
+      bonus += 1;
+    }
+    return ac + bonus;
   }),
 
   spellOptions: computed('selectedClass', function() {
@@ -455,6 +536,23 @@ export default Component.extend({
     this.set('thiefAllocations', A(allocs));
   },
 
+  initShopCart() {
+    let existing = this.get('osr_rpg.inventory') || {};
+    this.set('shopCart', { ...existing });
+  },
+
+  buildInventoryPayload() {
+    let cart = this.shopCart || {};
+    let payload = {};
+    Object.keys(cart).forEach(key => {
+      let qty = parseInt(cart[key], 10) || 0;
+      if (qty > 0) {
+        payload[key] = qty;
+      }
+    });
+    return payload;
+  },
+
   initSpellPicks() {
     let existing = this.get('osr_rpg.spell_book') || {};
     let l1 = existing['1'] || existing[1] || [];
@@ -608,6 +706,7 @@ export default Component.extend({
       ability_scores: scores,
       thief_skills: thief_skills,
       spell_book: this.buildSpellBookPayload(),
+      inventory: this.buildInventoryPayload(),
       ability_roll_count: this.abilityRollCount || 0
     };
   },
@@ -623,6 +722,34 @@ export default Component.extend({
     }
     this.initThiefAllocations();
     this.initSpellPicks();
+    this.initShopCart();
+  },
+
+  @action
+  addShopItem(itemKey) {
+    if ((this.goldRemaining || 0) <= 0) { return; }
+    let cart = { ...(this.shopCart || {}) };
+    cart[itemKey] = (cart[itemKey] || 0) + 1;
+    this.set('shopCart', cart);
+  },
+
+  @action
+  removeShopItem(itemKey) {
+    let cart = { ...(this.shopCart || {}) };
+    let qty = (cart[itemKey] || 0) - 1;
+    if (qty <= 0) {
+      delete cart[itemKey];
+    } else {
+      cart[itemKey] = qty;
+    }
+    this.set('shopCart', cart);
+  },
+
+  @action
+  clearCartItem(itemKey) {
+    let cart = { ...(this.shopCart || {}) };
+    delete cart[itemKey];
+    this.set('shopCart', cart);
   },
 
   @action

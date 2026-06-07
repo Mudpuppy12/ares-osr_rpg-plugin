@@ -1,5 +1,16 @@
 # Changelog
 
+## v3.2.0 — 2026-06-08
+
+Chargen equipment shop, gold economy, and ascending AC.
+
+- Web chargen **Equipment & Gear** shop with starting-gold budget (`3d6×10`)
+- Character fields `osr_gold` (current balance) and `osr_inventory` (owned items)
+- Telnet `osr_rpg/buy` and `osr_rpg/sell` commands; expanded `osr_rpg/gear` / `inventory`
+- Inventory-aware equip/unequip; auto-equip best armor at chargen finalize
+- **Ascending AC** (higher is better): unarmored 0, plate 6, shield +1; THAC0 hit math preserved
+- Profile sheet shows current gold and full inventory
+
 ## v3.1.1 — 2026-06-08
 
 Spell reference UI polish and install doc updates.

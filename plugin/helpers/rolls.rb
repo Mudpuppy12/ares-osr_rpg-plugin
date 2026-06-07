@@ -49,7 +49,7 @@ module AresMUSH
         hit = nil
         needed = nil
         if target_ac
-          needed = thac0.to_i - target_ac.to_i
+          needed = CommandHelpers.attack_needed_roll(thac0, target_ac)
           hit = roll >= needed
         end
         msg_key = target_ac ? 'osr_rpg.scene_roll_attack_vs' : 'osr_rpg.scene_roll_attack'
