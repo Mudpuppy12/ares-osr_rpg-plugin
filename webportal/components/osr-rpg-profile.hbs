@@ -1,5 +1,5 @@
 <div id="systemrpg" class="tab-pane fade">
-  <div class="tab-cover">OSR Sheet</div>
+  <div class="tab-cover">Character Sheet</div>
 
   {{#if this.sheet.class_name}}
     <div class="osr-rpg-sheet">
@@ -50,7 +50,7 @@
           <div class="osr-rpg-sheet-section-title">Ability Scores</div>
           <div class="row osr-rpg-ability-grid">
             {{#each this.sheet.abilities as |ab|}}
-              <div class="col-md-4 col-sm-6">
+              <div class="col-md-2 col-sm-4 col-6">
                 <div class="osr-rpg-stat-cell">
                   <div class="osr-rpg-stat-label">{{ab.name}}</div>
                   <div class="osr-rpg-stat-score-row">
@@ -155,7 +155,14 @@
                 <span class="osr-rpg-spell-label">Prepared:</span>
                 {{#each this.sheet.prepared_spells as |prep|}}
                   <span class="osr-rpg-skill-chip">L{{prep.level}}:
-                    {{#each prep.spells as |spell idx|}}{{unless (eq idx 0) ', '}}{{spell}}{{/each}}
+                    {{#each prep.spells as |spell idx|}}
+                      {{unless (eq idx 0) ', '}}
+                      {{#if this.sheet.spell_tradition}}
+                        <LinkTo @route="osr-rpg-spell-detail" @models={{array this.sheet.spell_tradition prep.level (this.spellDetailKey spell)}}>{{spell}}</LinkTo>
+                      {{else}}
+                        {{spell}}
+                      {{/if}}
+                    {{/each}}
                   </span>
                 {{/each}}
               </div>
@@ -170,7 +177,11 @@
                     <p class="osr-rpg-spell-note">
                       <span class="osr-rpg-spell-label">Spell Book L1:</span>
                       {{#each spells as |spell|}}
-                        <span class="osr-rpg-skill-chip">{{spell}}</span>
+                        {{#if this.sheet.spell_tradition}}
+                          <LinkTo @route="osr-rpg-spell-detail" @models={{array this.sheet.spell_tradition lvl (this.spellDetailKey spell)}} class="osr-rpg-skill-chip">{{spell}}</LinkTo>
+                        {{else}}
+                          <span class="osr-rpg-skill-chip">{{spell}}</span>
+                        {{/if}}
                       {{/each}}
                     </p>
                   {{/if}}
@@ -178,7 +189,11 @@
                     <p class="osr-rpg-spell-note">
                       <span class="osr-rpg-spell-label">L1 Spell:</span>
                       {{#each spells as |spell|}}
-                        <span class="osr-rpg-skill-chip">{{spell}}</span>
+                        {{#if this.sheet.spell_tradition}}
+                          <LinkTo @route="osr-rpg-spell-detail" @models={{array this.sheet.spell_tradition lvl (this.spellDetailKey spell)}} class="osr-rpg-skill-chip">{{spell}}</LinkTo>
+                        {{else}}
+                          <span class="osr-rpg-skill-chip">{{spell}}</span>
+                        {{/if}}
                       {{/each}}
                     </p>
                   {{/if}}

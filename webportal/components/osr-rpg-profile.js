@@ -49,6 +49,12 @@ export default Component.extend({
     return mod >= 0 ? `+${mod}` : `${mod}`;
   },
 
+  spellDetailKey(name) {
+    return (name || '').toString().trim().toLowerCase()
+      .replace(/\s+/g, '_')
+      .replace(/[^a-z0-9_]/g, '');
+  },
+
   updateSheet(response) {
     if (response.sheet) {
       this.set('char.osr_rpg', response.sheet);
