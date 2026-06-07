@@ -8,7 +8,7 @@ Spell reference UI polish and install doc updates.
 - URL-safe spell keys for detail links (slashes/apostrophes in spell names)
 - Styled spell detail page (tradition badges, effect/reversal panels)
 - Tradition accent colors on spell list tabs and level headings
-- README: clarify installer vs manual steps for routes, styles, and upgrades
+- README: auto vs manual install tables, fresh install and upgrade checklists
 
 ## v3.1.0 — 2026-06-08
 

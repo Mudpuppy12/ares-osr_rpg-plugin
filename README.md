@@ -33,24 +33,35 @@ cd aresmush
 bundle exec rake add_plugin[https://github.com/Mudpuppy12/ares-osr_rpg-plugin]
 ```
 
-The installer will:
+### What `plugin/install` does automatically
 
-1. Copy `plugin/` → `aresmush/plugins/osr_rpg/`
-2. Copy `game/config/` → `aresmush/game/config/` (**first install only**)
-3. Copy `webportal/components/`, `webportal/routes/`, and `webportal/templates/` → `ares-webportal/app/`
-4. Copy `public/sounds/` → `ares-webportal/public/sounds/`
-5. Add `osr_rpg` to `plugins.extras` in `plugins.yml`
-6. Rebuild the web portal
+| Step | Action |
+|------|--------|
+| Server code | Copies `plugin/` → `aresmush/plugins/osr_rpg/` |
+| Game config | Copies `game/config/` → `aresmush/game/config/` (**first install only**) |
+| Web components | Copies `webportal/components/` → `ares-webportal/app/components/` |
+| Web routes | Copies `webportal/routes/` → `ares-webportal/app/routes/` |
+| Web templates | Copies `webportal/templates/` → `ares-webportal/app/templates/` |
+| Sounds | Copies `public/sounds/` → `ares-webportal/public/sounds/` |
+| Plugin registry | Adds `osr_rpg` to `plugins.extras` in `plugins.yml` |
+| Portal build | Rebuilds the web portal |
 
-It does **not** copy styles, `custom-routes.js`, or `website.yml` — see manual steps below.
+### What you must do manually
 
-## Manual steps
+The Ares plugin importer cannot modify these files on your game:
 
-These cannot be automated by the plugin importer.
+| Item | File(s) | Why |
+|------|---------|-----|
+| App review hook | `plugins/chargen/custom_app_review.rb` | Core chargen hook — not part of the plugin tree |
+| Route registration | `ares-webportal/app/custom-routes.js` (or `router.js`) | Installer copies route **files** but does not register them in Ember |
+| Web styles | `aresmush/game/styles/custom_style.scss` | SCSS lives outside the portal `app/` tree |
+| System menu | `game/config/website.yml` | Per-game navbar config |
+| Reload | In-game `load osr_rpg` | Picks up server-side plugin changes |
 
-### 1. App review hook
+### Fresh install checklist
 
-Edit `aresmush/plugins/chargen/custom_app_review.rb` and add at the top of `custom_app_review`:
+1. Run `plugin/install` (see above).
+2. Add the app review hook to `custom_app_review.rb`:
 
 ```ruby
 if Manage.is_extra_installed?("osr_rpg")
@@ -58,28 +69,7 @@ if Manage.is_extra_installed?("osr_rpg")
 end
 ```
 
-### 2. Reload
-
-```
-load osr_rpg
-```
-
-Or restart the game server.
-
-### 3. Dice roll sound and styles (web)
-
-`plugin/install` copies `public/sounds/` into your web portal automatically. For manual installs:
-
-```bash
-mkdir -p ares-webportal/public/sounds
-cp ares-osr_rpg-plugin/public/sounds/osr-rpg-dice.mp3 ares-webportal/public/sounds/
-```
-
-Merge `styles/osr_rpg_chargen.scss` from this repo into `aresmush/game/styles/custom_style.scss` (or `@import` it) so chargen dice tray, expertise UI, and System reference pages are styled.
-
-### 4. Custom routes (System menu pages)
-
-`plugin/install` copies route and template **files**, but Ember still needs route **registration**. If your game uses `ares-webportal/app/custom-routes.js` (recommended), add:
+3. Register System reference routes in `ares-webportal/app/custom-routes.js`:
 
 ```javascript
 router.route('osr-rpg-spells', { path: '/osr_rpg/spells' });
@@ -89,7 +79,7 @@ router.route('osr-rpg-equipment', { path: '/osr_rpg/equipment' });
 
 Games that edit `router.js` directly can register the same routes there instead.
 
-Add System menu entries to `game/config/website.yml` under `website.top_navbar` → System:
+4. Add System menu entries to `game/config/website.yml` under `website.top_navbar` → System:
 
 ```yaml
 - title: Spell Lists
@@ -98,15 +88,33 @@ Add System menu entries to `game/config/website.yml` under `website.top_navbar` 
   route: osr-rpg-equipment
 ```
 
-### 5. Verify
+5. Merge `styles/osr_rpg_chargen.scss` into `aresmush/game/styles/custom_style.scss` (chargen dice tray, profile sheet, spell/equipment reference pages).
 
-- Web chargen shows a **Sheet** tab (with `osr_rpg` in extras)
-- Save a character with class, alignment, and ability scores
-- In-game: `osr_rpg/roll`, `osr_rpg/finish`, and `sheet` work for telnet chargen
-- App review includes an **OSR Sheet** section
-- Live scene menu shows OSR rolls; `help play` lists play commands
-- System → **Spell Lists** shows tradition tabs; spell links open detail pages
-- System → **Equipment List** shows armor, weapons, and gear tables
+6. Run `load osr_rpg` (or restart the game server).
+
+7. Verify:
+   - Web chargen shows a **Sheet** tab
+   - `osr_rpg/finish` and `sheet` work on telnet
+   - App review includes an **OSR Sheet** section
+   - Live scene menu shows OSR rolls
+   - System → **Spell Lists** — tradition tabs; spell links open detail pages
+   - System → **Equipment List** — armor, weapons, and gear tables
+
+### Manual install (without `plugin/install`)
+
+If you clone the repo by hand:
+
+```bash
+cp -r ares-osr_rpg-plugin/plugin aresmush/plugins/osr_rpg
+cp -r ares-osr_rpg-plugin/game/config/* aresmush/game/config/
+cp -r ares-osr_rpg-plugin/webportal/components ares-webportal/app/
+cp -r ares-osr_rpg-plugin/webportal/routes ares-webportal/app/
+cp -r ares-osr_rpg-plugin/webportal/templates ares-webportal/app/
+mkdir -p ares-webportal/public/sounds
+cp ares-osr_rpg-plugin/public/sounds/osr-rpg-dice.mp3 ares-webportal/public/sounds/
+```
+
+Then complete steps 2–7 above, add `osr_rpg` to `plugins.extras` in `plugins.yml`, and rebuild the portal.
 
 ---
 
@@ -255,26 +263,41 @@ NPC templates and monster XP-by-HD tables in `osr_npcs.yml` and `osr_treasure.ym
 
 ## Upgrading
 
-Re-running `plugin/install` updates `plugin/` and `webportal/` (components, routes, templates) and rebuilds the portal. It **does not overwrite** `game/config/` on re-install (to preserve local edits).
+Re-run the same install command:
 
-After upgrading, also:
+```
+plugin/install https://github.com/Mudpuppy12/ares-osr_rpg-plugin
+```
 
-1. `load osr_rpg` (or restart the game server)
-2. Merge new YAML from `game/config/` if needed — especially `osr_spell_details.yml`, `osr_equipment.yml`, and `osr_rpg.yml` blurbs
-3. Confirm `custom-routes.js` still has the three `osr-rpg-*` routes (installer does not edit this file)
-4. Merge style changes from `styles/osr_rpg_chargen.scss` into `game/styles/custom_style.scss`
-5. Add System menu entries to `website.yml` if not already present
+That updates server code and web portal files (components, routes, templates) and rebuilds the portal. It **does not overwrite** `game/config/` on re-install, to preserve local edits.
+
+### Upgrade checklist
+
+1. Run `plugin/install` (above).
+2. `load osr_rpg` (or restart the game server).
+3. Merge any new YAML from this repo's `game/config/` into your game — common files to check:
+   - `osr_spell_details.yml` (spell reference descriptions)
+   - `osr_equipment.yml` (expanded gear catalog)
+   - `osr_rpg.yml` (`spells_blurb`, `equipment_blurb`, permissions)
+   - `osr_spells.yml` (spell list changes)
+4. Confirm `custom-routes.js` still registers the three `osr-rpg-*` routes (the installer never edits this file).
+5. Merge style changes from `styles/osr_rpg_chargen.scss` into `custom_style.scss`.
+6. Confirm `website.yml` still has Spell Lists and Equipment List under System (if not done at first install).
+7. Spot-check System → Spell Lists and Equipment List in the web portal.
 
 ## Repository layout
 
 ```
 ares-osr_rpg-plugin/
-├── plugin/           → aresmush/plugins/osr_rpg/
-├── game/config/      → aresmush/game/config/
-├── webportal/        → ares-webportal/app/
-├── public/sounds/    → ares-webportal/public/sounds/
-├── styles/           → SCSS for web chargen/sheet UI
-└── scripts/          → maintainer tools (generate_osr_config.rb)
+├── plugin/              → aresmush/plugins/osr_rpg/          (auto)
+├── game/config/         → aresmush/game/config/              (auto, first install only)
+├── webportal/
+│   ├── components/      → ares-webportal/app/components/     (auto)
+│   ├── routes/        → ares-webportal/app/routes/         (auto; register in custom-routes.js)
+│   └── templates/     → ares-webportal/app/templates/       (auto)
+├── public/sounds/       → ares-webportal/public/sounds/      (auto)
+├── styles/              → merge into custom_style.scss       (manual)
+└── scripts/             → maintainer tools (not installed)
 ```
 
 ## Development
