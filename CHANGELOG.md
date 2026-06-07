@@ -13,9 +13,9 @@ Rename and Chargen V2.
 
 ## v1.0.0 — 2026-06-07
 
-Initial release (as ares-rpg-plugin / OSE).
+Initial release (legacy `ares-rpg-plugin` / `rpg` key).
 
-- OSE race-as-class chargen for 24 Advanced Fantasy classes
+- OSR race-as-class chargen for 24 Advanced Fantasy classes
 - d6 thief skills variant with Thief L1 expertise allocator
 - Web portal `RpgChargen` and `RpgProfile` components
 - In-game `sheet` command

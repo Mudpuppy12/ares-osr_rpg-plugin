@@ -97,9 +97,9 @@ The web chargen dice tray plays this clip when rolling abilities.
 - **`game/config/osr*.yml`** — class progressions, spells, house rules
 - Regenerate config (maintainers): `ruby scripts/generate_osr_config.rb`
 
-## Upgrading from ares-rpg-plugin (OSE)
+## Upgrading from ares-rpg-plugin (legacy `rpg`)
 
-If upgrading from the legacy `rpg` / OSE plugin:
+If upgrading from the legacy `rpg` plugin:
 
 1. Remove `rpg` from `plugins.extras` and delete `aresmush/plugins/rpg/` if present
 2. Install this plugin and run `load osr_rpg`
@@ -125,9 +125,9 @@ ares-osr_rpg-plugin/
 
 ## Development
 
-Source game / reference implementation: [ose-ares](https://github.com/OSE/ose-ares)
+Source game / reference implementation: the **osr-ares** AresMUSH dev workspace.
 
-Sync from ose-ares dev workspace:
+Sync from the dev workspace:
 
 ```bash
 ./scripts/sync_osr_rpg_plugin_repo.sh /path/to/ares-osr_rpg-plugin
