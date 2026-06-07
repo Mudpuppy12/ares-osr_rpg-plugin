@@ -1,0 +1,226 @@
+---
+ose:
+  classes:
+    necromancer:
+      group: supplemental
+      race: human
+      name: Necromancer
+      hd: d4
+      max_level: 14
+      prime_reqs:
+      - int
+      min_scores:
+        wis: 9
+      spell_tradition: necromancer
+      armor: none
+      playtest: true
+      blurb: Necromantic arcanist (v0.2 playtest); WIS 9 min.
+      progression:
+      - :level: 1
+        :xp: 0
+        :hd: 1d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 1
+      - :level: 2
+        :xp: 2500
+        :hd: 2d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+      - :level: 3
+        :xp: 5000
+        :hd: 3d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+          '2': 1
+      - :level: 4
+        :xp: 10000
+        :hd: 4d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+          '2': 2
+      - :level: 5
+        :xp: 20000
+        :hd: 5d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+          '2': 2
+          '3': 1
+      - :level: 6
+        :xp: 40000
+        :hd: 6d4
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 11
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 2
+          '2': 2
+          '3': 2
+      - :level: 7
+        :xp: 80000
+        :hd: 7d4
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 11
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 3
+          '2': 2
+          '3': 2
+          '4': 1
+      - :level: 8
+        :xp: 150000
+        :hd: 8d4
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 11
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 2
+          '4': 2
+      - :level: 9
+        :xp: 300000
+        :hd: 9d4
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 11
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+          '4': 2
+          '5': 1
+      - :level: 10
+        :xp: 450000
+        :hd: 9d4+1
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 11
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+          '4': 3
+          '5': 2
+      - :level: 11
+        :xp: 600000
+        :hd: 9d4+2
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 8
+          :breath: 11
+          :spells: 8
+        :spell_slots:
+          '1': 4
+          '2': 3
+          '3': 3
+          '4': 3
+          '5': 2
+          '6': 1
+      - :level: 12
+        :xp: 750000
+        :hd: 9d4+3
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 8
+          :breath: 11
+          :spells: 8
+        :spell_slots:
+          '1': 4
+          '2': 4
+          '3': 3
+          '4': 3
+          '5': 3
+          '6': 2
+      - :level: 13
+        :xp: 900000
+        :hd: 9d4+4
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 8
+          :breath: 11
+          :spells: 8
+        :spell_slots:
+          '1': 4
+          '2': 4
+          '3': 4
+          '4': 3
+          '5': 3
+          '6': 3
+      - :level: 14
+        :xp: 1050000
+        :hd: 9d4+5
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 8
+          :breath: 11
+          :spells: 8
+        :spell_slots:
+          '1': 4
+          '2': 4
+          '3': 4
+          '4': 4
+          '5': 3
+          '6': 3

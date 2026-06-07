@@ -1,0 +1,87 @@
+<div class="card card-default">
+  <div class="card-heading">OSE Character Sheet</div>
+  <div class="card-body">
+
+    <p class="cg-tip"><AnsiFormat @text={{this.model.cgInfo.rpg_blurb}} /></p>
+
+    <div class="form-item">
+      <div class="form-item-label"><b>Class</b></div>
+      <div class="form-item-entry">
+        <PowerSelect
+          @selected={{this.selectedClass}}
+          @options={{this.allClasses}}
+          @searchEnabled={{true}}
+          @searchField="displayName"
+          @onChange={{this.classChanged}}
+          @placeholder="Select class..."
+          as |cls|
+        >
+          {{cls.displayName}}
+        </PowerSelect>
+        {{#if this.selectedClass}}
+          <p class="cg-tip">{{this.selectedClass.blurb}}</p>
+          {{#if this.selectedClass.playtest}}
+            <p class="cg-tip text-warning">Playtest class — rules may change.</p>
+          {{/if}}
+        {{/if}}
+      </div>
+    </div>
+
+    <div class="form-item">
+      <div class="form-item-label"><b>Alignment</b></div>
+      <div class="form-item-entry">
+        <PowerSelect
+          @selected={{this.rpg.alignment}}
+          @options={{this.allowedAlignments}}
+          @searchEnabled={{false}}
+          @onChange={{this.alignmentChanged}}
+          @placeholder="Select alignment..."
+          as |align|
+        >
+          {{align}}
+        </PowerSelect>
+      </div>
+    </div>
+
+    <div class="form-item">
+      <div class="form-item-label"><b>Ability Scores</b> (3d6 each)</div>
+      <div class="form-item-entry">
+        <button class="btn btn-secondary btn-sm" type="button" {{on 'click' this.rollAbilities}}>Roll 3d6</button>
+        <br><br>
+        {{#each this.rpg.abilities as |ab|}}
+          <div class="form-inline" style="margin-bottom: 8px;">
+            <label style="width: 60px;"><b>{{ab}}</b></label>
+            <Input @type="number" @min={{3}} @max={{18}} @value={{get this.abilityScores ab}} {{on 'input' (fn this.abilityChanged ab)}} />
+          </div>
+        {{/each}}
+      </div>
+    </div>
+
+    {{#if this.showThiefAllocator}}
+      <div class="form-item">
+        <div class="form-item-label"><b>Thief Expertise</b></div>
+        <div class="form-item-entry">
+          <p class="cg-tip">Allocate {{this.rpg.l1_expertise_points}} expertise points (+1-in-6 each, max 5-in-6).</p>
+          <p>Points remaining: <b>{{this.thiefPointsRemaining}}</b></p>
+          {{#each this.thiefAllocations as |alloc|}}
+            <div class="form-inline" style="margin-bottom: 8px;">
+              <label style="width: 200px;">{{alloc.name}}</label>
+              <Input @type="number" @min={{0}} @max={{4}} @value={{alloc.points}} {{on 'input' (fn this.thiefPointChanged alloc.key)}} />
+              <span class="text-muted">→ {{alloc.chance}}-in-6</span>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if this.rpg.sheet.class_name}}
+      <hr>
+      <h4>Preview (Level 1)</h4>
+      <p><b>{{this.rpg.sheet.class_name}}</b> ({{this.rpg.sheet.race}}) — HP {{this.rpg.sheet.hp}}/{{this.rpg.sheet.hp_max}}, THAC0 {{this.rpg.sheet.thac0}}</p>
+      {{#if this.rpg.sheet.thief_skills.length}}
+        <p>Skills: {{#each this.rpg.sheet.thief_skills as |sk|}}{{sk.name}} {{sk.chance}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+      {{/if}}
+    {{/if}}
+
+  </div>
+</div>

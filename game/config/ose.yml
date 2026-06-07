@@ -1,0 +1,85 @@
+---
+ose:
+  edition: advanced_fantasy
+  creation_method: race_as_class
+  class_groups:
+  - human
+  - demihuman
+  - supplemental
+  abilities:
+  - str
+  - dex
+  - con
+  - int
+  - wis
+  - cha
+  alignments:
+  - Law
+  - Neutrality
+  - Chaos
+  starting_gold: 3d6x10
+  ability_modifiers:
+    '3': -3
+    '4': -2
+    '5': -2
+    '6': -1
+    '7': -1
+    '8': -1
+    '9': 0
+    '10': 0
+    '11': 0
+    '12': 0
+    '13': 1
+    '14': 1
+    '15': 1
+    '16': 2
+    '17': 2
+    '18': 3
+  prime_req_xp_bonus:
+    low: -10
+    mid: 0
+    high: 5
+    prime: 10
+  thief_skills_d6:
+    base_chance: 1
+    max_chance: 5
+    expertise_per_level:
+      '1': 4
+      default: 2
+    skills:
+    - climb_sheer
+    - find_remove_traps
+    - hear_noise
+    - hide_in_shadows
+    - move_silently
+    - open_locks
+    - pick_pockets
+    - read_languages
+    pick_pockets_penalty_per_3_levels: 1
+  save_tiers:
+    :martial:
+    - 12/13/14/15/16
+    - 10/11/12/13/14
+    - 8/9/10/10/12
+    - 6/7/8/8/10
+    - 4/5/6/5/8
+    :thief:
+    - 13/14/13/16/15
+    - 12/13/11/14/13
+    - 10/11/9/12/10
+    - 8/9/7/10/8
+    :caster:
+    - 13/14/13/16/15
+    - 11/12/11/14/12
+    - 8/9/8/11/8
+    :divine:
+    - 11/12/14/16/15
+    - 9/10/12/14/12
+    - 6/7/9/11/9
+    - 3/5/7/8/7
+    :paladin:
+    - 10/11/12/13/14
+    - 8/9/10/11/12
+    - 6/7/8/8/10
+    - 4/5/6/6/8
+    - 2/3/4/3/6

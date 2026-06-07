@@ -1,0 +1,12 @@
+en:
+  rpg:
+    class_not_set: "Class not set."
+    alignment_not_set: "Alignment not set."
+    invalid_class: "Invalid class: %{class}."
+    invalid_alignment: "Invalid alignment for class: %{alignment}."
+    min_score_failed: "%{ability} %{score} is below minimum %{min} for %{class}."
+    thief_points_wrong: "Thief must spend exactly %{points} expertise points (spent %{spent})."
+    thief_skill_too_high: "%{skill} cannot exceed %{max}-in-6."
+    ability_not_set: "%{ability} not set."
+    sheet_title: "OSE Character Sheet - %{name}"
+    no_permission_to_view_sheet: "You don't have permission to view that sheet."

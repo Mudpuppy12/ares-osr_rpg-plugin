@@ -1,0 +1,1300 @@
+---
+ose:
+  classes:
+    dwarf:
+      group: demihuman
+      race: dwarf
+      name: Dwarf
+      hd: d8
+      max_level: 12
+      prime_reqs:
+      - str
+      min_scores:
+        con: 9
+      blurb: Stout underground warrior.
+      progression:
+      - level: 1
+        xp: 0
+        hd: 1d8
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 13
+          :spells: 12
+      - level: 2
+        xp: 2200
+        hd: 2d8
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 13
+          :spells: 12
+      - level: 3
+        xp: 4400
+        hd: 3d8
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 13
+          :spells: 12
+      - level: 4
+        xp: 8800
+        hd: 4d8
+        thac0: 17
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 10
+          :spells: 10
+      - level: 5
+        xp: 17000
+        hd: 5d8
+        thac0: 17
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 10
+          :spells: 10
+      - level: 6
+        xp: 35000
+        hd: 6d8
+        thac0: 17
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 10
+          :spells: 10
+      - level: 7
+        xp: 70000
+        hd: 7d8
+        thac0: 14
+        saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 7
+          :spells: 8
+      - level: 8
+        xp: 140000
+        hd: 8d8
+        thac0: 14
+        saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 7
+          :spells: 8
+      - level: 9
+        xp: 270000
+        hd: 9d8
+        thac0: 14
+        saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 7
+          :spells: 8
+      - level: 10
+        xp: 400000
+        hd: 9d8+3
+        thac0: 12
+        saves:
+          :death: 2
+          :wands: 3
+          :paralysis: 4
+          :breath: 4
+          :spells: 6
+      - level: 11
+        xp: 530000
+        hd: 9d8+6
+        thac0: 12
+        saves:
+          :death: 2
+          :wands: 3
+          :paralysis: 4
+          :breath: 4
+          :spells: 6
+      - level: 12
+        xp: 660000
+        hd: 9d8+9
+        thac0: 12
+        saves:
+          :death: 2
+          :wands: 3
+          :paralysis: 4
+          :breath: 4
+          :spells: 6
+    half_orc:
+      group: demihuman
+      race: half_orc
+      name: Half-Orc
+      hd: d6
+      max_level: 8
+      prime_reqs:
+      - dex
+      - str
+      skill_system: d6
+      skill_set:
+      - hide_in_shadows
+      - move_silently
+      - pick_pockets
+      back_stab: true
+      blurb: Strong and stealthy; d6 thief skills at 1-in-6.
+      progression:
+      - level: 1
+        xp: 0
+        hd: 1d6
+        thac0: 19
+        saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - level: 2
+        xp: 1800
+        hd: 2d6
+        thac0: 19
+        saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - level: 3
+        xp: 3600
+        hd: 3d6
+        thac0: 19
+        saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - level: 4
+        xp: 7000
+        hd: 4d6
+        thac0: 19
+        saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - level: 5
+        xp: 14000
+        hd: 5d6
+        thac0: 17
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+      - level: 6
+        xp: 28000
+        hd: 6d6
+        thac0: 17
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+      - level: 7
+        xp: 60000
+        hd: 7d6
+        thac0: 17
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+      - level: 8
+        xp: 120000
+        hd: 8d6
+        thac0: 17
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+    halfling:
+      group: demihuman
+      race: halfling
+      name: Halfling
+      hd: d6
+      max_level: 8
+      prime_reqs:
+      - dex
+      - str
+      min_scores:
+        con: 9
+        dex: 9
+      alignment_restrictions:
+      - Law
+      - Neutrality
+      blurb: Small and brave; Lawful or Neutral only.
+      progression:
+      - level: 1
+        xp: 0
+        hd: 1d6
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 13
+          :spells: 12
+      - level: 2
+        xp: 2000
+        hd: 2d6
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 13
+          :spells: 12
+      - level: 3
+        xp: 4000
+        hd: 3d6
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 13
+          :spells: 12
+      - level: 4
+        xp: 8000
+        hd: 4d6
+        thac0: 17
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 10
+          :spells: 10
+      - level: 5
+        xp: 16000
+        hd: 5d6
+        thac0: 17
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 10
+          :spells: 10
+      - level: 6
+        xp: 32000
+        hd: 6d6
+        thac0: 17
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 10
+          :spells: 10
+      - level: 7
+        xp: 64000
+        hd: 7d6
+        thac0: 14
+        saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 7
+          :spells: 8
+      - level: 8
+        xp: 120000
+        hd: 8d6
+        thac0: 14
+        saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 7
+          :spells: 8
+    elf:
+      group: demihuman
+      race: elf
+      name: Elf
+      hd: d6
+      max_level: 10
+      prime_reqs:
+      - int
+      - str
+      min_scores:
+        int: 9
+      spell_tradition: magic_user
+      spells_from_level: 1
+      blurb: Graceful arcane race-class.
+      progression:
+      - level: 1
+        xp: 0
+        hd: 1d6
+        thac0: 19
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 13
+          :breath: 15
+          :spells: 15
+        spell_slots:
+          '1': 1
+      - level: 2
+        xp: 4000
+        hd: 2d6
+        thac0: 19
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 13
+          :breath: 15
+          :spells: 15
+        spell_slots:
+          '1': 2
+      - level: 3
+        xp: 8000
+        hd: 3d6
+        thac0: 19
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 13
+          :breath: 15
+          :spells: 15
+        spell_slots:
+          '1': 2
+          '2': 1
+      - level: 4
+        xp: 16000
+        hd: 4d6
+        thac0: 17
+        saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 11
+          :breath: 13
+          :spells: 12
+        spell_slots:
+          '1': 2
+          '2': 2
+      - level: 5
+        xp: 32000
+        hd: 5d6
+        thac0: 17
+        saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 11
+          :breath: 13
+          :spells: 12
+        spell_slots:
+          '1': 2
+          '2': 2
+          '3': 1
+      - level: 6
+        xp: 64000
+        hd: 6d6
+        thac0: 17
+        saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 11
+          :breath: 13
+          :spells: 12
+        spell_slots:
+          '1': 2
+          '2': 2
+          '3': 2
+      - level: 7
+        xp: 120000
+        hd: 7d6
+        thac0: 14
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 9
+          :breath: 10
+          :spells: 10
+        spell_slots:
+          '1': 3
+          '2': 2
+          '3': 2
+          '4': 1
+      - level: 8
+        xp: 250000
+        hd: 8d6
+        thac0: 14
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 9
+          :breath: 10
+          :spells: 10
+        spell_slots:
+          '1': 3
+          '2': 3
+          '3': 2
+          '4': 2
+      - level: 9
+        xp: 400000
+        hd: 9d6
+        thac0: 14
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 9
+          :breath: 10
+          :spells: 10
+        spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+          '4': 2
+          '5': 1
+      - level: 10
+        xp: 600000
+        hd: 9d6+2
+        thac0: 12
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 8
+        spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+          '4': 3
+          '5': 2
+    gnome:
+      group: demihuman
+      race: gnome
+      name: Gnome
+      hd: d4
+      max_level: 8
+      prime_reqs:
+      - dex
+      - int
+      min_scores:
+        con: 9
+      spell_tradition: illusionist
+      blurb: Small illusionist race-class.
+      progression:
+      - level: 1
+        xp: 0
+        hd: 1d4
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 14
+          :spells: 11
+        spell_slots:
+          '1': 1
+      - level: 2
+        xp: 3000
+        hd: 2d4
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 14
+          :spells: 11
+        spell_slots:
+          '1': 2
+      - level: 3
+        xp: 6000
+        hd: 3d4
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 14
+          :spells: 11
+        spell_slots:
+          '1': 2
+          '2': 1
+      - level: 4
+        xp: 12000
+        hd: 4d4
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 14
+          :spells: 11
+        spell_slots:
+          '1': 2
+          '2': 2
+      - level: 5
+        xp: 30000
+        hd: 5d4
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 14
+          :spells: 11
+        spell_slots:
+          '1': 2
+          '2': 2
+          '3': 1
+      - level: 6
+        xp: 60000
+        hd: 6d4
+        thac0: 17
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 11
+          :spells: 9
+        spell_slots:
+          '1': 2
+          '2': 2
+          '3': 2
+      - level: 7
+        xp: 120000
+        hd: 7d4
+        thac0: 17
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 11
+          :spells: 9
+        spell_slots:
+          '1': 3
+          '2': 2
+          '3': 2
+          '4': 1
+      - level: 8
+        xp: 240000
+        hd: 8d4
+        thac0: 17
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 11
+          :spells: 9
+        spell_slots:
+          '1': 3
+          '2': 3
+          '3': 2
+          '4': 2
+    drow:
+      group: demihuman
+      race: drow
+      name: Drow
+      hd: d6
+      max_level: 10
+      prime_reqs:
+      - str
+      - wis
+      min_scores:
+        int: 9
+      spell_tradition: cleric
+      l1_spells:
+      - darkness
+      spells_from_level: 2
+      blurb: Underdark elf; darkness only at 1st level.
+      progression:
+      - level: 1
+        xp: 0
+        hd: 1d6
+        thac0: 19
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 13
+          :breath: 15
+          :spells: 12
+        spell_slots:
+          '1': 1
+      - level: 2
+        xp: 4000
+        hd: 2d6
+        thac0: 19
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 13
+          :breath: 15
+          :spells: 12
+        spell_slots:
+          '1': 2
+      - level: 3
+        xp: 8000
+        hd: 3d6
+        thac0: 19
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 13
+          :breath: 15
+          :spells: 12
+        spell_slots:
+          '1': 2
+          '2': 1
+      - level: 4
+        xp: 16000
+        hd: 4d6
+        thac0: 17
+        saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 11
+          :breath: 13
+          :spells: 10
+        spell_slots:
+          '1': 2
+          '2': 2
+      - level: 5
+        xp: 32000
+        hd: 5d6
+        thac0: 17
+        saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 11
+          :breath: 13
+          :spells: 10
+        spell_slots:
+          '1': 2
+          '2': 2
+          '3': 1
+      - level: 6
+        xp: 64000
+        hd: 6d6
+        thac0: 17
+        saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 11
+          :breath: 13
+          :spells: 10
+        spell_slots:
+          '1': 2
+          '2': 2
+          '3': 2
+          '4': 1
+      - level: 7
+        xp: 120000
+        hd: 7d6
+        thac0: 14
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 9
+          :breath: 10
+          :spells: 8
+        spell_slots:
+          '1': 3
+          '2': 2
+          '3': 2
+          '4': 2
+          '5': 1
+      - level: 8
+        xp: 250000
+        hd: 8d6
+        thac0: 14
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 9
+          :breath: 10
+          :spells: 8
+        spell_slots:
+          '1': 3
+          '2': 3
+          '3': 2
+          '4': 2
+          '5': 2
+      - level: 9
+        xp: 400000
+        hd: 9d6
+        thac0: 14
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 9
+          :breath: 10
+          :spells: 8
+        spell_slots:
+          '1': 4
+          '2': 3
+          '3': 3
+          '4': 3
+          '5': 2
+      - level: 10
+        xp: 600000
+        hd: 9d6+2
+        thac0: 12
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 8
+        spell_slots:
+          '1': 4
+          '2': 4
+          '3': 4
+          '4': 3
+          '5': 3
+    duergar:
+      group: demihuman
+      race: duergar
+      name: Duergar
+      hd: d6
+      max_level: 10
+      prime_reqs:
+      - str
+      min_scores:
+        con: 9
+        int: 9
+      blurb: Gray dwarf with mental powers.
+      progression:
+      - level: 1
+        xp: 0
+        hd: 1d6
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 13
+          :spells: 12
+      - level: 2
+        xp: 2800
+        hd: 2d6
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 13
+          :spells: 12
+      - level: 3
+        xp: 5600
+        hd: 3d6
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 13
+          :spells: 12
+      - level: 4
+        xp: 11200
+        hd: 4d6
+        thac0: 17
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 10
+          :spells: 10
+      - level: 5
+        xp: 23000
+        hd: 5d6
+        thac0: 17
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 10
+          :spells: 10
+      - level: 6
+        xp: 46000
+        hd: 6d6
+        thac0: 17
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 10
+          :spells: 10
+      - level: 7
+        xp: 100000
+        hd: 7d6
+        thac0: 14
+        saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 7
+          :spells: 8
+      - level: 8
+        xp: 200000
+        hd: 8d6
+        thac0: 14
+        saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 7
+          :spells: 8
+      - level: 9
+        xp: 300000
+        hd: 9d6
+        thac0: 14
+        saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 7
+          :spells: 8
+      - level: 10
+        xp: 400000
+        hd: 9d6+3
+        thac0: 12
+        saves:
+          :death: 2
+          :wands: 3
+          :paralysis: 4
+          :breath: 4
+          :spells: 6
+    half_elf:
+      group: demihuman
+      race: half_elf
+      name: Half-Elf
+      hd: d6
+      max_level: 12
+      prime_reqs:
+      - int
+      - str
+      min_scores:
+        cha: 9
+        con: 9
+      spell_tradition: magic_user
+      spells_from_level: 2
+      blurb: Mixed heritage arcane caster.
+      progression:
+      - level: 1
+        xp: 0
+        hd: 1d6
+        thac0: 19
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 13
+          :breath: 15
+          :spells: 15
+      - level: 2
+        xp: 2500
+        hd: 2d6
+        thac0: 19
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 13
+          :breath: 15
+          :spells: 15
+        spell_slots:
+          '1': 1
+      - level: 3
+        xp: 5000
+        hd: 3d6
+        thac0: 19
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 13
+          :breath: 15
+          :spells: 15
+        spell_slots:
+          '1': 2
+      - level: 4
+        xp: 10000
+        hd: 4d6
+        thac0: 17
+        saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 11
+          :breath: 13
+          :spells: 12
+        spell_slots:
+          '1': 2
+      - level: 5
+        xp: 20000
+        hd: 5d6
+        thac0: 17
+        saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 11
+          :breath: 13
+          :spells: 12
+        spell_slots:
+          '1': 2
+          '2': 1
+      - level: 6
+        xp: 40000
+        hd: 6d6
+        thac0: 17
+        saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 11
+          :breath: 13
+          :spells: 12
+        spell_slots:
+          '1': 2
+          '2': 2
+      - level: 7
+        xp: 80000
+        hd: 7d6
+        thac0: 14
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 9
+          :breath: 10
+          :spells: 10
+        spell_slots:
+          '1': 2
+          '2': 2
+      - level: 8
+        xp: 150000
+        hd: 8d6
+        thac0: 14
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 9
+          :breath: 10
+          :spells: 10
+        spell_slots:
+          '1': 2
+          '2': 2
+          '3': 1
+      - level: 9
+        xp: 300000
+        hd: 9d6
+        thac0: 14
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 9
+          :breath: 10
+          :spells: 10
+        spell_slots:
+          '1': 3
+          '2': 2
+          '3': 1
+      - level: 10
+        xp: 450000
+        hd: 9d6+2
+        thac0: 12
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 8
+        spell_slots:
+          '1': 3
+          '2': 2
+          '3': 2
+      - level: 11
+        xp: 600000
+        hd: 9d6+4
+        thac0: 12
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 8
+        spell_slots:
+          '1': 3
+          '2': 2
+          '3': 2
+          '4': 1
+      - level: 12
+        xp: 750000
+        hd: 9d6+6
+        thac0: 12
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 8
+        spell_slots:
+          '1': 3
+          '2': 3
+          '3': 2
+          '4': 1
+    svirfneblin:
+      group: demihuman
+      race: svirfneblin
+      name: Svirfneblin
+      hd: d6
+      max_level: 8
+      prime_reqs:
+      - str
+      min_scores:
+        con: 9
+      blurb: Deep gnome; stone blend.
+      progression:
+      - level: 1
+        xp: 0
+        hd: 1d6
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 14
+          :spells: 11
+      - level: 2
+        xp: 2400
+        hd: 2d6
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 14
+          :spells: 11
+      - level: 3
+        xp: 4800
+        hd: 3d6
+        thac0: 19
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 14
+          :spells: 11
+      - level: 4
+        xp: 10000
+        hd: 4d6
+        thac0: 17
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 11
+          :spells: 9
+      - level: 5
+        xp: 20000
+        hd: 5d6
+        thac0: 17
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 11
+          :spells: 9
+      - level: 6
+        xp: 40000
+        hd: 6d6
+        thac0: 17
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 11
+          :spells: 9
+      - level: 7
+        xp: 80000
+        hd: 7d6
+        thac0: 14
+        saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 9
+          :spells: 7
+      - level: 8
+        xp: 160000
+        hd: 8d6
+        thac0: 14
+        saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 9
+          :spells: 7
+    wood_elf:
+      group: demihuman
+      race: wood_elf
+      name: Wood Elf
+      hd: d6
+      max_level: 10
+      prime_reqs:
+      - dex
+      - wis
+      min_scores:
+        dex: 9
+        wis: 9
+      spell_tradition: druid
+      supplemental: true
+      blurb: Forest guardian; druid spells (supplement).
+      progression:
+      - level: 1
+        xp: 0
+        hd: 1d6
+        thac0: 19
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 13
+          :breath: 15
+          :spells: 15
+        spell_slots:
+          '1': 1
+      - level: 2
+        xp: 3000
+        hd: 2d6
+        thac0: 19
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 13
+          :breath: 15
+          :spells: 15
+        spell_slots:
+          '1': 2
+      - level: 3
+        xp: 6000
+        hd: 3d6
+        thac0: 19
+        saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 13
+          :breath: 15
+          :spells: 15
+        spell_slots:
+          '1': 2
+          '2': 1
+      - level: 4
+        xp: 12000
+        hd: 4d6
+        thac0: 17
+        saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 11
+          :breath: 13
+          :spells: 12
+        spell_slots:
+          '1': 2
+          '2': 2
+      - level: 5
+        xp: 24000
+        hd: 5d6
+        thac0: 17
+        saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 11
+          :breath: 13
+          :spells: 12
+        spell_slots:
+          '1': 2
+          '2': 2
+          '3': 1
+      - level: 6
+        xp: 48000
+        hd: 6d6
+        thac0: 17
+        saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 11
+          :breath: 13
+          :spells: 12
+        spell_slots:
+          '1': 2
+          '2': 2
+          '3': 2
+      - level: 7
+        xp: 100000
+        hd: 7d6
+        thac0: 14
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 9
+          :breath: 10
+          :spells: 10
+        spell_slots:
+          '1': 3
+          '2': 2
+          '3': 2
+          '4': 1
+      - level: 8
+        xp: 200000
+        hd: 8d6
+        thac0: 14
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 9
+          :breath: 10
+          :spells: 10
+        spell_slots:
+          '1': 3
+          '2': 3
+          '3': 2
+          '4': 2
+      - level: 9
+        xp: 350000
+        hd: 9d6
+        thac0: 14
+        saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 9
+          :breath: 10
+          :spells: 10
+        spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+          '4': 2
+          '5': 1
+      - level: 10
+        xp: 500000
+        hd: 9d6+2
+        thac0: 12
+        saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 8
+        spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+          '4': 3
+          '5': 2

@@ -1,0 +1,176 @@
+---
+ose:
+  spells:
+    cleric:
+      '1':
+      - Cure Light Wounds
+      - Detect Evil
+      - Detect Magic
+      - Light
+      - Protection from Evil
+      - Purify Food and Water
+      - Remove Fear
+      - Resist Cold
+      '2':
+      - Bless
+      - Find Traps
+      - Hold Person
+      - Know Alignment
+      - Resist Fire
+      - Silence 15' Radius
+      - Snake Charm
+      - Speak with Animals
+      '3':
+      - Continual Light
+      - Cure Disease
+      - Growth of Animal
+      - Locate Object
+      - Remove Curse
+      - Striking
+      '4':
+      - Create Water
+      - Cure Serious Wounds
+      - Neutralize Poison
+      - Protection from Evil 10' Radius
+      - Speak with Plants
+      - Sticks to Snakes
+      '5':
+      - Commune
+      - Create Food
+      - Dispel Evil
+      - Insect Plague
+      - Quest
+      - Raise Dead
+    druid:
+      '1':
+      - Animal Friendship
+      - Detect Danger
+      - Entangle
+      - Faerie Fire
+      - Invisibility to Animals
+      - Locate Plant or Animal
+      - Predict Weather
+      - Speak with Animals
+      '2':
+      - Barkskin
+      - Create Water
+      - Cure Light Wounds
+      - Heat Metal
+      - Obscuring Mist
+      - Produce Flame
+      - Slow Poison
+      - Warp Wood
+      '3':
+      - Call Lightning
+      - Growth of Nature
+      - Hold Animal
+      - Protection from Poison
+      - Tree Shape
+      - Water Breathing
+      '4':
+      - Cure Serious Wounds
+      - Dispel Magic
+      - Protection from Fire and Lightning
+      - Speak with Plants
+      - Summon Animals
+      - Temperature Control
+      '5':
+      - Commune with Nature
+      - Control Weather
+      - Pass Plant
+      - Protection from Plants and Animals
+      - Transmute Rock to Mud
+    magic_user:
+      '1':
+      - Charm Person
+      - Detect Magic
+      - Floating Disc
+      - Hold Portal
+      - Light
+      - Magic Missile
+      - Protection from Evil
+      - Read Languages
+      - Read Magic
+      - Shield
+      - Sleep
+      - Ventriloquism
+      '2':
+      - Continual Light
+      - Detect Evil
+      - Detect Invisible
+      - ESP
+      - Invisibility
+      - Knock
+      - Levitate
+      - Locate Object
+      - Mirror Image
+      - Phantasmal Force
+      - Web
+      - Wizard Lock
+      '3':
+      - Clairvoyance
+      - Dispel Magic
+      - Fire Ball
+      - Fly
+      - Haste
+      - Hold Person
+      - Infravision
+      - Invisibility 10' Radius
+      - Lightning Bolt
+      - Protection from Evil 10' Radius
+      - Protection from Normal Missiles
+      - Water Breathing
+    illusionist:
+      '1':
+      - Auditory Illusion
+      - Chromatic Orb
+      - Colour Spray
+      - Dancing Lights
+      - Detect Illusion
+      - Glamour
+      - Hypnotism
+      - Light
+      - Phantasmal Force
+      - Read Magic
+      - Spook
+      - Wall of Fog
+      '2':
+      - Blindness/Deafness
+      - Blur
+      - Detect Magic
+      - False Aura
+      - Fascinate
+      - Hypnotic Pattern
+      - Improved Phantasmal Force
+      - Invisibility
+      - Magic Mouth
+      - Mirror Image
+      - Quasimorph
+      - Whispering Wind
+    necromancer:
+      '1':
+      - Chill Touch
+      - Command Dead
+      - Corpse Visage
+      - Decay
+      - Deathlight
+      - Detect Undead
+      - Marionette
+      - Pass Undead
+      - Protection From Evil
+      - Read Magic
+      - Skull Speech
+      - Undead Servitor
+      '2':
+      - Bone Armour
+      - Choke
+      - Death Recall
+      - Detect Magic
+      - Feign Death
+      - Paralysing Touch
+      - Seal Tomb
+      - Skeletal Steed
+      - Skull Sight
+      - Silence 15' Radius
+      - Speak With Dead
+      - Spectral Hand

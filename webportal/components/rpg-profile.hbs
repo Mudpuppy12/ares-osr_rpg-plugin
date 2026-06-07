@@ -1,0 +1,44 @@
+<div id="systemrpg" class="tab-pane fade">
+  <div class="tab-cover">OSE Sheet</div>
+
+  {{#if this.sheet.class_name}}
+    <h4>{{this.sheet.class_name}} ({{this.sheet.race}})</h4>
+    <p>Level {{this.sheet.level}} | Alignment: {{this.sheet.alignment}}</p>
+    <p>HP: {{this.sheet.hp}}/{{this.sheet.hp_max}} | THAC0: {{this.sheet.thac0}} | HD: {{this.sheet.hd_display}}</p>
+    <p>XP: {{this.sheet.xp}} ({{this.sheet.xp_bonus}}% bonus) | Gold: {{this.sheet.starting_gold}} gp</p>
+
+    {{#if this.sheet.abilities}}
+      <p>
+        {{#each this.sheet.abilities as |ab|}}
+          <b>{{ab.name}}</b> {{ab.score}} ({{#if (gte ab.modifier 0)}}+{{/if}}{{ab.modifier}}){{#unless @last}} | {{/unless}}
+        {{/each}}
+      </p>
+    {{/if}}
+
+    {{#if this.sheet.saves}}
+      <p>Saves: D{{this.sheet.saves.death}} W{{this.sheet.saves.wands}} P{{this.sheet.saves.paralysis}} B{{this.sheet.saves.breath}} S{{this.sheet.saves.spells}}</p>
+    {{/if}}
+
+    {{#if this.sheet.spell_slots}}
+      <p>Spell Slots:
+        {{#each-in this.sheet.spell_slots as |lvl count|}}
+          L{{lvl}}:{{count}}
+        {{/each-in}}
+      </p>
+    {{/if}}
+
+    {{#if this.sheet.thief_skills}}
+      <p>Skills:
+        {{#each this.sheet.thief_skills as |sk|}}
+          {{sk.name}} {{sk.chance}}{{#unless @last}}, {{/unless}}
+        {{/each}}
+      </p>
+    {{/if}}
+
+    {{#if this.sheet.playtest}}
+      <p class="text-warning"><i>Playtest class</i></p>
+    {{/if}}
+  {{else}}
+    <p><i>No OSE sheet configured.</i></p>
+  {{/if}}
+</div>

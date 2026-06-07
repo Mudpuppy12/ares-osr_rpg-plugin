@@ -1,0 +1,2370 @@
+---
+ose:
+  classes:
+    fighter:
+      group: human
+      race: human
+      name: Fighter
+      hd: d8
+      max_level: 14
+      prime_reqs:
+      - str
+      spell_tradition: 
+      blurb: Master of weapons and warfare.
+      progression:
+      - :level: 1
+        :xp: 0
+        :hd: 1d8
+        :thac0: 19
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 14
+          :breath: 15
+          :spells: 16
+      - :level: 2
+        :xp: 2000
+        :hd: 2d8
+        :thac0: 19
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 14
+          :breath: 15
+          :spells: 16
+      - :level: 3
+        :xp: 4000
+        :hd: 3d8
+        :thac0: 19
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 14
+          :breath: 15
+          :spells: 16
+      - :level: 4
+        :xp: 8000
+        :hd: 4d8
+        :thac0: 17
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 12
+          :breath: 13
+          :spells: 14
+      - :level: 5
+        :xp: 16000
+        :hd: 5d8
+        :thac0: 17
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 12
+          :breath: 13
+          :spells: 14
+      - :level: 6
+        :xp: 32000
+        :hd: 6d8
+        :thac0: 17
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 12
+          :breath: 13
+          :spells: 14
+      - :level: 7
+        :xp: 64000
+        :hd: 7d8
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 10
+          :spells: 12
+      - :level: 8
+        :xp: 120000
+        :hd: 8d8
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 10
+          :spells: 12
+      - :level: 9
+        :xp: 240000
+        :hd: 9d8
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 10
+          :spells: 12
+      - :level: 10
+        :xp: 360000
+        :hd: 9d8+3
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 10
+      - :level: 11
+        :xp: 480000
+        :hd: 9d8+6
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 10
+      - :level: 12
+        :xp: 600000
+        :hd: 9d8+9
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 10
+      - :level: 13
+        :xp: 720000
+        :hd: 9d8+12
+        :thac0: 10
+        :saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 5
+          :spells: 8
+      - :level: 14
+        :xp: 840000
+        :hd: 9d8+15
+        :thac0: 10
+        :saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 5
+          :spells: 8
+    cleric:
+      group: human
+      race: human
+      name: Cleric
+      hd: d6
+      max_level: 14
+      prime_reqs:
+      - wis
+      spell_tradition: cleric
+      spells_from_level: 2
+      blurb: Divine champion; clerical spells from 2nd level.
+      progression:
+      - :level: 1
+        :xp: 0
+        :hd: 1d6
+        :thac0: 19
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 14
+          :breath: 16
+          :spells: 15
+      - :level: 2
+        :xp: 1500
+        :hd: 2d6
+        :thac0: 19
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 14
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 1
+      - :level: 3
+        :xp: 3000
+        :hd: 3d6
+        :thac0: 19
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 14
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+      - :level: 4
+        :xp: 6000
+        :hd: 4d6
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 14
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+          '2': 1
+      - :level: 5
+        :xp: 12000
+        :hd: 5d6
+        :thac0: 17
+        :saves:
+          :death: 9
+          :wands: 10
+          :paralysis: 12
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 2
+          '2': 2
+      - :level: 6
+        :xp: 25000
+        :hd: 6d6
+        :thac0: 17
+        :saves:
+          :death: 9
+          :wands: 10
+          :paralysis: 12
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 2
+          '2': 2
+          '3': 1
+          '4': 1
+      - :level: 7
+        :xp: 50000
+        :hd: 7d6
+        :thac0: 14
+        :saves:
+          :death: 9
+          :wands: 10
+          :paralysis: 12
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 2
+          '2': 2
+          '3': 2
+          '4': 1
+          '5': 1
+      - :level: 8
+        :xp: 100000
+        :hd: 8d6
+        :thac0: 14
+        :saves:
+          :death: 9
+          :wands: 10
+          :paralysis: 12
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 2
+          '4': 2
+          '5': 1
+      - :level: 9
+        :xp: 200000
+        :hd: 9d6
+        :thac0: 14
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 9
+          :breath: 11
+          :spells: 9
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+          '4': 2
+          '5': 2
+      - :level: 10
+        :xp: 300000
+        :hd: 9d6+2
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 9
+          :breath: 11
+          :spells: 9
+        :spell_slots:
+          '1': 4
+          '2': 4
+          '3': 3
+          '4': 3
+          '5': 2
+      - :level: 11
+        :xp: 400000
+        :hd: 9d6+4
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 9
+          :breath: 11
+          :spells: 9
+        :spell_slots:
+          '1': 4
+          '2': 4
+          '3': 4
+          '4': 3
+          '5': 3
+      - :level: 12
+        :xp: 500000
+        :hd: 9d6+6
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 9
+          :breath: 11
+          :spells: 9
+        :spell_slots:
+          '1': 5
+          '2': 5
+          '3': 4
+          '4': 4
+          '5': 3
+      - :level: 13
+        :xp: 600000
+        :hd: 9d6+8
+        :thac0: 10
+        :saves:
+          :death: 3
+          :wands: 5
+          :paralysis: 7
+          :breath: 8
+          :spells: 7
+        :spell_slots:
+          '1': 5
+          '2': 5
+          '3': 5
+          '4': 4
+          '5': 4
+      - :level: 14
+        :xp: 700000
+        :hd: 9d6+10
+        :thac0: 10
+        :saves:
+          :death: 3
+          :wands: 5
+          :paralysis: 7
+          :breath: 8
+          :spells: 7
+        :spell_slots:
+          '1': 6
+          '2': 5
+          '3': 5
+          '4': 5
+          '5': 4
+    magic_user:
+      group: human
+      race: human
+      name: Magic-User
+      hd: d4
+      max_level: 14
+      prime_reqs:
+      - int
+      spell_tradition: magic_user
+      spells_from_level: 1
+      armor: none
+      blurb: Arcane spellcaster; no armor.
+      progression:
+      - :level: 1
+        :xp: 0
+        :hd: 1d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 1
+      - :level: 2
+        :xp: 2500
+        :hd: 2d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+      - :level: 3
+        :xp: 5000
+        :hd: 3d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+          '2': 1
+      - :level: 4
+        :xp: 10000
+        :hd: 4d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+          '2': 2
+      - :level: 5
+        :xp: 20000
+        :hd: 5d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+          '2': 2
+          '3': 1
+      - :level: 6
+        :xp: 40000
+        :hd: 6d4
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 11
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 2
+          '2': 2
+          '3': 2
+      - :level: 7
+        :xp: 80000
+        :hd: 7d4
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 11
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 3
+          '2': 2
+          '3': 2
+          '4': 1
+      - :level: 8
+        :xp: 150000
+        :hd: 8d4
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 11
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 2
+          '4': 2
+      - :level: 9
+        :xp: 300000
+        :hd: 9d4
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 11
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+          '4': 2
+          '5': 1
+      - :level: 10
+        :xp: 450000
+        :hd: 9d4+1
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 11
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+          '4': 3
+          '5': 2
+      - :level: 11
+        :xp: 600000
+        :hd: 9d4+2
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 8
+          :breath: 11
+          :spells: 8
+        :spell_slots:
+          '1': 4
+          '2': 3
+          '3': 3
+          '4': 3
+          '5': 2
+          '6': 1
+      - :level: 12
+        :xp: 750000
+        :hd: 9d4+3
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 8
+          :breath: 11
+          :spells: 8
+        :spell_slots:
+          '1': 4
+          '2': 4
+          '3': 3
+          '4': 3
+          '5': 3
+          '6': 2
+      - :level: 13
+        :xp: 900000
+        :hd: 9d4+4
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 8
+          :breath: 11
+          :spells: 8
+        :spell_slots:
+          '1': 4
+          '2': 4
+          '3': 4
+          '4': 3
+          '5': 3
+          '6': 3
+      - :level: 14
+        :xp: 1050000
+        :hd: 9d4+5
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 8
+          :breath: 11
+          :spells: 8
+        :spell_slots:
+          '1': 4
+          '2': 4
+          '3': 4
+          '4': 4
+          '5': 3
+          '6': 3
+    thief:
+      group: human
+      race: human
+      name: Thief
+      hd: d4
+      max_level: 14
+      prime_reqs:
+      - dex
+      spell_tradition: 
+      skill_system: d6
+      skill_set: all_eight
+      l1_expertise_points: 4
+      blurb: Skulduggerer; allocate 4 d6 expertise points at 1st level.
+      progression:
+      - :level: 1
+        :xp: 0
+        :hd: 1d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - :level: 2
+        :xp: 1200
+        :hd: 2d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - :level: 3
+        :xp: 2400
+        :hd: 3d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - :level: 4
+        :xp: 4800
+        :hd: 4d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - :level: 5
+        :xp: 9600
+        :hd: 5d4
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+      - :level: 6
+        :xp: 20000
+        :hd: 6d4
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+      - :level: 7
+        :xp: 40000
+        :hd: 7d4
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+      - :level: 8
+        :xp: 80000
+        :hd: 8d4
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+      - :level: 9
+        :xp: 160000
+        :hd: 9d4
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+      - :level: 10
+        :xp: 280000
+        :hd: 9d4+1
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+      - :level: 11
+        :xp: 400000
+        :hd: 9d4+2
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+      - :level: 12
+        :xp: 520000
+        :hd: 9d4+3
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+      - :level: 13
+        :xp: 640000
+        :hd: 9d4+4
+        :thac0: 12
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 7
+          :breath: 10
+          :spells: 8
+      - :level: 14
+        :xp: 760000
+        :hd: 9d4+5
+        :thac0: 12
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 7
+          :breath: 10
+          :spells: 8
+    acrobat:
+      group: human
+      race: human
+      name: Acrobat
+      hd: d4
+      max_level: 14
+      prime_reqs:
+      - dex
+      skill_system: d6
+      skill_set:
+      - climb_sheer
+      - hide_in_shadows
+      - move_silently
+      - tightrope_walking
+      blurb: Agile performer and climber.
+      progression:
+      - :level: 1
+        :xp: 0
+        :hd: 1d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - :level: 2
+        :xp: 1200
+        :hd: 2d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - :level: 3
+        :xp: 2400
+        :hd: 3d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - :level: 4
+        :xp: 4800
+        :hd: 4d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - :level: 5
+        :xp: 9600
+        :hd: 5d4
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+      - :level: 6
+        :xp: 20000
+        :hd: 6d4
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+      - :level: 7
+        :xp: 40000
+        :hd: 7d4
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+      - :level: 8
+        :xp: 80000
+        :hd: 8d4
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+      - :level: 9
+        :xp: 160000
+        :hd: 9d4
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+      - :level: 10
+        :xp: 280000
+        :hd: 9d4+1
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+      - :level: 11
+        :xp: 400000
+        :hd: 9d4+2
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+      - :level: 12
+        :xp: 520000
+        :hd: 9d4+3
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+      - :level: 13
+        :xp: 640000
+        :hd: 9d4+4
+        :thac0: 12
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 7
+          :breath: 10
+          :spells: 8
+      - :level: 14
+        :xp: 760000
+        :hd: 9d4+5
+        :thac0: 12
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 7
+          :breath: 10
+          :spells: 8
+    assassin:
+      group: human
+      race: human
+      name: Assassin
+      hd: d4
+      max_level: 14
+      prime_reqs:
+      - dex
+      skill_system: d6
+      skill_set:
+      - hide_in_shadows
+      - move_silently
+      alignment_restrictions:
+      - Neutrality
+      - Chaos
+      blurb: Deadly infiltrator; cannot be Lawful.
+      progression:
+      - :level: 1
+        :xp: 0
+        :hd: 1d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - :level: 2
+        :xp: 1500
+        :hd: 2d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - :level: 3
+        :xp: 3000
+        :hd: 3d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - :level: 4
+        :xp: 6000
+        :hd: 4d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - :level: 5
+        :xp: 12000
+        :hd: 5d4
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+      - :level: 6
+        :xp: 25000
+        :hd: 6d4
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+      - :level: 7
+        :xp: 50000
+        :hd: 7d4
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+      - :level: 8
+        :xp: 100000
+        :hd: 8d4
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+      - :level: 9
+        :xp: 200000
+        :hd: 9d4
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+      - :level: 10
+        :xp: 300000
+        :hd: 9d4+1
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+      - :level: 11
+        :xp: 425000
+        :hd: 9d4+2
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+      - :level: 12
+        :xp: 575000
+        :hd: 9d4+3
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+      - :level: 13
+        :xp: 750000
+        :hd: 9d4+4
+        :thac0: 12
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 7
+          :breath: 10
+          :spells: 8
+      - :level: 14
+        :xp: 900000
+        :hd: 9d4+5
+        :thac0: 12
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 7
+          :breath: 10
+          :spells: 8
+    barbarian:
+      group: human
+      race: human
+      name: Barbarian
+      hd: d8
+      max_level: 14
+      prime_reqs:
+      - con
+      - str
+      min_scores:
+        dex: 9
+      spell_tradition: 
+      blurb: Wilderness warrior.
+      progression:
+      - :level: 1
+        :xp: 0
+        :hd: 1d8
+        :thac0: 19
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 14
+          :breath: 15
+          :spells: 16
+      - :level: 2
+        :xp: 2500
+        :hd: 2d8
+        :thac0: 19
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 14
+          :breath: 15
+          :spells: 16
+      - :level: 3
+        :xp: 5000
+        :hd: 3d8
+        :thac0: 19
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 14
+          :breath: 15
+          :spells: 16
+      - :level: 4
+        :xp: 10000
+        :hd: 4d8
+        :thac0: 17
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 12
+          :breath: 13
+          :spells: 14
+      - :level: 5
+        :xp: 18500
+        :hd: 5d8
+        :thac0: 17
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 12
+          :breath: 13
+          :spells: 14
+      - :level: 6
+        :xp: 37000
+        :hd: 6d8
+        :thac0: 17
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 12
+          :breath: 13
+          :spells: 14
+      - :level: 7
+        :xp: 85000
+        :hd: 7d8
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 10
+          :spells: 12
+      - :level: 8
+        :xp: 140000
+        :hd: 8d8
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 10
+          :spells: 12
+      - :level: 9
+        :xp: 270000
+        :hd: 9d8
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 10
+          :spells: 12
+      - :level: 10
+        :xp: 400000
+        :hd: 9d8+3
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 10
+      - :level: 11
+        :xp: 530000
+        :hd: 9d8+6
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 10
+      - :level: 12
+        :xp: 660000
+        :hd: 9d8+9
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 10
+      - :level: 13
+        :xp: 790000
+        :hd: 9d8+12
+        :thac0: 10
+        :saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 5
+          :spells: 8
+      - :level: 14
+        :xp: 920000
+        :hd: 9d8+15
+        :thac0: 10
+        :saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 5
+          :spells: 8
+    knight:
+      group: human
+      race: human
+      name: Knight
+      hd: d8
+      max_level: 14
+      prime_reqs:
+      - str
+      min_scores:
+        con: 9
+        dex: 9
+      no_missiles: true
+      blurb: Chivalric warrior; no missile weapons.
+      progression:
+      - :level: 1
+        :xp: 0
+        :hd: 1d8
+        :thac0: 19
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 14
+          :breath: 15
+          :spells: 16
+      - :level: 2
+        :xp: 2500
+        :hd: 2d8
+        :thac0: 19
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 14
+          :breath: 15
+          :spells: 16
+      - :level: 3
+        :xp: 5000
+        :hd: 3d8
+        :thac0: 19
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 14
+          :breath: 15
+          :spells: 16
+      - :level: 4
+        :xp: 10000
+        :hd: 4d8
+        :thac0: 17
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 12
+          :breath: 13
+          :spells: 14
+      - :level: 5
+        :xp: 18500
+        :hd: 5d8
+        :thac0: 17
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 12
+          :breath: 13
+          :spells: 14
+      - :level: 6
+        :xp: 37000
+        :hd: 6d8
+        :thac0: 17
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 12
+          :breath: 13
+          :spells: 14
+      - :level: 7
+        :xp: 85000
+        :hd: 7d8
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 10
+          :spells: 12
+      - :level: 8
+        :xp: 140000
+        :hd: 8d8
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 10
+          :spells: 12
+      - :level: 9
+        :xp: 270000
+        :hd: 9d8
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 10
+          :spells: 12
+      - :level: 10
+        :xp: 400000
+        :hd: 9d8+3
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 10
+      - :level: 11
+        :xp: 530000
+        :hd: 9d8+6
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 10
+      - :level: 12
+        :xp: 660000
+        :hd: 9d8+9
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 10
+      - :level: 13
+        :xp: 790000
+        :hd: 9d8+12
+        :thac0: 10
+        :saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 5
+          :spells: 8
+      - :level: 14
+        :xp: 920000
+        :hd: 9d8+15
+        :thac0: 10
+        :saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 5
+          :spells: 8
+    bard:
+      group: human
+      race: human
+      name: Bard
+      hd: d6
+      max_level: 14
+      prime_reqs:
+      - cha
+      min_scores:
+        dex: 9
+        int: 9
+      spell_tradition: druid
+      spells_from_level: 2
+      max_spell_level: 4
+      blurb: Lore and performance; druid spells from 2nd.
+      progression:
+      - :level: 1
+        :xp: 0
+        :hd: 1d6
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+      - :level: 2
+        :xp: 2000
+        :hd: 2d6
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 1
+      - :level: 3
+        :xp: 4000
+        :hd: 3d6
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+      - :level: 4
+        :xp: 8000
+        :hd: 4d6
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 3
+      - :level: 5
+        :xp: 16000
+        :hd: 5d6
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+        :spell_slots:
+          '1': 3
+          '2': 1
+      - :level: 6
+        :xp: 32000
+        :hd: 6d6
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+        :spell_slots:
+          '1': 3
+          '2': 2
+      - :level: 7
+        :xp: 64000
+        :hd: 7d6
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+        :spell_slots:
+          '1': 3
+          '2': 3
+      - :level: 8
+        :xp: 120000
+        :hd: 8d6
+        :thac0: 17
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 11
+          :breath: 14
+          :spells: 13
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 1
+      - :level: 9
+        :xp: 240000
+        :hd: 9d6
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 2
+      - :level: 10
+        :xp: 360000
+        :hd: 9d6+2
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+      - :level: 11
+        :xp: 480000
+        :hd: 9d6+4
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+          '4': 1
+      - :level: 12
+        :xp: 600000
+        :hd: 9d6+6
+        :thac0: 14
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 9
+          :breath: 12
+          :spells: 10
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+          '4': 2
+      - :level: 13
+        :xp: 720000
+        :hd: 9d6+8
+        :thac0: 12
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 7
+          :breath: 10
+          :spells: 8
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+          '4': 3
+      - :level: 14
+        :xp: 840000
+        :hd: 9d6+10
+        :thac0: 12
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 7
+          :breath: 10
+          :spells: 8
+        :spell_slots:
+          '1': 4
+          '2': 4
+          '3': 3
+          '4': 3
+    druid:
+      group: human
+      race: human
+      name: Druid
+      hd: d6
+      max_level: 14
+      prime_reqs:
+      - wis
+      spell_tradition: druid
+      spells_from_level: 1
+      alignment_restrictions:
+      - Neutrality
+      blurb: Nature priest; Neutral alignment only.
+      progression:
+      - :level: 1
+        :xp: 0
+        :hd: 1d6
+        :thac0: 19
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 14
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 1
+      - :level: 2
+        :xp: 2000
+        :hd: 2d6
+        :thac0: 19
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 14
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+      - :level: 3
+        :xp: 4000
+        :hd: 3d6
+        :thac0: 19
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 14
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+          '2': 1
+      - :level: 4
+        :xp: 7500
+        :hd: 4d6
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 14
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+          '2': 2
+      - :level: 5
+        :xp: 12500
+        :hd: 5d6
+        :thac0: 17
+        :saves:
+          :death: 9
+          :wands: 10
+          :paralysis: 12
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 2
+          '2': 2
+          '3': 1
+          '4': 1
+      - :level: 6
+        :xp: 20000
+        :hd: 6d6
+        :thac0: 17
+        :saves:
+          :death: 9
+          :wands: 10
+          :paralysis: 12
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 2
+          '2': 2
+          '3': 2
+          '4': 1
+          '5': 1
+      - :level: 7
+        :xp: 35000
+        :hd: 7d6
+        :thac0: 14
+        :saves:
+          :death: 9
+          :wands: 10
+          :paralysis: 12
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 2
+          '4': 2
+          '5': 1
+      - :level: 8
+        :xp: 60000
+        :hd: 8d6
+        :thac0: 14
+        :saves:
+          :death: 9
+          :wands: 10
+          :paralysis: 12
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+          '4': 2
+          '5': 2
+      - :level: 9
+        :xp: 90000
+        :hd: 9d6
+        :thac0: 14
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 9
+          :breath: 11
+          :spells: 9
+        :spell_slots:
+          '1': 4
+          '2': 4
+          '3': 3
+          '4': 3
+          '5': 2
+      - :level: 10
+        :xp: 125000
+        :hd: 9d6+2
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 9
+          :breath: 11
+          :spells: 9
+        :spell_slots:
+          '1': 4
+          '2': 4
+          '3': 4
+          '4': 3
+          '5': 3
+      - :level: 11
+        :xp: 200000
+        :hd: 9d6+4
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 9
+          :breath: 11
+          :spells: 9
+        :spell_slots:
+          '1': 5
+          '2': 5
+          '3': 4
+          '4': 4
+          '5': 3
+      - :level: 12
+        :xp: 300000
+        :hd: 9d6+6
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 9
+          :breath: 11
+          :spells: 9
+        :spell_slots:
+          '1': 5
+          '2': 5
+          '3': 5
+          '4': 4
+          '5': 4
+      - :level: 13
+        :xp: 750000
+        :hd: 9d6+8
+        :thac0: 10
+        :saves:
+          :death: 3
+          :wands: 5
+          :paralysis: 7
+          :breath: 8
+          :spells: 7
+        :spell_slots:
+          '1': 6
+          '2': 5
+          '3': 5
+          '4': 5
+          '5': 4
+      - :level: 14
+        :xp: 1500000
+        :hd: 9d6+10
+        :thac0: 10
+        :saves:
+          :death: 3
+          :wands: 5
+          :paralysis: 7
+          :breath: 8
+          :spells: 7
+        :spell_slots:
+          '1': 6
+          '2': 6
+          '3': 5
+          '4': 5
+          '5': 5
+    illusionist:
+      group: human
+      race: human
+      name: Illusionist
+      hd: d4
+      max_level: 14
+      prime_reqs:
+      - int
+      min_scores:
+        dex: 9
+      spell_tradition: illusionist
+      armor: none
+      blurb: Arcane illusionist; no armor.
+      progression:
+      - :level: 1
+        :xp: 0
+        :hd: 1d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 1
+      - :level: 2
+        :xp: 2500
+        :hd: 2d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+      - :level: 3
+        :xp: 5000
+        :hd: 3d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+          '2': 1
+      - :level: 4
+        :xp: 10000
+        :hd: 4d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+          '2': 2
+      - :level: 5
+        :xp: 20000
+        :hd: 5d4
+        :thac0: 19
+        :saves:
+          :death: 13
+          :wands: 14
+          :paralysis: 13
+          :breath: 16
+          :spells: 15
+        :spell_slots:
+          '1': 2
+          '2': 2
+          '3': 1
+      - :level: 6
+        :xp: 40000
+        :hd: 6d4
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 11
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 2
+          '2': 2
+          '3': 2
+      - :level: 7
+        :xp: 80000
+        :hd: 7d4
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 11
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 3
+          '2': 2
+          '3': 2
+          '4': 1
+      - :level: 8
+        :xp: 150000
+        :hd: 8d4
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 11
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 2
+          '4': 2
+      - :level: 9
+        :xp: 300000
+        :hd: 9d4
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 11
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+          '4': 2
+          '5': 1
+      - :level: 10
+        :xp: 450000
+        :hd: 9d4+1
+        :thac0: 17
+        :saves:
+          :death: 11
+          :wands: 12
+          :paralysis: 11
+          :breath: 14
+          :spells: 12
+        :spell_slots:
+          '1': 3
+          '2': 3
+          '3': 3
+          '4': 3
+          '5': 2
+      - :level: 11
+        :xp: 600000
+        :hd: 9d4+2
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 8
+          :breath: 11
+          :spells: 8
+        :spell_slots:
+          '1': 4
+          '2': 3
+          '3': 3
+          '4': 3
+          '5': 2
+          '6': 1
+      - :level: 12
+        :xp: 750000
+        :hd: 9d4+3
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 8
+          :breath: 11
+          :spells: 8
+        :spell_slots:
+          '1': 4
+          '2': 4
+          '3': 3
+          '4': 3
+          '5': 3
+          '6': 2
+      - :level: 13
+        :xp: 900000
+        :hd: 9d4+4
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 8
+          :breath: 11
+          :spells: 8
+        :spell_slots:
+          '1': 4
+          '2': 4
+          '3': 4
+          '4': 3
+          '5': 3
+          '6': 3
+      - :level: 14
+        :xp: 1050000
+        :hd: 9d4+5
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 8
+          :breath: 11
+          :spells: 8
+        :spell_slots:
+          '1': 4
+          '2': 4
+          '3': 4
+          '4': 4
+          '5': 3
+          '6': 3
+    paladin:
+      group: human
+      race: human
+      name: Paladin
+      hd: d8
+      max_level: 14
+      prime_reqs:
+      - str
+      - wis
+      min_scores:
+        cha: 9
+      spell_tradition: cleric
+      spells_from_level: 9
+      alignment_restrictions:
+      - Law
+      turn_undead_from_level: 3
+      blurb: Holy warrior; Lawful; clerical spells from 9th.
+      progression:
+      - :level: 1
+        :xp: 0
+        :hd: 1d8
+        :thac0: 19
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 12
+          :breath: 13
+          :spells: 14
+      - :level: 2
+        :xp: 2750
+        :hd: 2d8
+        :thac0: 19
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 12
+          :breath: 13
+          :spells: 14
+      - :level: 3
+        :xp: 5500
+        :hd: 3d8
+        :thac0: 19
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 12
+          :breath: 13
+          :spells: 14
+      - :level: 4
+        :xp: 12000
+        :hd: 4d8
+        :thac0: 17
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 11
+          :spells: 12
+      - :level: 5
+        :xp: 24000
+        :hd: 5d8
+        :thac0: 17
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 11
+          :spells: 12
+      - :level: 6
+        :xp: 45000
+        :hd: 6d8
+        :thac0: 17
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 11
+          :spells: 12
+      - :level: 7
+        :xp: 95000
+        :hd: 7d8
+        :thac0: 14
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 10
+      - :level: 8
+        :xp: 175000
+        :hd: 8d8
+        :thac0: 14
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 10
+      - :level: 9
+        :xp: 350000
+        :hd: 9d8
+        :thac0: 14
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 10
+        :spell_slots:
+          '1': 1
+      - :level: 10
+        :xp: 500000
+        :hd: 9d8+3
+        :thac0: 12
+        :saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 6
+          :spells: 8
+        :spell_slots:
+          '1': 2
+      - :level: 11
+        :xp: 650000
+        :hd: 9d8+6
+        :thac0: 12
+        :saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 6
+          :spells: 8
+        :spell_slots:
+          '1': 2
+          '2': 1
+      - :level: 12
+        :xp: 800000
+        :hd: 9d8+9
+        :thac0: 12
+        :saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 6
+          :spells: 8
+        :spell_slots:
+          '1': 2
+          '2': 2
+      - :level: 13
+        :xp: 950000
+        :hd: 9d8+12
+        :thac0: 10
+        :saves:
+          :death: 2
+          :wands: 3
+          :paralysis: 4
+          :breath: 3
+          :spells: 6
+        :spell_slots:
+          '1': 2
+          '2': 2
+          '3': 1
+      - :level: 14
+        :xp: 1100000
+        :hd: 9d8+15
+        :thac0: 10
+        :saves:
+          :death: 2
+          :wands: 3
+          :paralysis: 4
+          :breath: 3
+          :spells: 6
+        :spell_slots:
+          '1': 3
+          '2': 2
+          '3': 1
+    ranger:
+      group: human
+      race: human
+      name: Ranger
+      hd: d8
+      max_level: 14
+      prime_reqs:
+      - str
+      min_scores:
+        con: 9
+        wis: 9
+      spell_tradition: druid
+      spells_from_level: 8
+      alignment_restrictions:
+      - Law
+      - Neutrality
+      tracking_base: 20
+      blurb: Woodland guardian; druid spells from 8th.
+      progression:
+      - :level: 1
+        :xp: 0
+        :hd: 1d8
+        :thac0: 19
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 14
+          :breath: 15
+          :spells: 16
+      - :level: 2
+        :xp: 2250
+        :hd: 2d8
+        :thac0: 19
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 14
+          :breath: 15
+          :spells: 16
+      - :level: 3
+        :xp: 4500
+        :hd: 3d8
+        :thac0: 19
+        :saves:
+          :death: 12
+          :wands: 13
+          :paralysis: 14
+          :breath: 15
+          :spells: 16
+      - :level: 4
+        :xp: 10000
+        :hd: 4d8
+        :thac0: 17
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 12
+          :breath: 13
+          :spells: 14
+      - :level: 5
+        :xp: 20000
+        :hd: 5d8
+        :thac0: 17
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 12
+          :breath: 13
+          :spells: 14
+      - :level: 6
+        :xp: 40000
+        :hd: 6d8
+        :thac0: 17
+        :saves:
+          :death: 10
+          :wands: 11
+          :paralysis: 12
+          :breath: 13
+          :spells: 14
+      - :level: 7
+        :xp: 90000
+        :hd: 7d8
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 10
+          :spells: 12
+      - :level: 8
+        :xp: 150000
+        :hd: 8d8
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 10
+          :spells: 12
+        :spell_slots:
+          '1': 1
+      - :level: 9
+        :xp: 300000
+        :hd: 9d8
+        :thac0: 14
+        :saves:
+          :death: 8
+          :wands: 9
+          :paralysis: 10
+          :breath: 10
+          :spells: 12
+        :spell_slots:
+          '1': 2
+      - :level: 10
+        :xp: 425000
+        :hd: 9d8+3
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 10
+        :spell_slots:
+          '1': 2
+          '2': 1
+      - :level: 11
+        :xp: 550000
+        :hd: 9d8+6
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 10
+        :spell_slots:
+          '1': 2
+          '2': 2
+      - :level: 12
+        :xp: 675000
+        :hd: 9d8+9
+        :thac0: 12
+        :saves:
+          :death: 6
+          :wands: 7
+          :paralysis: 8
+          :breath: 8
+          :spells: 10
+        :spell_slots:
+          '1': 2
+          '2': 2
+          '3': 1
+      - :level: 13
+        :xp: 800000
+        :hd: 9d8+12
+        :thac0: 10
+        :saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 5
+          :spells: 8
+        :spell_slots:
+          '1': 3
+          '2': 2
+          '3': 1
+      - :level: 14
+        :xp: 925000
+        :hd: 9d8+15
+        :thac0: 10
+        :saves:
+          :death: 4
+          :wands: 5
+          :paralysis: 6
+          :breath: 5
+          :spells: 8
+        :spell_slots:
+          '1': 3
+          '2': 2
+          '3': 2
