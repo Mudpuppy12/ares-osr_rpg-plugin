@@ -34,7 +34,7 @@ export default Component.extend({
   }),
 
   applyState(response) {
-    if (!response) { return; }
+    if (!response || !this.model) { return; }
     Object.keys(response).forEach(key => {
       set(this.model, key, response[key]);
     });
@@ -43,20 +43,10 @@ export default Component.extend({
   canBuyItem(item) {
     if (!item) { return false; }
     let cost = item.cost || 0;
-    if (cost <= 0 || this.gold < cost) { return false; }
-    if (item.arcane_only && !this.arcaneCaster) { return false; }
+    let gold = this.get('model.gold') || 0;
+    if (cost <= 0 || gold < cost) { return false; }
+    if (item.arcane_only && !this.get('model.arcane_caster')) { return false; }
     return true;
-  },
-
-  buyDisabledReason(item) {
-    if (!item) { return ''; }
-    if (item.arcane_only && !this.arcaneCaster) {
-      return 'Arcane casters only';
-    }
-    if ((item.cost || 0) > this.gold) {
-      return 'Insufficient gold';
-    }
-    return '';
   },
 
   @action

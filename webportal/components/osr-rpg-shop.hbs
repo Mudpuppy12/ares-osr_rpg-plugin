@@ -52,8 +52,8 @@
                   type="button"
                   class="btn btn-sm btn-primary"
                   {{on 'click' (fn this.buyItem item)}}
-                  disabled={{or this.isBusy (not (this.canBuyItem item))}}
-                  title={{this.buyDisabledReason item}}
+                  disabled={{or this.isBusy (lte item.cost 0) (lt this.gold item.cost) (and item.arcane_only (not this.arcaneCaster))}}
+                  title={{if (and item.arcane_only (not this.arcaneCaster)) "Arcane casters only" (if (lt this.gold item.cost) "Insufficient gold" "")}}
                 >Buy</button>
               </td>
             </tr>
