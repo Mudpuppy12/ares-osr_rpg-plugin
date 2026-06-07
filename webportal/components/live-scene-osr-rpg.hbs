@@ -1,4 +1,4 @@
-<li><button {{on 'click' this.toggleSheet}} class="dropdown-item">OSR Sheet</button></li>
+<li><button {{on 'click' this.showCharacterCard}} class="dropdown-item">Character Sheet</button></li>
 <li><button {{on 'click' (fn this.setShowAttackRoll true)}} class="dropdown-item">Roll Attack</button></li>
 <li><button {{on 'click' (fn this.setShowSaveRoll true)}} class="dropdown-item">Roll Save</button></li>
 {{#if this.skillOptions.length}}
@@ -7,19 +7,6 @@
 <li><button {{on 'click' (fn this.setShowAbilityRoll true)}} class="dropdown-item">Ability Check</button></li>
 <li><button {{on 'click' (fn this.setShowGenericRoll true)}} class="dropdown-item">Roll Dice</button></li>
 <li><button {{on 'click' this.toggleCombatTracker}} class="dropdown-item">Combat Tracker</button></li>
-
-{{#if this.showSheet}}
-  <div class="osr-rpg-live-sheet">
-    {{#if this.sheet}}
-      <p><b>{{this.sheet.class_name}}</b> L{{this.sheet.level}} — HP {{this.sheet.hp}}/{{this.sheet.hp_max}} AC {{this.sheet.ac}} THAC0 {{this.sheet.thac0}}</p>
-      {{#if this.sheet.saves}}
-        <p class="text-muted">Saves: D{{this.sheet.saves.death}} W{{this.sheet.saves.wands}} P{{this.sheet.saves.paralysis}} B{{this.sheet.saves.breath}} S{{this.sheet.saves.spells}}</p>
-      {{/if}}
-    {{else}}
-      <p class="text-muted"><i>No OSR sheet for pose character.</i></p>
-    {{/if}}
-  </div>
-{{/if}}
 
 {{#if this.showCombatTracker}}
   <div class="osr-rpg-combat-tracker">
@@ -56,7 +43,7 @@
 
 <BsModalSimple @title="Roll Save" @closeTitle="Cancel" @submitTitle="Roll" @open={{this.showSaveRoll}} @onSubmit={{this.rollSave}} @onHide={{(fn this.setShowSaveRoll false)}}>
   <select class="form-control" {{on 'change' this.saveCategoryChanged}}>
-    {{#each this.saveCategories as |cat|}}
+    {{#each this.rollSaveCategories as |cat|}}
       <option value={{cat.key}} selected={{eq this.saveCategory cat.key}}>{{cat.label}}</option>
     {{/each}}
   </select>

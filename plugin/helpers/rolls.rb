@@ -8,25 +8,11 @@ module AresMUSH
         return nil unless Leveling.sheet_ready?(char)
 
         sheet = Chargen.build_sheet_display(char)
-        {
-          class_name: sheet[:class_name],
-          class_key: sheet[:class_key],
-          level: sheet[:level],
-          hp: sheet[:hp],
-          hp_max: sheet[:hp_max],
-          ac: sheet[:ac],
-          thac0: sheet[:thac0],
-          saves: sheet[:saves],
-          thief_skills: sheet[:thief_skills],
-          exploration_skills: sheet[:exploration_skills],
-          abilities: sheet[:abilities],
-          can_level_up: sheet[:can_level_up],
-          xp: sheet[:xp],
-          xp_to_next_level: sheet[:xp_to_next_level],
-          expertise_unspent: sheet[:expertise_unspent],
-          prepared_spells: sheet[:prepared_spells],
-          spell_slots_remaining: sheet[:spell_slots_remaining]
-        }
+        sheet.merge(
+          char_name: char.name,
+          name: char.fullname.presence || char.name,
+          icon: Website.icon_for_char(char)
+        )
       end
 
       def self.thief_skill_chance(char, skill_key)

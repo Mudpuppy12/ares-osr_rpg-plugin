@@ -1,14 +1,21 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import { action, set } from '@ember/object';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+
+const SAVE_CATEGORIES = [
+  { key: 'death', label: 'Death', abbr: 'D' },
+  { key: 'wands', label: 'Wands', abbr: 'W' },
+  { key: 'paralysis', label: 'Paralysis', abbr: 'P' },
+  { key: 'breath', label: 'Breath', abbr: 'B' },
+  { key: 'spells', label: 'Spells', abbr: 'S' }
+];
 
 export default Component.extend({
   tagName: '',
   gameApi: service(),
   flashMessages: service(),
 
-  showSheet: false,
   showAttackRoll: false,
   showSaveRoll: false,
   showSkillRoll: false,
@@ -26,20 +33,26 @@ export default Component.extend({
   diceString: '1d20',
   isRolling: false,
   isCombatLoading: false,
+  _lastPoseCharId: null,
 
   didInsertElement() {
     this._super(...arguments);
+    this._lastPoseCharId = this.get('scene.poseChar.id');
     this.loadSheet();
   },
 
-  saveCategories: computed(function() {
-    return [
-      { key: 'death', label: 'Death' },
-      { key: 'wands', label: 'Wands' },
-      { key: 'paralysis', label: 'Paralysis' },
-      { key: 'breath', label: 'Breath' },
-      { key: 'spells', label: 'Spells' }
-    ];
+  didUpdateAttrs() {
+    this._super(...arguments);
+    let poseId = this.get('scene.poseChar.id');
+    if (poseId !== this._lastPoseCharId) {
+      this._lastPoseCharId = poseId;
+      this.set('sheet', null);
+      this.loadSheet();
+    }
+  },
+
+  rollSaveCategories: computed(function() {
+    return SAVE_CATEGORIES;
   }),
 
   skillOptions: computed('sheet.thief_skills.[]', function() {
@@ -127,10 +140,14 @@ export default Component.extend({
   },
 
   @action
-  toggleSheet() {
-    this.set('showSheet', !this.showSheet);
-    if (this.showSheet && !this.sheet) {
-      this.loadSheet();
+  showCharacterCard() {
+    let name = this.get('scene.poseChar.name');
+    if (!name) {
+      this.flashMessages.danger('No pose character selected.');
+      return;
+    }
+    if (this.onShowCharCard) {
+      this.onShowCharCard(name);
     }
   },
 

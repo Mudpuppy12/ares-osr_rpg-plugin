@@ -11,29 +11,38 @@ module AresMUSH
                        osr_thief_skills: { 'hide_in_shadows' => 3 },
                        osr_ability_scores: { 'str' => 14 })
         allow(Leveling).to receive(:sheet_ready?).with(@char).and_return(true)
+        allow(@char).to receive(:fullname).and_return('Test Fighter')
         allow(Chargen).to receive(:build_sheet_display).with(@char).and_return(
           class_name: 'Fighter',
           class_key: 'fighter',
           level: 1,
           hp: 8,
           hp_max: 8,
+          ac: 5,
           thac0: 19,
           saves: { death: 12 },
           thief_skills: [],
-          abilities: [],
+          abilities: [{ key: 'str', name: 'STR', score: 14, modifier: 1 }],
+          equipment: [{ name: 'Sword', key: 'sword' }],
+          inventory: [],
           can_level_up: false,
           xp: 0,
           xp_to_next_level: 2000,
           expertise_unspent: 0
         )
+        allow(Website).to receive(:icon_for_char).with(@char).and_return('icon/test.png')
         allow(CommandHelpers).to receive(:sheet_applied?).with(@char).and_return(true)
       end
 
       describe 'scene_sheet' do
-        it 'returns compact sheet when ready' do
+        it 'returns full sheet display with portrait metadata when ready' do
           sheet = Rolls.scene_sheet(@char)
           expect(sheet[:class_name]).to eq 'Fighter'
           expect(sheet[:thac0]).to eq 19
+          expect(sheet[:abilities].length).to eq 1
+          expect(sheet[:char_name]).to eq 'Tester'
+          expect(sheet[:name]).to eq 'Test Fighter'
+          expect(sheet[:icon]).to eq 'icon/test.png'
         end
 
         it 'returns nil when sheet not ready' do
