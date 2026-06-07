@@ -1,0 +1,39 @@
+{{page-title 'Spell Lists'}}
+<div class="osr-rpg-reference-page">
+<h1>Spell Lists</h1>
+
+{{#if this.model.spells_blurb}}
+<AnsiFormat @text={{this.model.spells_blurb}} />
+{{/if}}
+
+<div class="osr-rpg-reference-toolbar">
+  {{#each this.model.traditions as |trad|}}
+    <LinkTo @route="osr-rpg-spells" @query={{hash tradition=trad.key}}
+      class="btn btn-default osr-rpg-tradition-btn {{if (eq trad.key this.model.tradition) 'active'}}">
+      {{trad.name}}
+    </LinkTo>
+  {{/each}}
+</div>
+
+{{#each this.model.spells_by_level as |levelGroup|}}
+<h2 class="osr-rpg-reference-level">Level {{levelGroup.level}}</h2>
+<table class="table table-striped osr-rpg-reference-table">
+  <thead>
+    <tr>
+      <th>Spell</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each levelGroup.spells as |spell|}}
+    <tr>
+      <td>
+        <LinkTo @route="osr-rpg-spell-detail" @models={{array spell.tradition spell.level spell.key}}>
+          {{spell.name}}
+        </LinkTo>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+{{/each}}
+</div>

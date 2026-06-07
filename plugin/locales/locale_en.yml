@@ -106,6 +106,7 @@ en:
     scene_roll_turn: "OSR Roll - %{name} turns undead (HD %{hd}): d20 = %{roll} vs %{target} — %{result}"
     scene_roll_track: "OSR Roll - %{name} tracks: d20(%{roll})%{mod} = %{total} vs %{target} — %{result}"
     invalid_equipment: "Unknown equipment: %{item}."
+    spell_not_found: "Spell not found."
     equip_updated: "Equipment updated. AC %{ac}."
     gear_empty: "%{name} carries no equipped gear."
     gear_list: "%{name} gear: %{gear}. AC %{ac}."

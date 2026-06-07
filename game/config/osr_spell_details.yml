@@ -1,0 +1,995 @@
+# OSE Advanced Fantasy Player's Tome v1.1 spell descriptions (paraphrased).
+# Necromancer supplement v0.2 where noted. Used by web portal System → Spell Lists.
+---
+osr:
+  spell_details:
+    cleric:
+      '1':
+        cure_light_wounds:
+          name: Cure Light Wounds
+          description: heals 1d6+1 HP or cures paralysis.
+          reversal: Cause Light Wounds — inflicts 1d6+1, requires melee attack roll.
+        detect_evil:
+          name: Detect Evil
+          description: evil-enchanted objects or evil-intentioned creatures glow.
+            Traps/harmful things are not "evil."
+        detect_magic:
+          name: Detect Magic
+          description: enchanted objects/areas/creatures glow.
+        light:
+          name: Light
+          description: 15' radius light, or blinds creature (save vs. spells), or
+            cancels darkness.
+          reversal: Darkness.
+        protection_from_evil:
+          name: Protection from Evil
+          description: "+1 saves vs. other-alignment creatures, −1 to their attacks;
+            enchanted/constructed/summoned creatures cannot melee caster (unless caster
+            engages first)."
+        purify_food_and_water:
+          name: Purify Food and Water
+          description: purifies spoiled/poisonous food/water (6 quarts or 1 ration
+            or food for 12).
+        remove_fear:
+          name: Remove Fear
+          description: calms fear; magical fear requires save vs. spells +1/caster
+            level.
+          reversal: Cause Fear (flees 2 turns unless save).
+        resist_cold:
+          name: Resist Cold
+          description: immunity to non-magical cold; +2 saves vs. cold attacks; −1/die
+            cold damage minimum 1.
+        darkness:
+          name: Darkness
+          description: 15' radius darkness, or cancels light.
+          reversal: Light.
+      '2':
+        bless:
+          name: Bless
+          description: 'allies in 20'' square not yet in melee: +1 attack/damage/morale.'
+          reversal: Blight (−1 penalty, save vs. spells).
+        find_traps:
+          name: Find Traps
+          description: trapped objects/areas glow blue.
+        hold_person:
+          name: Hold Person
+          description: paralyses 1 target (−2 save) or 1d4 in group. Not undead or
+            >4+1 HD human-like.
+        know_alignment:
+          name: Know Alignment
+          description: know alignment of one creature/object/location.
+        resist_fire:
+          name: Resist Fire
+          description: immunity to non-magical fire; +2 saves vs. fire attacks; −1/die
+            fire damage minimum 1.
+        silence_15_radius:
+          name: Silence 15' Radius
+          description: no sound, no conversation, no spellcasting in 15' area. Can
+            move with creature (save vs. spells).
+        snake_charm:
+          name: Snake Charm
+          description: renders snakes non-hostile; total HD ≤ caster level.
+        speak_with_animals:
+          name: Speak with Animals
+          description: communicate with one animal type; may ask favors.
+      '3':
+        continual_light:
+          name: Continual Light
+          description: 30' radius bright light (full daylight), or blinds, or cancels
+            continual darkness.
+          reversal: Continual Darkness.
+        cure_disease:
+          name: Cure Disease
+          description: cures any disease; kills green slime.
+          reversal: Cause Disease (death in 2d12 days, −2 attacks, healing halved).
+        growth_of_animal:
+          name: Growth of Animal
+          description: doubles size/strength/carry of one normal animal.
+        locate_object:
+          name: Locate Object
+          description: sense direction of object by general class or specific known
+            object. Cannot locate creatures.
+        remove_curse:
+          name: Remove Curse
+          description: removes one curse; may allow discarding cursed item.
+          reversal: Curse (−2 saves/−4 hit/−50% ability score; save vs. spells).
+        striking:
+          name: Striking
+          description: one weapon deals +1d6 damage and counts as magical.
+      '4':
+        create_water:
+          name: Create Water
+          description: 50 gallons (12 humans + 12 mounts for 1 day). +12 humans/mounts
+            per level above 8th.
+        cure_serious_wounds:
+          name: Cure Serious Wounds
+          description: heals 2d6+2 HP.
+          reversal: Cause Serious Wounds.
+        neutralize_poison:
+          name: Neutralize Poison
+          description: neutralizes poison; can revive poisoned death within 10 rounds.
+        protection_from_evil_10_radius:
+          name: Protection from Evil 10' Radius
+          description: all allies protected as per Protection from Evil.
+        speak_with_plants:
+          name: Speak with Plants
+          description: communicate with normal or monstrous plants; may ask simple
+            favors.
+        sticks_to_snakes:
+          name: Sticks to Snakes
+          description: transforms 2d8 sticks into obedient snakes (50% poisonous).
+            AC6[13], HD1, 1d4, MV90'(30').
+      '5':
+        commune:
+          name: Commune
+          description: 3 yes/no answers from divine powers (6 questions once/year).
+            Once/week max.
+        create_food:
+          name: Create Food
+          description: food for 12 humans + 12 mounts per day. +12 per level above
+            8th.
+        dispel_evil:
+          name: Dispel Evil
+          description: ward vs. enchanted/undead, or instantly banish/destroy one
+            (save −2), or dispel cursed item.
+        insect_plague:
+          name: Insect Plague
+          description: 60' swarm, moves 20'/round. Drives off ≤2 HD creatures. Above
+            ground only.
+        quest:
+          name: Quest
+          description: commands subject to perform task (save vs. spells); refusal
+            = curse.
+          reversal: Remove Quest (5% fail/level below original caster).
+        raise_dead:
+          name: Raise Dead
+          description: restores life to human/demihuman dead ≤4 days/level above 7th;
+            2 weeks weakness.
+          reversal: Finger of Death (save vs. death or die instantly; chaotic act).
+    druid:
+      '1':
+        animal_friendship:
+          name: Animal Friendship
+          description: 'animal saves vs. spells or becomes permanent companion after
+            6-turn ritual. Up to 2 HD of animals/caster level at once; training: up
+            to 6 tricks, 1 week each.'
+        detect_danger:
+          name: Detect Danger
+          description: scan areas/creatures/objects to sense immediate vs. potential
+            danger.
+        entangle:
+          name: Entangle
+          description: 20' radius plants entangle creatures; save vs. spells or cannot
+            move; success = half movement.
+        faerie_fire:
+          name: Faerie Fire
+          description: outlines objects/creatures in lambent green. Makes invisible
+            visible; +2 to hit in low light. Harmless.
+        invisibility_to_animals:
+          name: Invisibility to Animals
+          description: subject undetectable to all animal senses (smell, sight, hearing).
+        locate_plant_or_animal:
+          name: Locate Plant or Animal
+          description: sense direction to nearest named species or specific known
+            individual.
+        predict_weather:
+          name: Predict Weather
+          description: accurate weather knowledge for next 12 hours.
+        speak_with_animals:
+          name: Speak with Animals
+          description: communicate with one animal type; may ask favors.
+      '2':
+        barkskin:
+          name: Barkskin
+          description: "+1 AC; +1 to all saves except magical effects."
+        create_water:
+          name: Create Water
+          description: 50 gallons.
+        cure_light_wounds:
+          name: Cure Light Wounds
+          description: heals 1d6+1 HP or cures paralysis.
+          reversal: Cause Light Wounds.
+        heat_metal:
+          name: Heat Metal
+          description: 'metal heats over 4 rounds then fades. Round 2: 1d3 damage.
+            Round 3–4: 1d6, flammables ignite. White hot/searing: save vs. spells
+            or limb/body disabled for days.'
+        obscuring_mist:
+          name: Obscuring Mist
+          description: 10'-high mist blocks normal vision and infravision. Fades in
+            strong winds.
+        produce_flame:
+          name: Produce Flame
+          description: flame in palm; lights flammables; can throw 30' (ends spell).
+        slow_poison:
+          name: Slow Poison
+          description: 'slows poison to 1 HP/turn; can revive poisoned death within
+            1 turn/level. Herbal antidote: 10%/level chance.'
+        warp_wood:
+          name: Warp Wood
+          description: 'warps 1 arrow-sized object/level; magic weapons: 10% chance
+            unaffected per plus.'
+      '3':
+        call_lightning:
+          name: Call Lightning
+          description: 1 lightning strike/turn (requires storm clouds); 8d6 damage,
+            10' radius, save vs. spells for half.
+        growth_of_nature:
+          name: Growth of Nature
+          description: double animal size/strength OR cause vigorous plant growth
+            (3000 sq ft becomes impassable jungle).
+        hold_animal:
+          name: Hold Animal
+          description: paralyses up to 1 HD/level of animals; fantastic/intelligent/summoned
+            animals unaffected.
+        protection_from_poison:
+          name: Protection from Poison
+          description: immunity to venom attacks and poison gases; +4 saves vs. poison
+            breath; neutralizes existing poisons.
+        tree_shape:
+          name: Tree Shape
+          description: caster becomes realistic tree; retains normal senses; cancel
+            at will.
+        water_breathing:
+          name: Water Breathing
+          description: subject breathes water freely.
+          reversal: Air Breathing.
+      '4':
+        cure_serious_wounds:
+          name: Cure Serious Wounds
+          description: heals 2d6+2 HP.
+        dispel_magic:
+          name: Dispel Magic
+          description: ends non-instant spell effects in 20' cube. 5% failure per
+            level below original caster.
+        protection_from_fire_and_lightning:
+          name: Protection from Fire and Lightning
+          description: choose fire or lightning; negates 6 HP/caster level of chosen
+            damage type.
+        speak_with_plants:
+          name: Speak with Plants
+          description: communicate with normal or monstrous plants.
+        summon_animals:
+          name: Summon Animals
+          description: total HD equal to caster level respond (not insects/magical/intelligent);
+            they understand caster, aid in whatever way possible.
+        temperature_control:
+          name: Temperature Control
+          description: raise or lower to full natural temperature range.
+      '5':
+        commune_with_nature:
+          name: Commune with Nature
+          description: reveals 1 fact/level about terrain, water, plants, animals,
+            minerals, or intelligent creatures in a direction. No effect underground.
+        control_weather:
+          name: Control Weather
+          description: 'manifests: Calm, Extreme Heat, Fog, High Winds, Rain, Snow,
+            or Tornado (12 HD, 2d8 damage, AC0[19], MV360''(120''), sweeps <2 HD creatures).'
+        pass_plant:
+          name: Pass Plant
+          description: step into one tree, emerge from same-species tree up to 600
+            yards away (oak); less for other species.
+        protection_from_plants_and_animals:
+          name: Protection from Plants and Animals
+          description: invisible barrier prevents contact by chosen type (plants or
+            animals); caster cannot touch/attack affected life-forms.
+        transmute_rock_to_mud:
+          name: Transmute Rock to Mud
+          description: 3000 sq ft of rock → 10' deep mud; movement −90%.
+          reversal: Transmute Mud to Rock (permanent).
+    magic_user:
+      '1':
+        charm_person:
+          name: Charm Person
+          description: save vs. spells or charmed; treats caster as trusted friend;
+            obeys commands not suicidal/harmful; re-saves at intervals by INT (monthly/weekly/daily
+            for INT 3–8/9–12/13–18).
+        detect_magic:
+          name: Detect Magic
+          description: enchanted objects/areas/creatures glow.
+        floating_disc:
+          name: Floating Disc
+          description: 3' diameter force disc carries 5000 coins at waist height,
+            follows caster.
+        hold_portal:
+          name: Hold Portal
+          description: magically holds shut a door/gate/window; Knock opens it; 3+
+            HD above caster can force in 1 round.
+        light:
+          name: Light
+          description: 15' radius light, or blinds (save vs. spells), or cancels darkness.
+          reversal: Darkness.
+        magic_missile:
+          name: Magic Missile
+          description: 1d6+1 damage, hits unerringly. +2 missiles per 5 levels (3
+            at 6–10th, 5 at 11–15th).
+        protection_from_evil:
+          name: Protection from Evil
+          description: "+1 saves vs. other-alignment creatures, −1 to their attacks;
+            summoned/enchanted/constructed cannot melee caster (unless caster engages)."
+        read_languages:
+          name: Read Languages
+          description: read any language/code/map.
+        read_magic:
+          name: Read Magic
+          description: decipher magical inscriptions/scrolls/spell books/runes. Once
+            read, can re-read without the spell.
+        shield:
+          name: Shield
+          description: AC 2[17] vs missiles, AC 4[15] vs other attacks.
+        sleep:
+          name: Sleep
+          description: 2d8 HD of ≤4 HD creatures sleep (weakest first) OR 1 creature
+            of 4+1 HD. Undead unaffected. Slapping/wounding wakes. Can be killed instantly
+            with bladed weapon.
+        ventriloquism:
+          name: Ventriloquism
+          description: voice appears from any location/source within range.
+      '2':
+        continual_light:
+          name: Continual Light
+          description: 30' radius daylight, or blinds, or cancels darkness.
+          reversal: Continual Darkness (blocks infravision).
+        detect_evil:
+          name: Detect Evil
+          description: evil-enchanted objects or evil-intentioned creatures glow.
+        detect_invisible:
+          name: Detect Invisible
+          description: invisible creatures/items revealed.
+        esp:
+          name: ESP
+          description: read thoughts; focus 1 turn per direction; multiple creatures
+            = jumble; blocked by lead or 2'+ rock.
+        invisibility:
+          name: Invisibility
+          description: invisible until attacks or casts spell. Items dropped become
+            visible.
+        knock:
+          name: Knock
+          description: opens stuck/barred/locked doors, chests; affects Hold Portal,
+            Wizard Lock; cannot open unknown secret doors.
+        levitate:
+          name: Levitate
+          description: move vertically at 20'/round; push against solids for lateral
+            movement.
+        locate_object:
+          name: Locate Object
+          description: sense direction of general class or specific known object.
+            Cannot locate creatures.
+        mirror_image:
+          name: Mirror Image
+          description: 1d4 illusory duplicates; each attack destroys one image.
+        phantasmal_force:
+          name: Phantasmal Force
+          description: 20' cube visual illusion (monster AC9[10], attack, or scene);
+            ends when caster moves/stops concentrating; pseudo-effects 1d4 turns.
+        web:
+          name: Web
+          description: 10' cube sticky mass; normal humans break free in 2d4 turns;
+            giants in 2 rounds; flammable (1d6 fire damage).
+        wizard_lock:
+          name: Wizard Lock
+          description: magically locks any lockable item; caster passes freely; Knock
+            bypasses; 3+ levels above caster pass freely.
+      '3':
+        clairvoyance:
+          name: Clairvoyance
+          description: see through eyes of creatures in range; focus 1 turn; blocked
+            by lead/2'+ rock.
+        dispel_magic:
+          name: Dispel Magic
+          description: ends non-instant spells in 20' cube; 5% failure per level below
+            original caster. Magic items unaffected.
+        fire_ball:
+          name: Fire Ball
+          description: 20' radius sphere; 1d6/level damage; save vs. spells for half.
+        fly:
+          name: Fly
+          description: flight at 360'(120').
+        haste:
+          name: Haste
+          description: 24 creatures in 60' area; double movement and attacks; doesn't
+            double spells or devices.
+        hold_person:
+          name: Hold Person
+          description: paralyses 1 (−2 save) or 1d4 in group. Not undead or >4+1 HD.
+        infravision:
+          name: Infravision
+          description: see 60' in dark.
+        invisibility_10_radius:
+          name: Invisibility 10' Radius
+          description: all within 10' of target invisible; subjects who move 10'+
+            away become visible; creatures entering area after casting don't become
+            invisible.
+        lightning_bolt:
+          name: Lightning Bolt
+          description: 60' long, 5' wide; 1d6/level damage; save vs. spells for half;
+            bounces off solid barriers.
+        protection_from_evil_10_radius:
+          name: Protection from Evil 10' Radius
+          description: all allies protected as per Protection from Evil.
+        protection_from_normal_missiles:
+          name: Protection from Normal Missiles
+          description: one subject immune to small non-magical missiles.
+        water_breathing:
+          name: Water Breathing
+          description: subject breathes water.
+      '4':
+        charm_monster:
+          name: Charm Monster
+          description: charms 3d6 creatures of ≤3 HD OR 1 creature of any HD; save
+            vs. spells; undead unaffected; re-saves by INT.
+        confusion:
+          name: Confusion
+          description: '3d6 subjects in 60''; behavior per round: 2–5=attack caster''s
+            group, 6–8=no action, 9–12=attack own group; 2+1 HD+ may save each round.'
+        dimension_door:
+          name: Dimension Door
+          description: caster or one creature teleports up to 360' to known or offset
+            location; fails if destination solid; unwilling save vs. spells.
+        growth_of_plants:
+          name: Growth of Plants
+          description: 3000 sq ft vegetation becomes impassable thorny jungle.
+        massmorph:
+          name: Massmorph
+          description: disguise up to 240' diameter force of humanoids as trees/orchard.
+        polymorph_others:
+          name: Polymorph Others
+          description: living subject becomes another creature; new form HD ≤ 2×subject's
+            HD; subject truly becomes new form including behavior; unwilling save
+            vs. spells.
+        polymorph_self:
+          name: Polymorph Self
+          description: caster transforms; retains own HP/saves/attacks; gains physical
+            but not non-physical special abilities; cannot cast spells while polymorphed.
+        remove_curse:
+          name: Remove Curse
+          description: removes one curse.
+          reversal: Curse (−2 saves/−4 hit/−50% ability score; save vs. spells).
+        wall_of_fire:
+          name: Wall of Fire
+          description: 1200 sq ft immobile violet fire; <4 HD cannot pass; ≥4 HD take
+            1d6 through; double vs. cold/undead.
+        wall_of_ice:
+          name: Wall of Ice
+          description: 1200 sq ft ice wall; <4 HD cannot pass; ≥4 HD take 1d6 to break
+            through; double vs. fire creatures.
+        wizard_eye:
+          name: Wizard Eye
+          description: invisible magical eye; move up to 120'/turn; caster sees through
+            it (normal+infravision); blocked by solid barriers; passes through 1-inch
+            holes.
+      '5':
+        animate_dead:
+          name: Animate Dead
+          description: 'animates HD of undead equal to caster level (skeletons: HD
+            as in life; zombies: HD+1).'
+        cloudkill:
+          name: Cloudkill
+          description: 30' diameter poisonous fog; moves 60'/turn; sinks to lowest
+            level; 1 HP/round; creatures <5 HD save vs. death or die.
+        feeblemind:
+          name: Feeblemind
+          description: arcane spellcaster saves vs. spells at −4 or becomes feebleminded.
+        hold_monster:
+          name: Hold Monster
+          description: paralyses 1 (−2 save) or 1d4 in group; undead unaffected.
+        magic_jar:
+          name: Magic Jar
+          description: caster's life-force enters receptacle; attempts to possess
+            creatures within 120'; victim saves vs. spells.
+        passwall:
+          name: Passwall
+          description: 5' diameter hole through 10' of solid rock.
+        telekinesis:
+          name: Telekinesis
+          description: move objects/creatures by thought; 200 coins/level; 20'/round;
+            save vs. spells to resist.
+        teleport:
+          name: Teleport
+          description: 'teleport to known location; risk of arriving above/below ground
+            (% by knowledge: exact=5% off-target, moderate=20%, scant=50%).'
+        wall_of_force:
+          name: Wall of Force
+          description: invisible force wall immune to most damage; blocks passage
+            and most spells.
+        wall_of_stone:
+          name: Wall of Stone
+          description: solid rock wall, 1000 cubic feet, any shape, must rest on solid
+            surface.
+      '6':
+        antimagic_shell:
+          name: Anti-Magic Shell
+          description: no spells/effects pass barrier in or out.
+        death_spell:
+          name: Death Spell
+          description: up to 4d8 HD of creatures in 60' cube save vs. death or die;
+            undead and >7 HD unaffected.
+        disintegrate:
+          name: Disintegrate
+          description: destroys one non-magical creature or object; save vs. death
+            to resist.
+        geas:
+          name: Geas
+          description: commands quest; save vs. spells; refusal = gradually fatal
+            penalties.
+          reversal: Remove Geas.
+        invisible_stalker:
+          name: Invisible Stalker
+          description: summons 8 HD invisible stalker; binds to mission; treacherous,
+            twists letter of command; dispel evil banishes it.
+        lower_water:
+          name: Lower Water
+          description: reduces depth of water body by half; up to 10,000 sq ft.
+        move_earth:
+          name: Move Earth
+          description: rearranges earth (not stone) at 60'/turn; can excavate downward.
+        part_water:
+          name: Part Water
+          description: 10' wide, 120' long path through water.
+        project_image:
+          name: Project Image
+          description: illusory duplicate of caster; spells appear to originate from
+            it; image disappears if touched/hit in melee.
+        reincarnation:
+          name: Reincarnation
+          description: 'dead character reincarnated as d10 roll: 1=Cleric, 2=Dwarf,
+            3=Elf, 4=Fighter, 5=Halfling, 6=MU, 7=Thief, 8=Monster, 9–10=same class;
+            at level 1d6.'
+    illusionist:
+      '1':
+        auditory_illusion:
+          name: Auditory Illusion
+          description: conjure a moving/changing sound; max ~4 humans shouting/caster
+            level.
+        chromatic_orb:
+          name: Chromatic Orb
+          description: 'orb hits unerringly; damage and effect by gem/level: Quartz=1d4+Light,
+            Ruby=1d6+Heat, Agate=1d8+Fire, Onyx=1d10+Blindness, Emerald=1d12+Stench,
+            Magnetite=2d6+Magnetism(−2 AC/attacks), Sapphire=2d8+Paralysis.'
+        colour_spray:
+          name: Colour Spray
+          description: 1d6 creatures; ≤caster HD=unconscious 2d4 rounds; up to 2 HD
+            above=blinded 1d4 rounds (save); 3+ HD above=stunned 1 round (save).
+        dancing_lights:
+          name: Dancing Lights
+          description: 1–4 torches/spheres or 1 humanoid light under control.
+        detect_illusion:
+          name: Detect Illusion
+          description: subject sees through illusions within 10'/level; also reveals
+            invisible.
+        glamour:
+          name: Glamour
+          description: change own appearance to another humanoid; height ±1'; can
+            copy a touched individual (attack roll if unwilling); familiar observers
+            save vs. spells.
+        hypnotism:
+          name: Hypnotism
+          description: suggest course of action to 1d6 creatures; harmful suggestions
+            auto-fail; save vs. spells (−2 if "reasonable").
+        light:
+          name: Light
+          description: 15' radius light, or blinds (save vs. spells), or cancels darkness.
+          reversal: Darkness.
+        phantasmal_force:
+          name: Phantasmal Force
+          description: visual illusion 20' cube; monster AC9[10], attack, or scene;
+            pseudo-damage effects last 1d4 turns.
+        read_magic:
+          name: Read Magic
+          description: decipher magical inscriptions/scrolls/spell books.
+        spook:
+          name: Spook
+          description: target perceives caster as nightmare monster and flees; save
+            vs. spells each round to break; undead/<animal intelligence unaffected.
+        wall_of_fog:
+          name: Wall of Fog
+          description: 10' cube/level fog bank; blocks normal vision and infravision.
+      '2':
+        blindnessdeafness:
+          name: Blindness/Deafness
+          description: afflicts with illusory blindness or deafness (save vs. spells);
+            removed by dispel magic not cure disease; caster can cancel at will.
+        blur:
+          name: Blur
+          description: "−4 to hit caster (−2 on 2nd+ attempt); +1 saves vs. spells
+            targeting caster directly."
+        detect_magic:
+          name: Detect Magic
+          description: enchanted objects/areas/creatures glow.
+        false_aura:
+          name: False Aura
+          description: veils aura; deflects detect magic/evil to nearby object; Know
+            Alignment reveals opposite.
+        fascinate:
+          name: Fascinate
+          description: 'subject perceives caster as captivating; follows caster; obeys
+            requests (CHA check or spell breaks); animals: 1d4 days, may stay if well-treated.'
+        hypnotic_pattern:
+          name: Hypnotic Pattern
+          description: twisting colours; up to 24 HD hypnotised (stand gazing); harm
+            breaks effect; stays while caster concentrates and remains stationary.
+        improved_phantasmal_force:
+          name: Improved Phantasmal Force
+          description: 20' cube illusion with minor sounds; monster AC7[12]; persists
+            2 rounds after concentration ends.
+        invisibility:
+          name: Invisibility
+          description: invisible until attacks or casts spell. Items dropped become
+            visible.
+        magic_mouth:
+          name: Magic Mouth
+          description: up to 25-word message triggered by condition; trigger can only
+            discern visual appearances.
+        mirror_image:
+          name: Mirror Image
+          description: 1d4 duplicates; each attack destroys one.
+        quasimorph:
+          name: Quasimorph
+          description: take on appearance of another creature (±50% size); gain limited
+            flight (¼ speed), water breathing, apparent attacks — no special abilities
+            or extra attacks.
+        whispering_wind:
+          name: Whispering Wind
+          description: send whispered message to a location; arrives when caster wishes.
+      '3':
+        clairaudience:
+          name: Clairaudience
+          description: hear through ears of creatures in range; focus 1 turn; blocked
+            by lead or 2'+ rock.
+        daylight:
+          name: Daylight
+          description: 30' radius bright light like full daylight, or blinds, or cancels
+            darkness.
+        dispel_magic:
+          name: Dispel Magic
+          description: ends non-instant spells in 20' cube; 5% failure per level below
+            original caster.
+        fear:
+          name: Fear
+          description: creatures flee at max speed; 60% drop held items (−5% per level/HD
+            above 1); save vs. spells negates.
+        hallucinatory_terrain:
+          name: Hallucinatory Terrain
+          description: conjure or hide terrain; dispelled by intelligent touch.
+        illusory_script:
+          name: Illusory Script
+          description: written message appears as different text to readers; triggers
+            on condition.
+        invisibility_10_radius:
+          name: Invisibility 10' Radius
+          description: all within 10' of target invisible.
+        paralysis:
+          name: Paralysis
+          description: up to 2 HD/level in 20' cube believe they cannot move; lowest
+            HD first; save vs. spells; mindless unaffected.
+        rope_trick:
+          name: Rope Trick
+          description: rope rises 30'; up to 6 creatures hide in imaginary space at
+            top; invisible/unaffectable inside; duration end = fall from midair.
+        spectral_force:
+          name: Spectral Force
+          description: 20' cube illusion with sounds/smells/thermal; monster AC5[14];
+            persists 3 rounds after concentration ends.
+        suggestion:
+          name: Suggestion
+          description: implant suggested action (save vs. spells; −2 if "reasonable");
+            harmful suggestions auto-fail; undead unaffected.
+        water_breathing:
+          name: Water Breathing
+          description: subject breathes water.
+      '4':
+        confusion:
+          name: Confusion
+          description: '3d6 subjects; behavior roll per round: 2–5=attack caster''s
+            group, 6–8=no action, 9–12=attack own group.'
+        emotion:
+          name: Emotion
+          description: all in 40' square save vs. spells or suffer Fear/Hate(+2 attack/damage/saves/morale)/Hopelessness(surrender
+            or do nothing)/Rage(+1 hit, +3 damage, +5 temp HP, no shield). Emotions
+            counter their opposites.
+        illusionary_wall:
+          name: Illusionary Wall
+          description: creates illusory wall up to 1200 sq ft that appears real; intelligent
+            touch may reveal.
+        massmorph:
+          name: Massmorph
+          description: disguise up to 240' diameter force of humanoids as trees/orchard.
+        minor_globe_of_invulnerability:
+          name: Minor Globe of Invulnerability
+          description: 10' radius globe blocks 1st–3rd level spell effects from entering
+            or leaving.
+        phantasmal_killer:
+          name: Phantasmal Killer
+          description: subject's worst nightmare pursues it; invulnerable to subject's
+            attacks; THAC0 16[+3]; hit = subject dies of terror (save vs. spells +2);
+            undead/<animal intelligence unaffected.
+        polymorph_others:
+          name: Polymorph Others
+          description: living subject becomes another creature; new form HD ≤ 2×subject's
+            HD; unwilling save vs. spells.
+        rainbow_pattern:
+          name: Rainbow Pattern
+          description: 24 HD hypnotised (stand gazing); caster can release pattern
+            to drift away, drawing hypnotised creatures with it; new save if led into
+            danger.
+        shadow_monsters:
+          name: Shadow Monsters
+          description: conjure shadow-stuff monsters; 1d2 HP/HD; save vs. spells to
+            see truly (AC9[10], ¼ damage, no specials) vs. perceive as real (full
+            damage, specials work but energy drain/petrify = unconscious/paralysed
+            1d4 turns).
+        solid_fog:
+          name: Solid Fog
+          description: 10' cube/level fog; blocks vision and infravision; movement
+            at 1/10 rate; only very strong winds or magical fire clears it.
+      '5':
+        advanced_illusion:
+          name: Advanced Illusion
+          description: 20' cube illusion with sounds/smells/thermal; monster AC5[14];
+            no concentration needed (responsiveness set at casting).
+        cloudkill:
+          name: Cloudkill
+          description: 30' diameter poisonous fog moves 60'/turn; sinks to low ground;
+            1 hp/round; creatures under 5 HD save vs death each round or die.
+        dream:
+          name: Dream
+          description: send dream message to sleeping subject; may deliver warning
+            or suggestion (save vs spells for harmful content).
+        feeblemind:
+          name: Feeblemind
+          description: arcane spellcaster saves vs. spells at −4 or becomes feebleminded.
+        major_creation:
+          name: Major Creation
+          description: create non-living vegetable or mineral object 1 cubic foot/level;
+            vegetable=12 turns/level, mineral=6 turns/level.
+        mislead:
+          name: Mislead
+          description: caster becomes invisible while an illusory double appears and
+            acts independently with its own HP equal to caster's current HP.
+        persistent_image:
+          name: Persistent Image
+          description: 20' cube illusion with sounds/smells/thermal; monster AC5[14];
+            no concentration needed; scene permanent until dispelled.
+        project_image:
+          name: Project Image
+          description: illusory duplicate; spells appear to originate from it; disappears
+            if touched or hit in melee.
+        shadow_door:
+          name: Shadow Door
+          description: creates shadowy portal allowing caster to step through to a
+            familiar location within 240'.
+        shadow_magic:
+          name: Shadow Magic
+          description: conjure semi-real shadow monsters; 1d4 HP/HD; save vs spells
+            for half damage and no special effects.
+      '6':
+        antimagic_shell:
+          name: Anti-Magic Shell
+          description: no spells/effects pass barrier in or out.
+        mass_suggestion:
+          name: Mass Suggestion
+          description: implant suggested action in up to 1 subject/level; harmful
+            suggestions auto-fail; save vs. spells (−2 if "reasonable"); undead unaffected.
+        permanent_illusion:
+          name: Permanent Illusion
+          description: 20' cube illusion with sounds/smells/thermal; monster AC5[14];
+            no concentration needed; scene permanent until dispelled.
+        programmed_illusion:
+          name: Programmed Illusion
+          description: enchants area to produce illusion when trigger condition occurs;
+            trigger can only discern visual appearances; illusion lasts 1 round/level
+            after triggering.
+        shades:
+          name: Shades
+          description: shadow monsters with 1d6 HP/HD; save = AC9[10] + ¾ damage;
+            fail = full damage + specials (energy drain/petrify → unconscious/paralysed
+            1d4 turns).
+        true_sight:
+          name: True Sight
+          description: subject sees all as they truly are — secret doors, invisible
+            creatures/objects, illusions, enchantments all revealed.
+        veil:
+          name: Veil
+          description: alters appearance of group of creatures or objects to look
+            like another type; height ±10%; cannot precisely copy specific individuals.
+    necromancer:
+      '1':
+        chill_touch:
+          name: Chill Touch
+          description: melee touch vs living target deals 1d4 damage and drains 1
+            STR; non-rated STR targets take cumulative -1 to attacks instead. Lost
+            STR recovers 1/hour.
+        command_dead:
+          name: Command Dead
+          description: raises 2d6 humanoid corpses/skeletons with 1 hp each; they
+            obey briefly, attack as 1 HD undead, and cannot use abilities from life.
+        corpse_visage:
+          name: Corpse Visage
+          description: caster's face and voice mimic a touched humanoid corpse dead
+            within the last week, including its state of decay.
+        decay:
+          name: Decay
+          description: reduces corpse/dead body part to bones in 1 turn, making it
+            count as older for raise dead, or touch-attacks fleshy undead for 2d6
+            damage.
+          reversal: Ward Against Decay (permanently preserves a corpse/body part from
+            decay).
+        deathlight:
+          name: Deathlight
+          description: wreathes a skull, skeleton, corpse, or undead in flickering
+            light with 15' radius; intelligent undead may save vs spells. Prevents
+            full invisibility on the target.
+        detect_undead:
+          name: Detect Undead
+          description: reveals presence and direction of undead, not exact type/location.
+            Blocked by 1' stone, 3' earth, or thin metal.
+        marionette:
+          name: Marionette
+          description: controls one corporeal undead up to 4 HD or one person-like
+            living target; save vs paralysis negates. Target can move/attack/freeze,
+            attacks at -2, no special abilities.
+        pass_undead:
+          name: Pass Undead
+          description: subject is undetectable to undead. Undead 6+ HD may save to
+            detect; 9+ HD are never fooled.
+        protection_from_evil:
+          name: Protection From Evil
+          description: caster gets +1 saves and enemies of another alignment attack
+            at -1. Enchanted/constructed/summoned creatures cannot melee the caster
+            unless the caster engages them in melee.
+        read_magic:
+          name: Read Magic
+          description: reads arcane scrolls, other arcane spell books, and magical
+            inscriptions. Once read, the same inscription remains readable later.
+        skull_speech:
+          name: Skull Speech
+          description: makes one skull speak words chosen by caster; cannot cast through
+            it. Intelligent undead skulls may save vs paralysis.
+        undead_servitor:
+          name: Undead Servitor
+          description: reanimates one dead humanoid as obedient skeleton or zombie
+            with no special abilities from life.
+      '2':
+        bone_armour:
+          name: Bone Armour
+          description: grants AC 5[14]. Melee attackers who hit suffer 1d3 damage
+            from bone shards. Armour absorbs 5 damage +1/level before ending.
+        choke:
+          name: Choke
+          description: living target saves vs spells or ghostly hands choke it for
+            1d4 damage/round and -2 attacks. Cannot be physically removed; ends if
+            caster is killed or unconscious.
+        death_recall:
+          name: Death Recall
+          description: caster witnesses the last 10 minutes of a corpse's life if
+            it died within 24 hours; caster is in a trance and cannot perceive surroundings.
+        detect_magic:
+          name: Detect Magic
+          description: permanent and temporary enchantments on objects, areas, or
+            creatures glow.
+        feign_death:
+          name: Feign Death
+          description: willing target up to caster level in HD appears dead but keeps
+            hearing/smell. Damage is halved, paralysis/energy drain do not affect
+            target, poison is suspended.
+        paralysing_touch:
+          name: Paralysing Touch
+          description: melee touch forces living target to save vs paralysis or be
+            paralysed 2d4 turns. Elves and creatures larger than ogres are unaffected.
+        seal_tomb:
+          name: Seal Tomb
+          description: seals one crypt door or coffer lid as a magical lock. Caster
+            can pass; knock or a magic-user 3+ levels higher bypasses.
+          reversal: Open Tomb (opens crypt/coffer, dispels seal tomb/wizard lock).
+        skeletal_steed:
+          name: Skeletal Steed
+          description: conjures silent skeletal horse for one rider plus up to 3,000
+            coins; excess load ends spell. Steed crumbles when duration ends.
+        skull_sight:
+          name: Skull Sight
+          description: with eyes bound, caster sees through a humanoid skull up to
+            60' in total darkness with fine detail.
+        silence_15_radius:
+          name: Silence 15' Radius
+          description: creates silent 15' radius; no conversation or spellcasting
+            inside. Can target creature; save vs spells means effect stays stationary,
+            failure makes it move with target.
+        speak_with_dead:
+          name: Speak With Dead
+          description: requires physical remains; asks a dead person's spirit brief
+            truthful questions based on caster level.
+        spectral_hand:
+          name: Spectral Hand
+          description: ghostly hand delivers touch spells up to 4th level at range.
+            It moves 60'/round with concentration, gives +2 on touch attacks.
+      '3':
+        animate_dead:
+          name: Animate Dead
+          description: animates skeletons or zombies from dead creatures up to caster
+            level in total HD; obey caster until duration ends, then crumble.
+        bestow_curse:
+          name: Bestow Curse
+          description: target saves vs spells or suffers caster-defined curse. Maximum
+            effects include -2 saves, -4 to hit, or halving an ability score. Multiple
+            distinct curses may stack.
+        death_ward:
+          name: Death Ward
+          description: living subject can keep acting below 0 hp until -10 hp, gains
+            +2 saves vs death/poison. Healing works normally. If spell ends while
+            subject is at 0 hp or lower, subject dies immediately.
+        speak_with_dead:
+          name: Speak With Dead
+          description: requires physical remains; asks a dead person's spirit brief
+            truthful questions based on caster level.
+        spirit_guard:
+          name: Spirit Guard
+          description: summons invisible dormant spirit to guard location. On trigger,
+            manifests as wraith, warning, or chilling fog.
+        vampiric_touch:
+          name: Vampiric Touch
+          description: melee touch vs living target deals 1d6 damage per 2 caster
+            levels, max 6d6; caster heals equal damage, with excess becoming temporary
+            bonus hp for 1 hour.
+      '4':
+        contagion:
+          name: Contagion
+          description: Infects a living target with a disease of the caster's choice
+            (blinding, crippling, fevers, etc.); save vs spells negates.
+        death_spell:
+          name: Death Spell
+          description: up to 4d8 HD of creatures in 60' cube save vs death or die
+            instantly. Undead and creatures above 7 HD unaffected.
+        enervation:
+          name: Enervation
+          description: Black ray drains 1d4 levels from a living target; save vs spells
+            for half; nonliving and undead unaffected.
+        fear:
+          name: Fear
+          description: creatures in cone save vs spells or flee at maximum speed for
+            1 round/level. Affected creatures have 60% chance to drop held items.
+        wraithform:
+          name: Wraithform
+          description: caster becomes semi-incorporeal; passes through cracks; only
+            magic and incorporeal creatures can harm; undead ignore caster (10+ HD
+            save at −4 to notice).
+      '5':
+        animate_dead:
+          name: Animate Dead
+          description: animates skeletons or zombies from dead creatures up to caster
+            level in total HD; obey caster until destroyed or dispelled.
+        cloudkill:
+          name: Cloudkill
+          description: 30' diameter poisonous fog moves 60'/turn; sinks to low ground;
+            1 hp/round; creatures under 5 HD save vs death each round or die.
+        magic_jar:
+          name: Magic Jar
+          description: caster's body becomes comatose and life-force enters an object
+            within 30'. From jar, caster may possess creatures within 120'; target
+            saves vs spells.
+        raise_dead:
+          name: Raise Dead
+          description: Restores life to a human or demihuman dead within the time
+            limit; subject returns with 2 weeks of weakness at 1 hp, half movement,
+            and cannot attack or cast spells.
+        summon_shadow:
+          name: Summon Shadow
+          description: Invokes Orcus to send undead servitors; roll 1d6 for type (skeletons,
+            zombies, ghouls, wights, wraiths, or mummies). Concentration is needed
+            to command them.
+      '6':
+        antimagic_shell:
+          name: Anti-Magic Shell
+          description: no spells/effects pass barrier in or out.
+        death_spell:
+          name: Death Spell
+          description: up to 4d8 HD of creatures in 60' cube save vs death or die
+            instantly. Undead and creatures above 7 HD unaffected.
+        disintegrate:
+          name: Disintegrate
+          description: destroys one non-magical creature or object; save vs death
+            to resist.
+        reincarnation:
+          name: Reincarnation
+          description: dead character reincarnated into new body and class per table;
+            returns at level 1d6.

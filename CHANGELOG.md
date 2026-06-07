@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.1.0 — 2026-06-08
+
+System menu reference pages.
+
+- Web portal **Spell Lists** and **Equipment List** under System navbar
+- API handlers: `osrRpgSpells`, `osrRpgSpellDetail`, `osrRpgEquipment`
+- `osr_spell_details.yml` with paraphrased OSE spell descriptions
+- Expanded `osr_equipment.yml` (armor, melee/missile weapons, adventuring gear)
+- Ember routes/templates in `webportal/`; register in `custom-routes.js`
+
 ## v3.0.0 — 2026-06-08
 
 Hybrid OSR play layer.

@@ -1,0 +1,29 @@
+{{page-title this.model.name}}
+<div class="osr-rpg-reference-page">
+<h1>{{this.model.name}}</h1>
+
+<p class="osr-rpg-reference-meta">
+  <strong>{{this.model.tradition_name}}</strong> — Level {{this.model.level}}
+</p>
+
+{{#if this.model.error}}
+<p class="alert alert-warning">{{this.model.error}}</p>
+{{else}}
+<div class="osr-rpg-reference-detail">
+  <AnsiFormat @text={{this.model.description_html}} />
+</div>
+
+{{#if this.model.reversal_html}}
+<h3>Reversal</h3>
+<div class="osr-rpg-reference-detail">
+  <AnsiFormat @text={{this.model.reversal_html}} />
+</div>
+{{/if}}
+{{/if}}
+
+<p>
+  <LinkTo @route="osr-rpg-spells" @query={{hash tradition=this.model.tradition}}>
+    Back to {{this.model.tradition_name}} spells
+  </LinkTo>
+</p>
+</div>

@@ -114,6 +114,12 @@ module AresMUSH
         return SpendExpertiseRequestHandler
       when 'osrRpgSpellAction'
         return SpellActionRequestHandler
+      when 'osrRpgSpells'
+        return SpellsListRequestHandler
+      when 'osrRpgSpellDetail'
+        return SpellDetailRequestHandler
+      when 'osrRpgEquipment'
+        return EquipmentListRequestHandler
       end
       nil
     end

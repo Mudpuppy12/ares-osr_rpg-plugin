@@ -99,6 +99,16 @@ module AresMUSH
         Global.read_config('osr', 'spells', tradition) || {}
       end
 
+      def self.spell_detail_key(name)
+        normalize_key(name)
+      end
+
+      def self.spell_detail(tradition, level, key)
+        return nil if tradition.blank? || level.blank? || key.blank?
+        details = Global.read_config('osr', 'spell_details', tradition.to_s, level.to_s) || {}
+        val(details, key.to_s) || val(details, key.to_sym)
+      end
+
       def self.prime_req_xp_bonus(class_key, scores)
         cfg = class_config(class_key)
         return 0 unless cfg

@@ -72,9 +72,30 @@ mkdir -p ares-webportal/public/sounds
 cp ares-osr_rpg-plugin/public/sounds/osr-rpg-dice.mp3 ares-webportal/public/sounds/
 ```
 
-Merge `styles/osr_rpg_chargen.scss` from this repo into `aresmush/game/styles/custom_style.scss` (or `@import` it) so chargen dice tray and expertise UI are styled.
+Merge `styles/osr_rpg_chargen.scss` from this repo into `aresmush/game/styles/custom_style.scss` (or `@import` it) so chargen dice tray, expertise UI, and System reference pages are styled.
 
-### 4. Verify
+### 4. Custom routes (System menu pages)
+
+If your game uses `ares-webportal/app/custom-routes.js` (recommended), add:
+
+```javascript
+router.route('osr-rpg-spells', { path: '/osr_rpg/spells' });
+router.route('osr-rpg-spell-detail', { path: '/osr_rpg/spells/:tradition/:level/:name' });
+router.route('osr-rpg-equipment', { path: '/osr_rpg/equipment' });
+```
+
+Games that edit `router.js` directly can register the same routes there.
+
+Add System menu entries to `game/config/website.yml`:
+
+```yaml
+- title: Spell Lists
+  route: osr-rpg-spells
+- title: Equipment List
+  route: osr-rpg-equipment
+```
+
+### 5. Verify
 
 - Web chargen shows a **Sheet** tab (with `osr_rpg` in extras)
 - Save a character with class, alignment, and ability scores
@@ -190,6 +211,14 @@ NPC templates and monster XP-by-HD tables in `osr_npcs.yml` and `osr_treasure.ym
 | `OsrRpgProfile` | Profile OSR tab — sheet display, level-up, HP adjust, rest |
 | `LiveSceneOsrRpg` | Live scene dropdown — rolls, sheet, server combat tracker |
 
+### System menu reference pages
+
+| Route | API | Purpose |
+|-------|-----|---------|
+| `osr-rpg-spells` | `osrRpgSpells` | Spell lists by tradition (cleric, druid, magic-user, illusionist, necromancer) |
+| `osr-rpg-spell-detail` | `osrRpgSpellDetail` | Spell description and reversal text |
+| `osr-rpg-equipment` | `osrRpgEquipment` | Armor, weapons, missile weapons, adventuring gear |
+
 ### Config and content
 
 | File | Purpose |
@@ -199,7 +228,8 @@ NPC templates and monster XP-by-HD tables in `osr_npcs.yml` and `osr_treasure.ym
 | `osr_classes_*.yml` | 24 classes with XP/THAC0/save/slot progressions |
 | `osr_class_details.yml` | Armor, weapons, restrictions, special abilities |
 | `osr_spells.yml` | Spell lists by tradition (cleric/druid/MU/illusionist/necromancer) |
-| `osr_equipment.yml` | Armor and weapon catalog |
+| `osr_spell_details.yml` | Spell descriptions for web reference (paraphrased from OSE) |
+| `osr_equipment.yml` | Armor, weapons, missile weapons, and adventuring gear catalog |
 | `osr_npcs.yml` | NPC combat templates |
 | `osr_treasure.yml` | Treasure tables and monster XP by HD |
 

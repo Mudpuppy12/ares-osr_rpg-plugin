@@ -1,3 +1,6 @@
+# OSE Advanced Fantasy Player's Tome v1.1 equipment reference.
+# AC: unarmored 9, leather 7, chain 5, plate 3, shield +1 (stored as ac_bonus -1).
+# Keys align with osr_rpg/equip command (normalize_key).
 ---
 osr:
   equipment:
@@ -5,31 +8,172 @@ osr:
       none:
         name: Unarmored
         ac: 9
+        cost: 0
+        notes: Default AC without armor.
       leather:
         name: Leather
         ac: 7
+        cost: 20
+        notes: Light armor; no movement penalty.
       chain:
         name: Chain Mail
         ac: 5
+        cost: 75
+        notes: Medium armor.
       plate:
         name: Plate Mail
         ac: 3
+        cost: 60
+        notes: Heavy armor.
       shield:
         name: Shield
         ac_bonus: -1
+        cost: 10
+        notes: Improves AC by 1 when used with armor.
     weapons:
       dagger:
         name: Dagger
         damage: 1d4
-      sword:
-        name: Sword
-        damage: 1d8
+        cost: 3
+        notes: Melee or thrown (5'/10'/30').
+      hand_axe:
+        name: Hand Axe
+        damage: 1d6
+        cost: 4
+        notes: Melee or thrown (10'/20'/30').
       mace:
         name: Mace
         damage: 1d6
+        cost: 5
+      war_hammer:
+        name: War Hammer
+        damage: 1d6
+        cost: 5
+      short_sword:
+        name: Short Sword
+        damage: 1d6
+        cost: 7
+      sword:
+        name: Sword
+        damage: 1d8
+        cost: 10
+        notes: Long sword.
+      battle_axe:
+        name: Battle Axe
+        damage: 1d8
+        cost: 7
       spear:
         name: Spear
         damage: 1d6
+        cost: 3
+        notes: Melee or thrown (20'/40'/60').
+      pole_arm:
+        name: Pole Arm
+        damage: 1d10
+        cost: 7
+        notes: Requires two hands.
+      two_handed_sword:
+        name: Two-Handed Sword
+        damage: 1d10
+        cost: 15
+        notes: Requires two hands.
+    missile_weapons:
+      sling:
+        name: Sling
+        damage: 1d4
+        cost: 2
+        notes: Range 40'/80'/160'; uses stones.
+      short_bow:
+        name: Short Bow
+        damage: 1d6
+        cost: 15
+        notes: Range 50'/100'/150'; requires arrows.
+      long_bow:
+        name: Long Bow
+        damage: 1d6
+        cost: 40
+        notes: Range 70'/140'/210'; requires arrows.
+      light_crossbow:
+        name: Light Crossbow
+        damage: 1d6
+        cost: 25
+        notes: Range 50'/100'/150'; reload 1 round.
+      heavy_crossbow:
+        name: Heavy Crossbow
+        damage: 1d8
+        cost: 50
+        notes: Range 80'/160'/240'; reload 1 round.
       bow:
         name: Short Bow
         damage: 1d6
+        cost: 15
+        notes: Alias for short_bow (legacy equip key).
+    adventuring_gear:
+      backpack:
+        name: Backpack
+        cost: 5
+        notes: Holds up to 400 coins weight.
+      bedroll:
+        name: Bedroll
+        cost: 1
+      crowbar:
+        name: Crowbar
+        cost: 10
+      flask:
+        name: Flask (empty)
+        cost: 1
+      grappling_hook:
+        name: Grappling Hook
+        cost: 25
+      holy_symbol:
+        name: Holy Symbol
+        cost: 25
+        notes: Required for cleric spellcasting.
+      holy_water:
+        name: Holy Water (vial)
+        cost: 25
+        notes: 1d8 damage to undead; one use.
+      iron_rations:
+        name: Iron Rations (1 week)
+        cost: 15
+      lantern:
+        name: Lantern
+        cost: 10
+        notes: Burns 1 turn per flask of oil; 30' light.
+      oil_flask:
+        name: Oil (flask)
+        cost: 2
+        notes: Burns 2 turns; can be thrown (1d8 fire, save for half).
+      pole_10:
+        name: Pole (10')
+        cost: 1
+      rope_50:
+        name: Rope (50')
+        cost: 1
+      sack:
+        name: Sack
+        cost: 1
+      spell_book:
+        name: Spell Book
+        cost: 0
+        notes: Arcane casters start with one; replacement cost varies.
+      spikes_iron:
+        name: Iron Spikes (12)
+        cost: 1
+      thieves_tools:
+        name: Thieves' Tools
+        cost: 25
+      tinderbox:
+        name: Tinderbox
+        cost: 3
+      torch:
+        name: Torch
+        cost: 1
+        notes: Burns 1 turn; 30' light.
+      waterskin:
+        name: Waterskin
+        cost: 1
+      wolfsbane:
+        name: Wolfsbane
+        cost: 10
+        notes: Repels lycanthropes.

@@ -1,0 +1,96 @@
+{{page-title 'Equipment List'}}
+<div class="osr-rpg-reference-page">
+<h1>Equipment List</h1>
+
+{{#if this.model.equipment_blurb}}
+<AnsiFormat @text={{this.model.equipment_blurb}} />
+{{/if}}
+
+<h2>Armor</h2>
+<table class="table table-striped osr-rpg-reference-table">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>AC</th>
+      <th>Cost (gp)</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each this.model.armor as |item|}}
+    <tr>
+      <td>{{item.name}}</td>
+      <td>
+        {{#if item.ac}}{{item.ac}}{{else}}{{#if item.ac_bonus}}{{item.ac_bonus}}{{else}}—{{/if}}{{/if}}
+      </td>
+      <td>{{#if item.cost}}{{item.cost}}{{else}}—{{/if}}</td>
+      <td>{{item.notes}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<h2>Melee Weapons</h2>
+<table class="table table-striped osr-rpg-reference-table">
+  <thead>
+    <tr>
+      <th>Weapon</th>
+      <th>Damage</th>
+      <th>Cost (gp)</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each this.model.weapons as |item|}}
+    <tr>
+      <td>{{item.name}}</td>
+      <td>{{item.damage}}</td>
+      <td>{{#if item.cost}}{{item.cost}}{{else}}—{{/if}}</td>
+      <td>{{item.notes}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<h2>Missile Weapons</h2>
+<table class="table table-striped osr-rpg-reference-table">
+  <thead>
+    <tr>
+      <th>Weapon</th>
+      <th>Damage</th>
+      <th>Cost (gp)</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each this.model.missile_weapons as |item|}}
+    <tr>
+      <td>{{item.name}}</td>
+      <td>{{item.damage}}</td>
+      <td>{{#if item.cost}}{{item.cost}}{{else}}—{{/if}}</td>
+      <td>{{item.notes}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<h2>Adventuring Gear</h2>
+<table class="table table-striped osr-rpg-reference-table">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Cost (gp)</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each this.model.adventuring_gear as |item|}}
+    <tr>
+      <td>{{item.name}}</td>
+      <td>{{#if item.cost}}{{item.cost}}{{else}}—{{/if}}</td>
+      <td>{{item.notes}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+</div>

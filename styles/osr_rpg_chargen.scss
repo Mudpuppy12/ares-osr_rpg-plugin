@@ -556,3 +556,38 @@
   }
 }
 
+/* ---- OSR RPG reference pages (System menu) ---- */
+
+.osr-rpg-reference-page {
+  max-width: 960px;
+}
+
+.osr-rpg-reference-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 24px;
+}
+
+.osr-rpg-tradition-btn.active {
+  font-weight: bold;
+}
+
+.osr-rpg-reference-level {
+  margin-top: 24px;
+  font-family: 'Cinzel', serif;
+}
+
+.osr-rpg-reference-table {
+  margin-bottom: 24px;
+}
+
+.osr-rpg-reference-meta {
+  color: $faded-text-color;
+  margin-bottom: 16px;
+}
+
+.osr-rpg-reference-detail {
+  margin-bottom: 16px;
+}
+
