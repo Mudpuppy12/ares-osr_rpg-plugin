@@ -175,7 +175,17 @@ Rebuild the portal after any `custom-routes.js` change.
 
 | File | Required | What to add | If skipped |
 |------|----------|-------------|------------|
-| `aresmush/game/config/website.yml` | **Yes** | System + Play menu entries | No nav links to spell/equipment lists or shop |
+| `aresmush/game/config/website.yml` | **Yes** | System + Play menu entries; gallery group keys | No nav links; Characters/Roster pages crash |
+| `aresmush/game/config/demographics.yml` | **Yes** (OSE) | `Kingdom`, `Region`, `Profession` groups | Chargen groups won't match your setting |
+
+**Gallery groups (required):** Ares defaults `character_gallery_group` / `character_gallery_subgroup` to `Faction` / `Position`. OSE games use different demographics — set them to real group names from `demographics.yml`, for example:
+
+```yaml
+character_gallery_group: Kingdom
+character_gallery_subgroup: Region
+```
+
+If these don't match a demographics group, the portal **Characters** and **Roster** pages fail (`undefined method '[]' for nil` in the game log). Run in-game `config/check` (or boot-time validation) after editing to catch mismatches early.
 
 Under **System**:
 
@@ -217,7 +227,7 @@ Use this after Step 1 and Step 2:
 - [ ] `profile-system.js` / `.hbs` have `rpgExtraInstalled` + `OsrRpgProfile`
 - [ ] `live-scene-control.js` / `.hbs` have `rpgExtraInstalled` + `LiveSceneOsrRpg`
 - [ ] `custom-routes.js` registers all four `osr-rpg-*` routes
-- [ ] `website.yml` has System + Play menu entries
+- [ ] `website.yml` has System + Play menu entries and `character_gallery_group` / `character_gallery_subgroup` match `demographics.yml` (e.g. Kingdom / Region)
 - [ ] `custom_style.scss` includes `osr_rpg_chargen.scss` styles
 - [ ] (Optional) `scene-create.hbs` and `play.hbs` shop links
 - [ ] `load osr_rpg` run on game server
