@@ -1,0 +1,10 @@
+{{page-title 'Equipment Shop'}}
+<div class="osr-rpg-reference-page osr-rpg-shop-page">
+  <h1>Equipment Shop</h1>
+
+  {{#if this.model.shop_blurb}}
+    <AnsiFormat @text={{this.model.shop_blurb}} />
+  {{/if}}
+
+  <OsrRpgShop @model={{this.model}} />
+</div>

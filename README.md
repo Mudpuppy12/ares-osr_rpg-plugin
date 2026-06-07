@@ -54,6 +54,7 @@ The Ares plugin importer cannot modify these files on your game:
 |------|---------|-----|
 | App review hook | `plugins/chargen/custom_app_review.rb` | Core chargen hook — not part of the plugin tree |
 | Chargen controller | `ares-webportal/app/controllers/chargen-char.js` | OSR save payload + review/save guardrails — see `webportal/patches/chargen-char.osr_rpg.md` |
+| Scene create link | `ares-webportal/app/templates/scene-create.hbs` | Equipment Shop banner — see `webportal/patches/scene-create.osr_rpg.md` |
 | Route registration | `ares-webportal/app/custom-routes.js` (or `router.js`) | Installer copies route **files** but does not register them in Ember |
 | Web styles | `aresmush/game/styles/custom_style.scss` | SCSS lives outside the portal `app/` tree |
 | System menu | `game/config/website.yml` | Per-game navbar config |
@@ -78,6 +79,7 @@ end
 router.route('osr-rpg-spells', { path: '/osr_rpg/spells' });
 router.route('osr-rpg-spell-detail', { path: '/osr_rpg/spells/:tradition/:level/:name' });
 router.route('osr-rpg-equipment', { path: '/osr_rpg/equipment' });
+router.route('osr-rpg-shop', { path: '/osr_rpg/shop' });
 ```
 
 Games that edit `router.js` directly can register the same routes there instead.
@@ -210,8 +212,9 @@ Gear catalog in `osr_equipment.yml` (armor, melee weapons, missile weapons, adve
 | Context | Behavior |
 |---------|----------|
 | **Chargen (web)** | Equipment & Gear shop after class select; cart → inventory on valid Save; auto-equip best armor/shield/weapon at finalize |
+| **Post-chargen shop (web)** | Play → **Equipment Shop** (`/osr_rpg/shop`); buy/sell mundane gear, potions, arcane scrolls; approved characters only |
 | **Profile (web)** | Equipped vs Carried sections; equip/unequip buttons on own sheet |
-| **Telnet** | `buy`, `sell`, `equip`, `unequip`, `gear` / `inventory` |
+| **Telnet** | `buy`, `sell`, `equip`, `unequip`, `gear` / `inventory` (magic items from `osr_shop.yml` too) |
 | **System menu** | Read-only **Equipment List** reference page |
 
 | Command | Description |
@@ -243,6 +246,7 @@ NPC templates and monster XP-by-HD tables in `osr_npcs.yml` and `osr_treasure.ym
 |-----------|------|
 | `OsrRpgChargen` | Chargen Sheet tab |
 | `OsrRpgProfile` | Profile Character Sheet tab — sheet display, equipment equip/unequip, level-up, HP adjust, rest |
+| `OsrRpgShop` | Post-chargen equipment shop — buy/sell gear, potions, arcane scrolls |
 | `LiveSceneOsrRpg` | Live scene dropdown — rolls, sheet, server combat tracker |
 
 ### System menu reference pages
@@ -252,14 +256,18 @@ NPC templates and monster XP-by-HD tables in `osr_npcs.yml` and `osr_treasure.ym
 | `osr-rpg-spells` | `osrRpgSpells` | Spell lists by tradition (cleric, druid, magic-user, illusionist, necromancer) |
 | `osr-rpg-spell-detail` | `osrRpgSpellDetail` | Spell description and reversal text |
 | `osr-rpg-equipment` | `osrRpgEquipment` | Armor, weapons, missile weapons, adventuring gear |
+| `osr-rpg-shop` | `osrRpgShopState` / `Buy` / `Sell` | Post-chargen buy/sell shop (approved characters) |
 
-Chargen and profile web APIs (not routes — called from components):
+Chargen, profile, and shop web APIs (not routes — called from components):
 
 | API | Purpose |
 |-----|---------|
 | `osrRpgEnsureStartingGold` | Roll/bootstrap chargen starting-gold budget |
 | `osrRpgResetShop` | Clear cart/inventory and re-roll gold when class changes |
 | `osrRpgEquip` | Equip or unequip carried gear; returns refreshed sheet |
+| `osrRpgShopState` | Shop catalog, gold, sellable inventory (eligibility gate) |
+| `osrRpgShopBuy` | Purchase item; deducts `osr_gold` |
+| `osrRpgShopSell` | Sell carried item at half price |
 
 ### Config and content
 
@@ -272,6 +280,7 @@ Chargen and profile web APIs (not routes — called from components):
 | `osr_spells.yml` | Spell lists by tradition (cleric/druid/MU/illusionist/necromancer) |
 | `osr_spell_details.yml` | Spell descriptions for web reference (paraphrased from OSE) |
 | `osr_equipment.yml` | Armor, weapons, missile weapons, and adventuring gear catalog |
+| `osr_shop.yml` | Post-chargen magic catalog (potions, arcane scrolls) and shop blurb |
 | `osr_npcs.yml` | NPC combat templates |
 | `osr_treasure.yml` | Treasure tables and monster XP by HD |
 
@@ -307,15 +316,17 @@ That updates server code and web portal files (components, routes, templates) an
 3. Merge any new YAML from this repo's `game/config/` into your game — common files to check:
    - `osr_spell_details.yml` (spell reference descriptions)
    - `osr_equipment.yml` (expanded gear catalog)
+   - `osr_shop.yml` (post-chargen potions and scrolls)
    - `osr_rpg.yml` (`spells_blurb`, `equipment_blurb`, permissions)
    - `osr_spells.yml` (spell list changes)
-4. Confirm `custom-routes.js` still registers the three `osr-rpg-*` routes (the installer never edits this file).
+4. Confirm `custom-routes.js` still registers the `osr-rpg-*` routes including `osr-rpg-shop` (the installer never edits this file).
 5. Merge style changes from `styles/osr_rpg_chargen.scss` into `custom_style.scss` (includes chargen shop, profile equipment rows, spell/equipment reference pages).
 6. Confirm `website.yml` still has Spell Lists and Equipment List under System (if not done at first install).
 7. Run `load osr_rpg` after server-side plugin updates.
 8. Spot-check:
    - Chargen Sheet → Equipment & Gear (budget, cart, save)
    - Profile Character Sheet → Equipment (equip/unequip on own character)
+   - Play → Equipment Shop (approved character buy/sell)
    - System → Spell Lists and Equipment List
 
 ## Repository layout

@@ -1,6 +1,16 @@
 module AresMUSH
   module OsrRpg
     describe 'Equipment and commerce' do
+      ARMOR_AC_CASES = [
+        { label: 'leather', gear: %w[leather], expected: 2, legacy: 7 },
+        { label: 'chain', gear: %w[chain], expected: 4, legacy: 5 },
+        { label: 'plate', gear: %w[plate], expected: 6, legacy: 3 },
+        { label: 'shield only', gear: %w[shield], expected: 1, legacy: 8 },
+        { label: 'leather and shield', gear: %w[leather shield], expected: 3, legacy: 6 },
+        { label: 'chain and shield', gear: %w[chain shield], expected: 5, legacy: 4 },
+        { label: 'plate and shield', gear: %w[plate shield], expected: 7, legacy: 2 }
+      ].freeze
+
       before do
         allow(Global).to receive(:read_config).and_call_original
         allow(Global).to receive(:read_config).with('osr_rpg', 'default_ac').and_return(0)
@@ -8,6 +18,7 @@ module AresMUSH
         allow(Global).to receive(:read_config).with('osr', 'equipment').and_return({
           'armor' => {
             'leather' => { 'name' => 'Leather', 'ac' => 2, 'cost' => 20 },
+            'chain' => { 'name' => 'Chain Mail', 'ac' => 4, 'cost' => 75 },
             'plate' => { 'name' => 'Plate Mail', 'ac' => 6, 'cost' => 60 },
             'shield' => { 'name' => 'Shield', 'ac_bonus' => 1, 'cost' => 10 }
           },
@@ -33,6 +44,16 @@ module AresMUSH
         it 'stacks plate and shield to AC 7' do
           ac = EquipmentHelper.suggest_ac_for_list(%w[plate shield])
           expect(ac).to eq 7
+        end
+
+        it 'stacks leather and shield to AC 3' do
+          ac = EquipmentHelper.suggest_ac_for_list(%w[leather shield])
+          expect(ac).to eq 3
+        end
+
+        it 'stacks chain and shield to AC 5' do
+          ac = EquipmentHelper.suggest_ac_for_list(%w[chain shield])
+          expect(ac).to eq 5
         end
 
         it 'converts attack target using ascending AC' do
@@ -124,6 +145,102 @@ module AresMUSH
           EquipmentHelper.migrate_character!(@char)
 
           expect(updates[:osr_equipment]).to eq(['sword'])
+        end
+
+        ARMOR_AC_CASES.each do |case_data|
+          it "does not flip ascending #{case_data[:label]} AC on migrate" do
+            updates = {}
+            allow(@char).to receive(:osr_inventory).and_return({})
+            allow(@char).to receive(:osr_equipment).and_return(case_data[:gear])
+            allow(@char).to receive(:osr_ac).and_return(case_data[:expected])
+            allow(@char).to receive(:update) { |attrs| updates.merge!(attrs) }
+
+            EquipmentHelper.migrate_character!(@char)
+
+            expect(updates).not_to have_key(:osr_ac)
+          end
+
+          it "migrates legacy descending #{case_data[:label]} AC to ascending" do
+            updates = {}
+            allow(@char).to receive(:osr_inventory).and_return({})
+            allow(@char).to receive(:osr_equipment).and_return(case_data[:gear])
+            allow(@char).to receive(:osr_ac).and_return(case_data[:legacy])
+            allow(@char).to receive(:update) { |attrs| updates.merge!(attrs) }
+
+            EquipmentHelper.migrate_character!(@char)
+
+            expect(updates[:osr_ac]).to eq case_data[:expected]
+          end
+        end
+
+        it 'keeps equip_item AC after migrate for plate (profile load path)' do
+          allow(@char).to receive(:osr_inventory).and_return({ 'plate' => 1 })
+          allow(@char).to receive(:osr_equipment).and_return([])
+          allow(@char).to receive(:osr_ac).and_return(0)
+
+          EquipmentHelper.equip_item(@char, 'plate')
+          EquipmentHelper.migrate_character!(@char)
+
+          expect(@char.osr_ac).to eq 6
+        end
+
+        it 'keeps equip_item AC after migrate for chain (profile load path)' do
+          allow(@char).to receive(:osr_inventory).and_return({ 'chain' => 1 })
+          allow(@char).to receive(:osr_equipment).and_return([])
+          allow(@char).to receive(:osr_ac).and_return(0)
+
+          EquipmentHelper.equip_item(@char, 'chain')
+          EquipmentHelper.migrate_character!(@char)
+
+          expect(@char.osr_ac).to eq 4
+        end
+
+        it 'keeps equip_item AC after migrate for leather and shield (profile load path)' do
+          allow(@char).to receive(:osr_inventory).and_return({ 'leather' => 1, 'shield' => 1 })
+          allow(@char).to receive(:osr_equipment).and_return([])
+          allow(@char).to receive(:osr_ac).and_return(0)
+
+          EquipmentHelper.equip_item(@char, 'leather')
+          EquipmentHelper.equip_item(@char, 'shield')
+          EquipmentHelper.migrate_character!(@char)
+
+          expect(@char.osr_ac).to eq 3
+        end
+      end
+
+      describe 'profile sheet AC' do
+        it 'shows ascending plate AC after equip and migrate (equip handler path)' do
+          allow(@char).to receive(:osr_inventory).and_return({ 'plate' => 1 })
+          allow(@char).to receive(:osr_equipment).and_return([])
+          allow(@char).to receive(:osr_ac).and_return(0)
+
+          EquipmentHelper.equip_item(@char, 'plate')
+          EquipmentHelper.migrate_character!(@char)
+
+          expect(Resources.current_ac(@char)).to eq 6
+        end
+
+        it 'shows ascending chain AC after equip and migrate (equip handler path)' do
+          allow(@char).to receive(:osr_inventory).and_return({ 'chain' => 1 })
+          allow(@char).to receive(:osr_equipment).and_return([])
+          allow(@char).to receive(:osr_ac).and_return(0)
+
+          EquipmentHelper.equip_item(@char, 'chain')
+          EquipmentHelper.migrate_character!(@char)
+
+          expect(Resources.current_ac(@char)).to eq 4
+        end
+
+        it 'shows ascending leather and shield AC after equip and migrate (equip handler path)' do
+          allow(@char).to receive(:osr_inventory).and_return({ 'leather' => 1, 'shield' => 1 })
+          allow(@char).to receive(:osr_equipment).and_return([])
+          allow(@char).to receive(:osr_ac).and_return(0)
+
+          EquipmentHelper.equip_item(@char, 'leather')
+          EquipmentHelper.equip_item(@char, 'shield')
+          EquipmentHelper.migrate_character!(@char)
+
+          expect(Resources.current_ac(@char)).to eq 3
         end
       end
 

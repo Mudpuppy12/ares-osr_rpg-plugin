@@ -130,6 +130,12 @@ module AresMUSH
         return EquipmentListRequestHandler
       when 'osrRpgEquip'
         return EquipRequestHandler
+      when 'osrRpgShopState'
+        return ShopStateRequestHandler
+      when 'osrRpgShopBuy'
+        return ShopBuyRequestHandler
+      when 'osrRpgShopSell'
+        return ShopSellRequestHandler
       end
       nil
     end

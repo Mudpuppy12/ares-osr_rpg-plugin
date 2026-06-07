@@ -41,6 +41,11 @@ osr:
         damage: 1d4
         cost: 3
         notes: Melee or thrown (5'/10'/30').
+      silver_dagger:
+        name: Silver Dagger
+        damage: 1d4
+        cost: 30
+        notes: Silver weapon; useful against certain creatures.
       hand_axe:
         name: Hand Axe
         damage: 1d6

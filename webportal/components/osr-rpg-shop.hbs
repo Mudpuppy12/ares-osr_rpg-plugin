@@ -1,0 +1,100 @@
+{{#unless this.eligible}}
+  <div class="alert alert-warning">
+    {{or this.model.message "The equipment shop is not available."}}
+  </div>
+{{else}}
+  <div class="osr-rpg-chargen-shop">
+    <div class="osr-rpg-shop-gold-bar">
+      <span class="osr-rpg-pool-chip">Gold <b>{{this.gold}}</b> gp</span>
+      {{#if this.equippedGear.length}}
+        <span class="osr-rpg-pool-chip">
+          Equipped:
+          {{#each this.equippedGear as |item|}}
+            <span class="osr-rpg-skill-chip">{{item.name}}</span>
+          {{/each}}
+        </span>
+      {{/if}}
+    </div>
+
+    <h3>Buy</h3>
+    {{#unless this.arcaneCaster}}
+      <p class="cg-tip">Arcane scrolls are only sold to arcane casters (magic-user, illusionist, elf, etc.). Potions and mundane gear are available to all.</p>
+    {{/unless}}
+
+    {{#each this.catalogSections as |section|}}
+      <h5 class="osr-rpg-shop-section-title">{{section.title}}</h5>
+      <table class="table table-striped osr-rpg-reference-table osr-rpg-shop-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            {{#if (eq section.key 'armor')}}<th>AC</th>{{/if}}
+            {{#if (or (eq section.key 'weapons') (eq section.key 'missile_weapons'))}}<th>Damage</th>{{/if}}
+            {{#if (eq section.key 'magic_scrolls')}}<th>Spell</th>{{/if}}
+            <th>Cost</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each section.items as |item|}}
+            <tr>
+              <td>
+                {{item.name}}
+                {{#if item.notes}}
+                  <div class="hint">{{item.notes}}</div>
+                {{/if}}
+              </td>
+              {{#if (eq section.key 'armor')}}<td>{{item.ac_display}}</td>{{/if}}
+              {{#if (or (eq section.key 'weapons') (eq section.key 'missile_weapons'))}}<td>{{item.damage}}</td>{{/if}}
+              {{#if (eq section.key 'magic_scrolls')}}<td>{{item.spell}}</td>{{/if}}
+              <td>{{item.cost}} gp</td>
+              <td class="osr-rpg-shop-actions">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-primary"
+                  {{on 'click' (fn this.buyItem item)}}
+                  disabled={{or this.isBusy (not (this.canBuyItem item))}}
+                  title={{this.buyDisabledReason item}}
+                >Buy</button>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{/each}}
+
+    <h3>Sell</h3>
+    <p class="cg-tip">Sell price is half the purchase price. Unequip gear on your profile before selling it.</p>
+
+    {{#if this.sellableInventory.length}}
+      <table class="table table-striped osr-rpg-reference-table osr-rpg-shop-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Sell</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each this.sellableInventory as |item|}}
+            <tr>
+              <td>{{item.name}}</td>
+              <td>{{item.qty}}</td>
+              <td>{{item.sell_value}} gp</td>
+              <td class="osr-rpg-shop-actions">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-secondary"
+                  {{on 'click' (fn this.sellItem item)}}
+                  disabled={{or this.isBusy (lte item.qty 0)}}
+                >Sell 1</button>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{else}}
+      <p class="text-muted">No carried items to sell.</p>
+    {{/if}}
+  </div>
+{{/unless}}

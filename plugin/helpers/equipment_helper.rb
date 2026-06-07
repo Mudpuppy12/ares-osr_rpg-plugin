@@ -16,18 +16,26 @@ module AresMUSH
           entry = items[key] || items[key.to_sym]
           next unless entry
 
-          return {
-            key: key,
-            category: category,
-            name: entry['name'] || key.titleize,
-            cost: entry['cost'].to_i,
-            damage: entry['damage'],
-            ac: entry['ac'],
-            ac_bonus: entry['ac_bonus'],
-            notes: entry['notes']
-          }
+          return build_lookup_entry(key, category, entry)
         end
+
+        magic = ShopHelper.lookup_magic_item(key)
+        return magic if magic
+
         nil
+      end
+
+      def self.build_lookup_entry(key, category, entry)
+        {
+          key: key,
+          category: category,
+          name: entry['name'] || key.titleize,
+          cost: entry['cost'].to_i,
+          damage: entry['damage'],
+          ac: entry['ac'],
+          ac_bonus: entry['ac_bonus'],
+          notes: entry['notes']
+        }
       end
 
       def self.equippable?(item_key)
@@ -86,8 +94,13 @@ module AresMUSH
           updates[:osr_gold] = char.osr_starting_gold
         end
 
-        if char.osr_ac && char.osr_ac.to_i >= 3 && char.osr_ac.to_i <= 9 && CommandHelpers.default_ac == 0
-          updates[:osr_ac] = 9 - char.osr_ac.to_i
+        if equipped.any?
+          expected = suggest_ac_for_list(equipped)
+          stored = char.osr_ac
+          baseline = CommandHelpers.ac_baseline
+          if stored.nil? || stored.to_i == baseline - expected
+            updates[:osr_ac] = expected unless stored.to_i == expected
+          end
         end
 
         char.update(updates) if updates.any?

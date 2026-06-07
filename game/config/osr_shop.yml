@@ -1,0 +1,60 @@
+# Post-chargen shop magic catalog.
+# Retail prices follow OSE Magical Research: 500 gp per spell level (1 week/level to craft).
+# Open Brain documents potion/scroll effects; shop prices use the research baseline.
+---
+osr_rpg:
+  shop_blurb: |
+    Town equipment shop — buy and sell mundane gear, healing potions, and arcane scrolls.
+    Scrolls require an arcane caster class. Sell price is half the purchase price.
+  magic_consumables:
+    potion_healing:
+      name: Potion of Healing
+      cost: 500
+      notes: Restores 1d6+1 HP or cures paralysis.
+    potion_extra_healing:
+      name: Potion of Extra Healing
+      cost: 750
+      notes: Restores 2d6+2 HP.
+  magic_scrolls:
+    scroll_l1_magic_missile:
+      name: Scroll of Magic Missile
+      cost: 500
+      spell: Magic Missile
+      level: 1
+      arcane_only: true
+      notes: One casting of Magic Missile (L1).
+    scroll_l1_shield:
+      name: Scroll of Shield
+      cost: 500
+      spell: Shield
+      level: 1
+      arcane_only: true
+      notes: One casting of Shield (L1).
+    scroll_l1_sleep:
+      name: Scroll of Sleep
+      cost: 500
+      spell: Sleep
+      level: 1
+      arcane_only: true
+      notes: One casting of Sleep (L1).
+    scroll_l1_detect_magic:
+      name: Scroll of Detect Magic
+      cost: 500
+      spell: Detect Magic
+      level: 1
+      arcane_only: true
+      notes: One casting of Detect Magic (L1).
+    scroll_l1_read_magic:
+      name: Scroll of Read Magic
+      cost: 500
+      spell: Read Magic
+      level: 1
+      arcane_only: true
+      notes: One casting of Read Magic (L1).
+    scroll_l1_protection_from_evil:
+      name: Scroll of Protection from Evil
+      cost: 500
+      spell: Protection from Evil
+      level: 1
+      arcane_only: true
+      notes: One casting of Protection from Evil (L1).

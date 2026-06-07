@@ -1,5 +1,19 @@
 # Changelog
 
+## v3.4.0 — 2026-06-08
+
+Post-chargen web equipment shop with magic items.
+
+- Web **Equipment Shop** (`/osr_rpg/shop`) for approved characters — buy/sell mundane gear, healing potions, L1 arcane scrolls
+- Config `osr_shop.yml` — potion and scroll catalog priced at OSE Magical Research baseline (500 gp/spell level)
+- Telnet `buy`/`sell` recognize magic inventory keys via extended `EquipmentHelper.lookup_item`
+- Web APIs: `osrRpgShopState`, `osrRpgShopBuy`, `osrRpgShopSell`
+- Play menu + scene-create link; optional Play sidebar shortcut
+- Add **Silver Dagger** (30 gp) to equipment catalog
+- Manual patch: `webportal/patches/scene-create.osr_rpg.md`
+- Fix profile AC flip on sheet load — ascending armor AC no longer inverted by `migrate_character!`
+- Armor AC regression specs for leather, chain, plate, and shield combinations
+
 ## v3.3.1 — 2026-06-08
 
 Chargen inventory/armor save fixes and profile equip UI hardening.
