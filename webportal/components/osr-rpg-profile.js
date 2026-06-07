@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
+import { computed, set } from '@ember/object';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
@@ -23,6 +23,18 @@ export default Component.extend({
     return this.get('char.osr_rpg') || {};
   }),
 
+  equipmentList: computed('char.osr_rpg', 'char.osr_rpg.equipment.[]', function() {
+    return this.get('char.osr_rpg.equipment') || [];
+  }),
+
+  inventoryList: computed('char.osr_rpg', 'char.osr_rpg.inventory.[]', function() {
+    return this.get('char.osr_rpg.inventory') || [];
+  }),
+
+  hasEquipmentSection: computed('equipmentList.[]', 'inventoryList.[]', function() {
+    return this.equipmentList.length > 0 || this.inventoryList.length > 0;
+  }),
+
   displayName: computed('char.fullname', 'char.name', function() {
     return this.get('char.fullname') || this.get('char.name') || '';
   }),
@@ -39,9 +51,27 @@ export default Component.extend({
     }));
   }),
 
-  isOwnProfile: computed('char.name', 'session.data.authenticated.name', function() {
-    return this.get('char.name') === this.get('session.data.authenticated.name');
-  }),
+  isOwnProfile: computed(
+    'char.id',
+    'char.name',
+    'session.data.authenticated.id',
+    'session.data.authenticated.name',
+    function() {
+      let auth = this.get('session.data.authenticated') || {};
+      let charId = this.get('char.id');
+      if (auth.id != null && charId != null) {
+        return String(auth.id) === String(charId);
+      }
+      return this.get('char.name') === auth.name;
+    }
+  ),
+
+  itemCanEquip(item) {
+    if (!item) { return false; }
+    if (item.equippable === true || item.equippable === 'true') { return true; }
+    let category = item.category;
+    return category === 'armor' || category === 'weapons';
+  },
 
   modDisplay(ab) {
     let mod = ab.modifier;
@@ -56,8 +86,8 @@ export default Component.extend({
   },
 
   updateSheet(response) {
-    if (response.sheet) {
-      this.set('char.osr_rpg', response.sheet);
+    if (response.sheet && this.char) {
+      set(this.char, 'osr_rpg', response.sheet);
     }
   },
 

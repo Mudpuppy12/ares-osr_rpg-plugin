@@ -422,6 +422,7 @@ module AresMUSH
         tradition = Tables.spell_tradition(class_key)
 
         starting_gold = ensure_starting_gold!(char)
+        inventory = EquipmentHelper.merge_equipped_into_inventory(char, inventory)
         purchase = EquipmentHelper.purchase_items(char, inventory, budget: starting_gold)
         final_inventory = purchase[:inventory] || {}
         gold_remaining = purchase[:error] ? starting_gold : purchase[:gold_remaining]
@@ -676,8 +677,8 @@ module AresMUSH
           thac0: char.osr_thac0,
           prepared_spells: Spellcasting.prepared_display(char),
           spell_slots_remaining: Spellcasting.slots_remaining_display(char),
-          equipment: EquipmentHelper.gear_display(char),
-          inventory: EquipmentHelper.inventory_display(char),
+          equipment: EquipmentHelper.gear_display(char) || [],
+          inventory: EquipmentHelper.inventory_display(char) || [],
           saves: char.osr_saving_throws,
           spell_slots: char.osr_spell_slots,
           spell_tradition: tradition,
@@ -730,9 +731,13 @@ module AresMUSH
         lines << "Alignment: #{sheet[:alignment] || 'Not set'}"
         lines << "HP: #{sheet[:hp] || '?'}/#{sheet[:hp_max] || '?'}  THAC0: #{sheet[:thac0] || '?'}  XP Bonus: #{sheet[:xp_bonus]}%"
         lines << "Gold: #{sheet[:gold] || sheet[:starting_gold] || '?'} gp"
+        if sheet[:equipment] && sheet[:equipment].any?
+          equipped = sheet[:equipment].map { |i| i[:name] }.join(', ')
+          lines << "Equipped: #{equipped}"
+        end
         if sheet[:inventory] && sheet[:inventory].any?
           gear = sheet[:inventory].map { |i| i[:qty] > 1 ? "#{i[:name]} x#{i[:qty]}" : i[:name] }.join(', ')
-          lines << "Inventory: #{gear}"
+          lines << "Carried: #{gear}"
         end
 
         if sheet[:abilities]

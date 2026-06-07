@@ -53,6 +53,7 @@ The Ares plugin importer cannot modify these files on your game:
 | Item | File(s) | Why |
 |------|---------|-----|
 | App review hook | `plugins/chargen/custom_app_review.rb` | Core chargen hook — not part of the plugin tree |
+| Chargen controller | `ares-webportal/app/controllers/chargen-char.js` | OSR save payload + review/save guardrails — see `webportal/patches/chargen-char.osr_rpg.md` |
 | Route registration | `ares-webportal/app/custom-routes.js` (or `router.js`) | Installer copies route **files** but does not register them in Ember |
 | Web styles | `aresmush/game/styles/custom_style.scss` | SCSS lives outside the portal `app/` tree |
 | System menu | `game/config/website.yml` | Per-game navbar config |
@@ -69,7 +70,9 @@ if Manage.is_extra_installed?("osr_rpg")
 end
 ```
 
-3. Register System reference routes in `ares-webportal/app/custom-routes.js`:
+3. Patch `ares-webportal/app/controllers/chargen-char.js` per `webportal/patches/chargen-char.osr_rpg.md` (OSR shop data on save/review).
+
+4. Register System reference routes in `ares-webportal/app/custom-routes.js`:
 
 ```javascript
 router.route('osr-rpg-spells', { path: '/osr_rpg/spells' });
@@ -79,7 +82,7 @@ router.route('osr-rpg-equipment', { path: '/osr_rpg/equipment' });
 
 Games that edit `router.js` directly can register the same routes there instead.
 
-4. Add System menu entries to `game/config/website.yml` under `website.top_navbar` → System:
+5. Add System menu entries to `game/config/website.yml` under `website.top_navbar` → System:
 
 ```yaml
 - title: Spell Lists
@@ -88,11 +91,11 @@ Games that edit `router.js` directly can register the same routes there instead.
   route: osr-rpg-equipment
 ```
 
-5. Merge `styles/osr_rpg_chargen.scss` into `aresmush/game/styles/custom_style.scss` (chargen dice tray, profile sheet, spell/equipment reference pages).
+6. Merge `styles/osr_rpg_chargen.scss` into `aresmush/game/styles/custom_style.scss` (chargen dice tray, profile sheet, spell/equipment reference pages).
 
-6. Run `load osr_rpg` (or restart the game server).
+7. Run `load osr_rpg` (or restart the game server).
 
-7. Verify:
+8. Verify:
    - Web chargen shows a **Sheet** tab with **Equipment & Gear** shop (after class selected)
    - Chargen **Budget** shows rolled starting gold (30–180 gp); cart saves on a valid full-sheet **Save**
    - Web profile **Character Sheet** tab shows **Equipment** (Equipped / Carried) with equip buttons on your own sheet

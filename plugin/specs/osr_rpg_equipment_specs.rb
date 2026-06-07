@@ -125,6 +125,20 @@ module AresMUSH
         end
       end
 
+      describe 'merge_equipped_into_inventory' do
+        it 'adds equipped items missing from the submitted cart' do
+          allow(@char).to receive(:osr_equipment).and_return(['leather', 'shield'])
+          merged = EquipmentHelper.merge_equipped_into_inventory(@char, { 'torch' => 2 })
+          expect(merged).to eq({ 'torch' => 2, 'leather' => 1, 'shield' => 1 })
+        end
+
+        it 'does not duplicate items already in the cart' do
+          allow(@char).to receive(:osr_equipment).and_return(['leather'])
+          merged = EquipmentHelper.merge_equipped_into_inventory(@char, { 'leather' => 1, 'torch' => 1 })
+          expect(merged).to eq({ 'leather' => 1, 'torch' => 1 })
+        end
+      end
+
       describe 'inventory_display' do
         it 'marks armor and weapons as equippable' do
           allow(@char).to receive(:osr_inventory).and_return({ 'leather' => 1, 'torch' => 2 })

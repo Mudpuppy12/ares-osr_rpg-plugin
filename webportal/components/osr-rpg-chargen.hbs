@@ -317,10 +317,10 @@
                   {{/each}}
                 </div>
               {{/if}}
-              {{#if this.cartLineItems.length}}
+              {{#if this.savedCarriedLines.length}}
                 <div class="osr-rpg-shop-saved-row">
                   <span class="osr-rpg-spell-label">Carried:</span>
-                  {{#each this.cartLineItems as |line|}}
+                  {{#each this.savedCarriedLines as |line|}}
                     <span class="osr-rpg-skill-chip">{{line.name}}{{#if (gt line.qty 1)}} x{{line.qty}}{{/if}}</span>
                   {{/each}}
                 </div>

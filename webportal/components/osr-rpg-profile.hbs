@@ -110,15 +110,15 @@
         </div>
       </div>
 
-      {{#if (or this.sheet.equipment.length this.sheet.inventory.length)}}
+      {{#if (or this.hasEquipmentSection this.isOwnProfile)}}
         <div class="osr-rpg-sheet-section osr-rpg-equipment-section">
           <div class="osr-rpg-sheet-section-title">Equipment</div>
 
-          {{#if this.sheet.equipment.length}}
+          {{#if this.equipmentList.length}}
             <div class="osr-rpg-equipment-subsection">
               <div class="osr-rpg-spell-label">Equipped</div>
               <div class="osr-rpg-equipment-list">
-                {{#each this.sheet.equipment as |item|}}
+                {{#each this.equipmentList as |item|}}
                   <div class="osr-rpg-equipment-row">
                     <span class="osr-rpg-skill-chip">{{item.name}}</span>
                     {{#if this.isOwnProfile}}
@@ -130,22 +130,24 @@
             </div>
           {{/if}}
 
-          {{#if this.sheet.inventory.length}}
+          {{#if this.inventoryList.length}}
             <div class="osr-rpg-equipment-subsection">
               <div class="osr-rpg-spell-label">Carried</div>
               <div class="osr-rpg-equipment-list">
-                {{#each this.sheet.inventory as |item|}}
+                {{#each this.inventoryList as |item|}}
                   <div class="osr-rpg-equipment-row">
                     <span class="osr-rpg-skill-chip">
                       {{item.name}}{{#if (gt item.qty 1)}} x{{item.qty}}{{/if}}
                     </span>
-                    {{#if (and this.isOwnProfile item.equippable)}}
+                    {{#if (and this.isOwnProfile (this.itemCanEquip item))}}
                       <button type="button" class="btn btn-sm btn-outline-secondary" disabled={{this.isBusy}} {{on 'click' (fn this.equipItem item.key)}}>Equip</button>
                     {{/if}}
                   </div>
                 {{/each}}
               </div>
             </div>
+          {{else if this.isOwnProfile}}
+            <p class="osr-rpg-spell-note text-muted">No carried gear.</p>
           {{/if}}
         </div>
       {{/if}}

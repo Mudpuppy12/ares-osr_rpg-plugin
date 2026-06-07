@@ -343,10 +343,25 @@ export default Component.extend({
     return this.get('osr_rpg.equipment') || [];
   }),
 
-  hasSavedGear: computed('savedEquipment.[]', 'osr_rpg.inventory', function() {
-    let equipped = this.savedEquipment || [];
-    let inventory = this.get('osr_rpg.inventory') || {};
-    return equipped.length > 0 || Object.keys(inventory).length > 0;
+  savedCarriedLines: computed('osr_rpg.inventory', 'shopCatalogSections', function() {
+    let inv = this.get('osr_rpg.inventory') || {};
+    let lines = [];
+    Object.keys(inv).forEach(key => {
+      let qty = parseInt(inv[key], 10) || 0;
+      if (qty <= 0) { return; }
+      let name = key;
+      this.shopCatalogSections.forEach(section => {
+        (section.items || []).forEach(item => {
+          if (item.key === key) { name = item.name; }
+        });
+      });
+      lines.push({ key, name, qty });
+    });
+    return lines;
+  }),
+
+  hasSavedGear: computed('savedEquipment.[]', 'savedCarriedLines.[]', function() {
+    return this.savedEquipment.length > 0 || this.savedCarriedLines.length > 0;
   }),
 
   shopCatalogSections: computed('osr_rpg.equipment_catalog', function() {
@@ -574,12 +589,24 @@ export default Component.extend({
   },
 
   initShopCart() {
-    let existing = this.get('osr_rpg.inventory') || {};
-    this.set('shopCart', { ...existing });
+    let cart = { ...(this.get('osr_rpg.inventory') || {}) };
+    (this.get('osr_rpg.equipment') || []).forEach(item => {
+      let key = item && (item.key || item);
+      if (!key) { return; }
+      cart[key] = (parseInt(cart[key], 10) || 0) + 1;
+    });
+    this.set('shopCart', cart);
   },
 
   buildInventoryPayload() {
-    let cart = this.shopCart || {};
+    let cart = { ...(this.shopCart || {}) };
+    (this.get('osr_rpg.equipment') || []).forEach(item => {
+      let key = item && (item.key || item);
+      if (!key) { return; }
+      if (!(parseInt(cart[key], 10) > 0)) {
+        cart[key] = 1;
+      }
+    });
     let payload = {};
     Object.keys(cart).forEach(key => {
       let qty = parseInt(cart[key], 10) || 0;

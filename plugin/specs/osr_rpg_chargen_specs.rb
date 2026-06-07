@@ -351,6 +351,36 @@ module AresMUSH
           expect(alerts).not_to be_empty
           expect(updates).not_to have_key(:osr_inventory)
         end
+
+        it 'preserves auto-equipped armor on re-save when payload omits equipped items' do
+          scores = {
+            'str' => 13, 'dex' => 10, 'con' => 12,
+            'int' => 10, 'wis' => 10, 'cha' => 10
+          }
+          updates = {}
+          allow(@char).to receive(:osr_starting_gold).and_return(100)
+          allow(@char).to receive(:osr_class).and_return('fighter')
+          allow(@char).to receive(:osr_inventory).and_return({ 'torch' => 2 })
+          allow(@char).to receive(:osr_equipment).and_return(['leather'])
+          allow(@char).to receive(:osr_gold).and_return(78)
+          allow(@char).to receive(:update) do |attrs|
+            updates.merge!(attrs)
+            attrs.each { |k, v| allow(@char).to receive(k).and_return(v) }
+          end
+
+          alerts = Chargen.save_char(@char, {
+            'class' => 'fighter',
+            'alignment' => 'Law',
+            'ability_scores' => scores,
+            'thief_skills' => {},
+            'spell_book' => {},
+            'inventory' => { 'torch' => 2 }
+          })
+
+          expect(alerts).to be_empty
+          expect(updates[:osr_inventory]).to eq({ 'torch' => 2 })
+          expect(updates[:osr_equipment]).to include('leather')
+        end
       end
 
       describe 'finish_char' do

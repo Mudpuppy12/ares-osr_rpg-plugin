@@ -1,5 +1,16 @@
 # Changelog
 
+## v3.3.1 — 2026-06-08
+
+Chargen inventory/armor save fixes and profile equip UI hardening.
+
+- Fix armor/weapons lost on chargen re-save: merge equipped items into cart payload and `apply_sheet` purchase
+- Chargen shop: `initShopCart` restores equipped qty after reload; saved **Carried** row reads persisted inventory
+- App review shows **Equipped** and **Carried** separately (armor visible after auto-equip)
+- Profile equip: safe equipment/inventory lists, id-based own-profile check, `itemCanEquip` fallback
+- Manual web patch: `webportal/patches/chargen-char.osr_rpg.md` (save/review guardrails, `osr_rpg` payload key)
+- Specs: re-save armor preservation, `merge_equipped_into_inventory`
+
 ## v3.3.0 — 2026-06-08
 
 Chargen shop hardening, web profile equipment, and inventory fixes.

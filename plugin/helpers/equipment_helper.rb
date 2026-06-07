@@ -161,6 +161,17 @@ module AresMUSH
         }
       end
 
+      def self.merge_equipped_into_inventory(char, inventory_hash)
+        inv = normalize_inventory_hash(inventory_hash)
+        (char.osr_equipment || []).each do |item|
+          key = Tables.normalize_key(item)
+          next if (inv[key] || 0).positive?
+
+          inv[key] = 1
+        end
+        inv
+      end
+
       def self.purchase_items(char, inventory_hash, budget:)
         inv = normalize_inventory_hash(inventory_hash)
         total = cart_total(inv)
