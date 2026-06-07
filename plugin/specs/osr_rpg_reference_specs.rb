@@ -55,6 +55,12 @@ module AresMUSH
         end
       end
 
+      describe 'ReferenceData.format_spell_text' do
+        it 'capitalizes the first letter' do
+          expect(ReferenceData.format_spell_text('heals 1d6+1 HP.')).to eq 'Heals 1d6+1 HP.'
+        end
+      end
+
       describe 'ReferenceData.spell_detail_for_web' do
         it 'returns spell detail with reversal' do
           allow(Global).to receive(:read_config).with('osr', 'spell_details', 'cleric').and_return({

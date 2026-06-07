@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.1.1 — 2026-06-08
+
+Spell reference UI polish and install doc updates.
+
+- Fix spell detail lookup for nested `osr_spell_details.yml` config
+- URL-safe spell keys for detail links (slashes/apostrophes in spell names)
+- Styled spell detail page (tradition badges, effect/reversal panels)
+- Tradition accent colors on spell list tabs and level headings
+- README: clarify installer vs manual steps for routes, styles, and upgrades
+
 ## v3.1.0 — 2026-06-08
 
 System menu reference pages.

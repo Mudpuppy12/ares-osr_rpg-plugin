@@ -1,29 +1,42 @@
 {{page-title this.model.name}}
-<div class="osr-rpg-reference-page">
-<h1>{{this.model.name}}</h1>
+<div class="osr-rpg-reference-page osr-rpg-spell-detail-page osr-rpg-tradition-{{this.model.tradition}}">
+  <p class="osr-rpg-spell-back">
+    <LinkTo @route="osr-rpg-spells" @query={{hash tradition=this.model.tradition}}>
+      <i class="fa fa-arrow-left" aria-hidden="true"></i>
+      Back to {{this.model.tradition_name}} spells
+    </LinkTo>
+  </p>
 
-<p class="osr-rpg-reference-meta">
-  <strong>{{this.model.tradition_name}}</strong> — Level {{this.model.level}}
-</p>
+  {{#if this.model.error}}
+  <div class="osr-rpg-spell-panel osr-rpg-spell-panel-error">
+    <p class="alert alert-warning">{{this.model.error}}</p>
+  </div>
+  {{else}}
+  <header class="osr-rpg-spell-header">
+    <h1 class="osr-rpg-spell-title">{{this.model.name}}</h1>
+    <div class="osr-rpg-spell-badges">
+      <span class="osr-rpg-spell-badge osr-rpg-spell-badge-tradition">{{this.model.tradition_name}}</span>
+      <span class="osr-rpg-spell-badge osr-rpg-spell-badge-level">Level {{this.model.level}}</span>
+    </div>
+  </header>
 
-{{#if this.model.error}}
-<p class="alert alert-warning">{{this.model.error}}</p>
-{{else}}
-<div class="osr-rpg-reference-detail">
-  <AnsiFormat @text={{this.model.description_html}} />
-</div>
+  <section class="osr-rpg-spell-panel osr-rpg-spell-panel-effect">
+    <h2 class="osr-rpg-spell-panel-title">Effect</h2>
+    <div class="osr-rpg-spell-body">
+      <AnsiFormat @text={{this.model.description_html}} />
+    </div>
+  </section>
 
-{{#if this.model.reversal_html}}
-<h3>Reversal</h3>
-<div class="osr-rpg-reference-detail">
-  <AnsiFormat @text={{this.model.reversal_html}} />
-</div>
-{{/if}}
-{{/if}}
-
-<p>
-  <LinkTo @route="osr-rpg-spells" @query={{hash tradition=this.model.tradition}}>
-    Back to {{this.model.tradition_name}} spells
-  </LinkTo>
-</p>
+  {{#if this.model.reversal_html}}
+  <section class="osr-rpg-spell-panel osr-rpg-spell-panel-reversal">
+    <h2 class="osr-rpg-spell-panel-title">
+      <i class="fa fa-rotate-left" aria-hidden="true"></i>
+      Reversal
+    </h2>
+    <div class="osr-rpg-spell-body">
+      <AnsiFormat @text={{this.model.reversal_html}} />
+    </div>
+  </section>
+  {{/if}}
+  {{/if}}
 </div>

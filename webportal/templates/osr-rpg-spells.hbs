@@ -1,5 +1,5 @@
 {{page-title 'Spell Lists'}}
-<div class="osr-rpg-reference-page">
+<div class="osr-rpg-reference-page osr-rpg-spells-page osr-rpg-tradition-{{this.model.tradition}}">
 <h1>Spell Lists</h1>
 
 {{#if this.model.spells_blurb}}
@@ -9,7 +9,7 @@
 <div class="osr-rpg-reference-toolbar">
   {{#each this.model.traditions as |trad|}}
     <LinkTo @route="osr-rpg-spells" @query={{hash tradition=trad.key}}
-      class="btn btn-default osr-rpg-tradition-btn {{if (eq trad.key this.model.tradition) 'active'}}">
+      class="btn btn-default osr-rpg-tradition-btn osr-rpg-tradition-btn-{{trad.key}} {{if (eq trad.key this.model.tradition) 'active'}}">
       {{trad.name}}
     </LinkTo>
   {{/each}}

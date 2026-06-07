@@ -32,8 +32,8 @@ module AresMUSH
         entry = Tables.spell_detail(tradition, level, key)
         return { error: t('osr_rpg.spell_not_found') } unless entry
 
-        desc = entry['description'] || entry[:description]
-        reversal = entry['reversal'] || entry[:reversal]
+        desc = format_spell_text(entry['description'] || entry[:description])
+        reversal = format_spell_text(entry['reversal'] || entry[:reversal])
         {
           name: entry['name'] || entry[:name] || name,
           key: key,
@@ -99,6 +99,12 @@ module AresMUSH
 
       def self.tradition_label(tradition)
         TRADITION_LABELS[tradition.to_s] || tradition.to_s.titleize.gsub('_', ' ')
+      end
+
+      def self.format_spell_text(text)
+        return text if text.blank?
+
+        text.to_s.strip.sub(/\A([a-z])/) { Regexp.last_match(1).upcase }
       end
     end
   end

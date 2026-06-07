@@ -569,8 +569,81 @@
   margin: 16px 0 24px;
 }
 
-.osr-rpg-tradition-btn.active {
-  font-weight: bold;
+.osr-rpg-tradition-btn {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.04em;
+  border-radius: 999px;
+  background: rgba(18, 14, 10, 0.55);
+  border: 1px solid $border-color;
+  color: $faded-text-color;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+
+  &.active {
+    font-weight: bold;
+  }
+}
+
+@mixin osr-rpg-tradition-accent($border, $color, $bg-active: null) {
+  border-color: $border;
+  color: $color;
+
+  &:hover,
+  &:focus {
+    border-color: $border;
+    color: $color;
+    background: if($bg-active, $bg-active, rgba(18, 14, 10, 0.7));
+  }
+
+  &.active {
+    border-color: $border;
+    color: $color;
+    background: if($bg-active, $bg-active, rgba(18, 14, 10, 0.7));
+  }
+}
+
+.osr-rpg-tradition-btn-cleric {
+  @include osr-rpg-tradition-accent(rgba(201, 168, 76, 0.5), $primary-outline-color, rgba(201, 168, 76, 0.12));
+}
+
+.osr-rpg-tradition-btn-druid {
+  @include osr-rpg-tradition-accent(rgba(90, 140, 90, 0.55), #8fbc8f, rgba(90, 140, 90, 0.12));
+}
+
+.osr-rpg-tradition-btn-magic_user {
+  @include osr-rpg-tradition-accent(rgba(100, 130, 200, 0.55), #9bb8e8, rgba(100, 130, 200, 0.12));
+}
+
+.osr-rpg-tradition-btn-illusionist {
+  @include osr-rpg-tradition-accent(rgba(160, 100, 200, 0.55), #c9a0e8, rgba(160, 100, 200, 0.12));
+}
+
+.osr-rpg-tradition-btn-necromancer {
+  @include osr-rpg-tradition-accent(rgba(120, 120, 120, 0.55), #b0b0b0, rgba(120, 120, 120, 0.12));
+}
+
+.osr-rpg-spells-page.osr-rpg-tradition-cleric .osr-rpg-reference-level {
+  color: $primary-outline-color;
+}
+
+.osr-rpg-spells-page.osr-rpg-tradition-druid .osr-rpg-reference-level {
+  color: #8fbc8f;
+}
+
+.osr-rpg-spells-page.osr-rpg-tradition-magic_user .osr-rpg-reference-level {
+  color: #9bb8e8;
+}
+
+.osr-rpg-spells-page.osr-rpg-tradition-illusionist .osr-rpg-reference-level {
+  color: #c9a0e8;
+}
+
+.osr-rpg-spells-page.osr-rpg-tradition-necromancer .osr-rpg-reference-level {
+  color: #b0b0b0;
 }
 
 .osr-rpg-reference-level {
@@ -589,5 +662,152 @@
 
 .osr-rpg-reference-detail {
   margin-bottom: 16px;
+}
+
+/* ---- Spell detail page ---- */
+
+.osr-rpg-spell-detail-page {
+  max-width: 720px;
+}
+
+.osr-rpg-spell-back {
+  margin: 0 0 20px;
+
+  a {
+    color: $faded-text-color;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.15s ease;
+
+    &:hover,
+    &:focus {
+      color: $primary-outline-color;
+      text-decoration: none;
+    }
+
+    i {
+      margin-right: 6px;
+    }
+  }
+}
+
+.osr-rpg-spell-header {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid $border-color;
+}
+
+.osr-rpg-spell-title {
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin: 0 0 12px;
+  line-height: 1.2;
+}
+
+.osr-rpg-spell-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.osr-rpg-spell-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid $border-color;
+  background: rgba(18, 14, 10, 0.55);
+  color: $faded-text-color;
+}
+
+.osr-rpg-spell-badge-level {
+  font-family: inherit;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+.osr-rpg-spell-panel {
+  background: linear-gradient(180deg, rgba(42, 35, 24, 0.45) 0%, rgba(26, 22, 16, 0.8) 100%);
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  padding: 20px 22px;
+  margin-bottom: 18px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.osr-rpg-spell-panel-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $primary-outline-color;
+  margin: 0 0 14px;
+
+  i {
+    margin-right: 6px;
+    opacity: 0.85;
+  }
+}
+
+.osr-rpg-spell-body {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: $text-color;
+
+  p {
+    margin-bottom: 0.75em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.osr-rpg-spell-panel-reversal {
+  border-color: rgba(139, 58, 58, 0.45);
+  background: linear-gradient(180deg, rgba(42, 28, 28, 0.5) 0%, rgba(26, 16, 16, 0.85) 100%);
+
+  .osr-rpg-spell-panel-title {
+    color: #c97a7a;
+  }
+}
+
+.osr-rpg-spell-panel-error {
+  padding: 16px 20px;
+
+  .alert {
+    margin: 0;
+  }
+}
+
+.osr-rpg-tradition-cleric .osr-rpg-spell-badge-tradition {
+  border-color: rgba(201, 168, 76, 0.5);
+  color: $primary-outline-color;
+}
+
+.osr-rpg-tradition-druid .osr-rpg-spell-badge-tradition {
+  border-color: rgba(90, 140, 90, 0.55);
+  color: #8fbc8f;
+}
+
+.osr-rpg-tradition-magic_user .osr-rpg-spell-badge-tradition {
+  border-color: rgba(100, 130, 200, 0.55);
+  color: #9bb8e8;
+}
+
+.osr-rpg-tradition-illusionist .osr-rpg-spell-badge-tradition {
+  border-color: rgba(160, 100, 200, 0.55);
+  color: #c9a0e8;
+}
+
+.osr-rpg-tradition-necromancer .osr-rpg-spell-badge-tradition {
+  border-color: rgba(120, 120, 120, 0.55);
+  color: #b0b0b0;
 }
 

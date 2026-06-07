@@ -36,10 +36,13 @@ bundle exec rake add_plugin[https://github.com/Mudpuppy12/ares-osr_rpg-plugin]
 The installer will:
 
 1. Copy `plugin/` → `aresmush/plugins/osr_rpg/`
-2. Copy `game/config/` → `aresmush/game/config/` (first install only)
-3. Copy `webportal/` → your web portal `app/` directory
-4. Add `osr_rpg` to `plugins.extras` in `plugins.yml`
-5. Rebuild the web portal
+2. Copy `game/config/` → `aresmush/game/config/` (**first install only**)
+3. Copy `webportal/components/`, `webportal/routes/`, and `webportal/templates/` → `ares-webportal/app/`
+4. Copy `public/sounds/` → `ares-webportal/public/sounds/`
+5. Add `osr_rpg` to `plugins.extras` in `plugins.yml`
+6. Rebuild the web portal
+
+It does **not** copy styles, `custom-routes.js`, or `website.yml` — see manual steps below.
 
 ## Manual steps
 
@@ -76,7 +79,7 @@ Merge `styles/osr_rpg_chargen.scss` from this repo into `aresmush/game/styles/cu
 
 ### 4. Custom routes (System menu pages)
 
-If your game uses `ares-webportal/app/custom-routes.js` (recommended), add:
+`plugin/install` copies route and template **files**, but Ember still needs route **registration**. If your game uses `ares-webportal/app/custom-routes.js` (recommended), add:
 
 ```javascript
 router.route('osr-rpg-spells', { path: '/osr_rpg/spells' });
@@ -84,9 +87,9 @@ router.route('osr-rpg-spell-detail', { path: '/osr_rpg/spells/:tradition/:level/
 router.route('osr-rpg-equipment', { path: '/osr_rpg/equipment' });
 ```
 
-Games that edit `router.js` directly can register the same routes there.
+Games that edit `router.js` directly can register the same routes there instead.
 
-Add System menu entries to `game/config/website.yml`:
+Add System menu entries to `game/config/website.yml` under `website.top_navbar` → System:
 
 ```yaml
 - title: Spell Lists
@@ -102,6 +105,8 @@ Add System menu entries to `game/config/website.yml`:
 - In-game: `osr_rpg/roll`, `osr_rpg/finish`, and `sheet` work for telnet chargen
 - App review includes an **OSR Sheet** section
 - Live scene menu shows OSR rolls; `help play` lists play commands
+- System → **Spell Lists** shows tradition tabs; spell links open detail pages
+- System → **Equipment List** shows armor, weapons, and gear tables
 
 ---
 
@@ -183,7 +188,7 @@ Web live scene **Combat Tracker** reads/writes the same server state.
 
 ### Equipment
 
-Lightweight gear catalog in `osr_equipment.yml` (armor, weapons).
+Gear catalog in `osr_equipment.yml` (armor, melee weapons, missile weapons, adventuring gear). Web **Equipment List** under System shows the full reference; telnet `equip` uses armor/melee keys from the same file.
 
 | Command | Description |
 |---------|-------------|
@@ -250,9 +255,15 @@ NPC templates and monster XP-by-HD tables in `osr_npcs.yml` and `osr_treasure.ym
 
 ## Upgrading
 
-Re-running `plugin/install` updates `plugin/` and `webportal/` but **does not overwrite** `game/config/` if the plugin was previously installed (to preserve local edits).
+Re-running `plugin/install` updates `plugin/` and `webportal/` (components, routes, templates) and rebuilds the portal. It **does not overwrite** `game/config/` on re-install (to preserve local edits).
 
-To pick up new OSR YAML on upgrade, manually merge changes from this repo's `game/config/` into your game.
+After upgrading, also:
+
+1. `load osr_rpg` (or restart the game server)
+2. Merge new YAML from `game/config/` if needed — especially `osr_spell_details.yml`, `osr_equipment.yml`, and `osr_rpg.yml` blurbs
+3. Confirm `custom-routes.js` still has the three `osr-rpg-*` routes (installer does not edit this file)
+4. Merge style changes from `styles/osr_rpg_chargen.scss` into `game/styles/custom_style.scss`
+5. Add System menu entries to `website.yml` if not already present
 
 ## Repository layout
 
