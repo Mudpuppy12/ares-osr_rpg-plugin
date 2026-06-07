@@ -4,6 +4,8 @@
 
 Chargen inventory/armor save fixes and profile equip UI hardening.
 
+- Add **Staff** (2 gp, 1d4, blunt two-handed) and **Club** (3 gp, 1d4, blunt) to equipment catalog
+
 - Fix armor/weapons lost on chargen re-save: merge equipped items into cart payload and `apply_sheet` purchase
 - Chargen shop: `initShopCart` restores equipped qty after reload; saved **Carried** row reads persisted inventory
 - App review shows **Equipped** and **Carried** separately (armor visible after auto-equip)

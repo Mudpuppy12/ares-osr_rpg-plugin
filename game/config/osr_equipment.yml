@@ -31,6 +31,11 @@ osr:
         cost: 10
         notes: Improves AC by 1 when used with armor.
     weapons:
+      club:
+        name: Club
+        damage: 1d4
+        cost: 3
+        notes: Blunt melee weapon.
       dagger:
         name: Dagger
         damage: 1d4
@@ -67,6 +72,11 @@ osr:
         damage: 1d6
         cost: 3
         notes: Melee or thrown (20'/40'/60').
+      staff:
+        name: Staff
+        damage: 1d4
+        cost: 2
+        notes: Blunt; requires two hands.
       pole_arm:
         name: Pole Arm
         damage: 1d10

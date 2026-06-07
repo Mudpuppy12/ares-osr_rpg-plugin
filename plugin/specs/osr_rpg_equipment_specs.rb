@@ -12,7 +12,9 @@ module AresMUSH
             'shield' => { 'name' => 'Shield', 'ac_bonus' => 1, 'cost' => 10 }
           },
           'weapons' => {
-            'sword' => { 'name' => 'Sword', 'damage' => '1d8', 'cost' => 10 }
+            'sword' => { 'name' => 'Sword', 'damage' => '1d8', 'cost' => 10 },
+            'staff' => { 'name' => 'Staff', 'damage' => '1d4', 'cost' => 2 },
+            'club' => { 'name' => 'Club', 'damage' => '1d4', 'cost' => 3 }
           },
           'adventuring_gear' => {
             'torch' => { 'name' => 'Torch', 'cost' => 1 }
@@ -122,6 +124,26 @@ module AresMUSH
           EquipmentHelper.migrate_character!(@char)
 
           expect(updates[:osr_equipment]).to eq(['sword'])
+        end
+      end
+
+      describe 'lookup_item' do
+        it 'includes staff as an equippable melee weapon' do
+          item = EquipmentHelper.lookup_item('staff')
+          expect(item[:name]).to eq 'Staff'
+          expect(item[:damage]).to eq '1d4'
+          expect(item[:cost]).to eq 2
+          expect(item[:category]).to eq 'weapons'
+          expect(EquipmentHelper.equippable?('staff')).to be true
+        end
+
+        it 'includes club as an equippable melee weapon' do
+          item = EquipmentHelper.lookup_item('club')
+          expect(item[:name]).to eq 'Club'
+          expect(item[:damage]).to eq '1d4'
+          expect(item[:cost]).to eq 3
+          expect(item[:category]).to eq 'weapons'
+          expect(EquipmentHelper.equippable?('club')).to be true
         end
       end
 
