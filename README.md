@@ -61,16 +61,16 @@ load osr_rpg
 
 Or restart the game server.
 
-### 3. Dice roll sound (web chargen)
+### 3. Dice roll sound and styles (web)
 
-Copy the bundled sound into your web portal public directory:
+`plugin/install` copies `public/sounds/` into your web portal automatically. For manual installs:
 
 ```bash
 mkdir -p ares-webportal/public/sounds
 cp ares-osr_rpg-plugin/public/sounds/osr-rpg-dice.mp3 ares-webportal/public/sounds/
 ```
 
-The web chargen dice tray plays this clip when rolling abilities.
+Merge `styles/osr_rpg_chargen.scss` from this repo into `aresmush/game/styles/custom_style.scss` (or `@import` it) so chargen dice tray and expertise UI are styled.
 
 ### 4. Verify
 

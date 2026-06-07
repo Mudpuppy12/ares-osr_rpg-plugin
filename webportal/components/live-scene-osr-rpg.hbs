@@ -1,0 +1,80 @@
+<li><button {{on 'click' this.toggleSheet}} class="dropdown-item">OSR Sheet</button></li>
+<li><button {{on 'click' (fn this.setShowAttackRoll true)}} class="dropdown-item">Roll Attack</button></li>
+<li><button {{on 'click' (fn this.setShowSaveRoll true)}} class="dropdown-item">Roll Save</button></li>
+{{#if this.skillOptions.length}}
+  <li><button {{on 'click' (fn this.setShowSkillRoll true)}} class="dropdown-item">Roll Skill</button></li>
+{{/if}}
+<li><button {{on 'click' (fn this.setShowAbilityRoll true)}} class="dropdown-item">Ability Check</button></li>
+<li><button {{on 'click' (fn this.setShowGenericRoll true)}} class="dropdown-item">Roll Dice</button></li>
+<li><button {{on 'click' this.toggleCombatTracker}} class="dropdown-item">Combat Tracker</button></li>
+
+{{#if this.showSheet}}
+  <div class="osr-rpg-live-sheet">
+    {{#if this.sheet}}
+      <p><b>{{this.sheet.class_name}}</b> L{{this.sheet.level}} — HP {{this.sheet.hp}}/{{this.sheet.hp_max}} THAC0 {{this.sheet.thac0}}</p>
+      {{#if this.sheet.saves}}
+        <p class="text-muted">Saves: D{{this.sheet.saves.death}} W{{this.sheet.saves.wands}} P{{this.sheet.saves.paralysis}} B{{this.sheet.saves.breath}} S{{this.sheet.saves.spells}}</p>
+      {{/if}}
+    {{else}}
+      <p class="text-muted"><i>No OSR sheet for pose character.</i></p>
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#if this.showCombatTracker}}
+  <div class="osr-rpg-combat-tracker">
+    <div class="osr-rpg-combat-toolbar">
+      <b>Initiative Tracker</b>
+      <button type="button" class="btn btn-sm btn-outline-secondary" {{on 'click' this.addCombatant}}>+ Add</button>
+    </div>
+    {{#each this.sortedCombatants as |c|}}
+      <div class="osr-rpg-combat-row">
+        <Input @type="text" @value={{c.name}} placeholder="Name" {{on 'input' (fn this.combatantFieldChanged c 'name')}} class="form-control form-control-sm" />
+        <button type="button" class="btn btn-sm btn-outline-secondary" {{on 'click' (fn this.rollInitiative c)}}>d20</button>
+        <span class="osr-rpg-init-badge">{{c.initiative}}</span>
+        <Input @type="number" @value={{c.hp}} {{on 'input' (fn this.combatantFieldChanged c 'hp')}} class="form-control form-control-sm osr-rpg-hp-input" />
+        <span>/</span>
+        <Input @type="number" @value={{c.hp_max}} {{on 'input' (fn this.combatantFieldChanged c 'hp_max')}} class="form-control form-control-sm osr-rpg-hp-input" />
+        <button type="button" class="btn btn-sm btn-link text-danger" {{on 'click' (fn this.removeCombatant c)}}>×</button>
+      </div>
+    {{/each}}
+  </div>
+{{/if}}
+
+<BsModalSimple @title="Roll Attack" @closeTitle="Cancel" @submitTitle="Roll" @open={{this.showAttackRoll}} @onSubmit={{this.rollAttack}} @onHide={{(fn this.setShowAttackRoll false)}}>
+  <p>Roll d20 attack using pose character THAC0.</p>
+</BsModalSimple>
+
+<BsModalSimple @title="Roll Save" @closeTitle="Cancel" @submitTitle="Roll" @open={{this.showSaveRoll}} @onSubmit={{this.rollSave}} @onHide={{(fn this.setShowSaveRoll false)}}>
+  <select class="form-control" {{on 'change' this.saveCategoryChanged}}>
+    {{#each this.saveCategories as |cat|}}
+      <option value={{cat.key}} selected={{eq this.saveCategory cat.key}}>{{cat.label}}</option>
+    {{/each}}
+  </select>
+</BsModalSimple>
+
+<BsModalSimple @title="Roll Skill" @closeTitle="Cancel" @submitTitle="Roll" @open={{this.showSkillRoll}} @onSubmit={{this.rollSkill}} @onHide={{(fn this.setShowSkillRoll false)}}>
+  <select class="form-control" {{on 'change' this.skillKeyChanged}}>
+    {{#each this.skillOptions as |sk|}}
+      <option value={{sk.key}} selected={{eq this.skillKey sk.key}}>{{sk.name}} ({{sk.chance}})</option>
+    {{/each}}
+  </select>
+</BsModalSimple>
+
+<BsModalSimple @title="Ability Check" @closeTitle="Cancel" @submitTitle="Roll" @open={{this.showAbilityRoll}} @onSubmit={{this.rollAbility}} @onHide={{(fn this.setShowAbilityRoll false)}}>
+  <p>
+    <select class="form-control" {{on 'change' this.abilityKeyChanged}}>
+      <option value="str" selected={{eq this.abilityKey 'str'}}>STR</option>
+      <option value="dex" selected={{eq this.abilityKey 'dex'}}>DEX</option>
+      <option value="con" selected={{eq this.abilityKey 'con'}}>CON</option>
+      <option value="int" selected={{eq this.abilityKey 'int'}}>INT</option>
+      <option value="wis" selected={{eq this.abilityKey 'wis'}}>WIS</option>
+      <option value="cha" selected={{eq this.abilityKey 'cha'}}>CHA</option>
+    </select>
+  </p>
+  <p><label>Target (optional):</label> <Input @type="number" @value={{this.abilityTarget}} {{on 'input' this.abilityTargetChanged}} /></p>
+</BsModalSimple>
+
+<BsModalSimple @title="Roll Dice" @closeTitle="Cancel" @submitTitle="Roll" @open={{this.showGenericRoll}} @onSubmit={{this.rollGeneric}} @onHide={{(fn this.setShowGenericRoll false)}}>
+  <Input @type="text" @value={{this.diceString}} {{on 'input' this.diceStringChanged}} placeholder="e.g. 2d6" />
+</BsModalSimple>

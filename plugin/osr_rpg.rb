@@ -30,6 +30,8 @@ module AresMUSH
           return ThiefCmd
         when 'skills'
           return SkillsCmd
+        when 'spell'
+          return SpellCmd
         when 'finish'
           return FinishCmd
         when 'reset'
@@ -56,6 +58,12 @@ module AresMUSH
         return ChargenInfoRequestHandler
       when 'osrRpgRollAbilities'
         return RollRequestHandler
+      when 'osrRpgSceneSheet'
+        return SceneSheetRequestHandler
+      when 'osrRpgSceneRoll'
+        return SceneRollRequestHandler
+      when 'osrRpgLevelUp'
+        return LevelUpRequestHandler
       end
       nil
     end
@@ -78,5 +86,5 @@ module AresMUSH
   end
 
   # Ares plugin loader matches folder name `osr_rpg` to constant Osr_rpg (case-insensitive).
-  Osr_rpg = OsrRpg
+  Osr_rpg = OsrRpg unless const_defined?(:Osr_rpg)
 end

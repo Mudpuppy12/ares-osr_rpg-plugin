@@ -67,6 +67,22 @@ module AresMUSH
         end
       end
 
+      describe 'set_spell_book' do
+        it 'sets arcane L1 spell' do
+          allow(@char).to receive(:osr_class).and_return('magic_user')
+          allow(@char).to receive(:update)
+          result = Chargen.set_spell_book(@char, ['Magic Missile'])
+          expect(result).to eq true
+          expect(@char).to have_received(:update).with(hash_including(osr_spell_book: { '1' => ['Magic Missile'] }))
+        end
+
+        it 'rejects invalid spell count' do
+          allow(@char).to receive(:osr_class).and_return('magic_user')
+          result = Chargen.set_spell_book(@char, [])
+          expect(result).to include(t('osr_rpg.spell_picks_wrong', required: 1, picked: 0))
+        end
+      end
+
       describe 'Tables.class_allowed?' do
         it 'allows all when allowlist empty' do
           allow(Global).to receive(:read_config).and_wrap_original do |method, *args|

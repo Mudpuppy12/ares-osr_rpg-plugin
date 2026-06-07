@@ -325,7 +325,7 @@ export default Component.extend({
     return defs.filter(d => keys.includes(d.key));
   }),
 
-  thiefPointsSpent: computed('thiefAllocations.@each.points', function() {
+  thiefPointsSpent: computed('thiefAllocations.[]', 'thiefAllocations.@each.points', function() {
     let allocs = this.thiefAllocations || [];
     return allocs.reduce((sum, a) => sum + (parseInt(a.points, 10) || 0), 0);
   }),
@@ -431,18 +431,27 @@ export default Component.extend({
       }));
   }),
 
+  buildThiefAllocEntry(d, points) {
+    let pts = parseInt(points, 10) || 0;
+    let chance = 1 + pts;
+    let pips = [];
+    for (let i = 0; i < 6; i++) {
+      pips.push(i < chance);
+    }
+    return {
+      key: d.key,
+      name: d.name,
+      points: pts,
+      chance: chance,
+      atMax: chance >= 5,
+      pips: pips
+    };
+  },
+
   initThiefAllocations: function() {
     let existing = this.get('osr_rpg.thief_skill_allocations') || {};
     let skills = this.thiefSkillsForClass || [];
-    let allocs = skills.map(d => {
-      let points = existing[d.key] || 0;
-      return {
-        key: d.key,
-        name: d.name,
-        points: points,
-        chance: 1 + points
-      };
-    });
+    let allocs = skills.map(d => this.buildThiefAllocEntry(d, existing[d.key] || 0));
     this.set('thiefAllocations', A(allocs));
   },
 
@@ -640,16 +649,40 @@ export default Component.extend({
     });
   },
 
-  @action
-  thiefPointChanged(skillKey, event) {
-    let val = parseInt(event.target.value, 10) || 0;
-    val = Math.max(0, Math.min(4, val));
+  updateThiefAlloc(skillKey, points) {
     let allocs = this.thiefAllocations || [];
     let idx = allocs.findIndex(a => a.key === skillKey);
-    if (idx >= 0) {
-      this.set(`thiefAllocations.${idx}.points`, val);
-      this.set(`thiefAllocations.${idx}.chance`, 1 + val);
+    if (idx < 0) { return; }
+    let pts = Math.max(0, parseInt(points, 10) || 0);
+    let chance = 1 + pts;
+    let pips = [];
+    for (let i = 0; i < 6; i++) {
+      pips.push(i < chance);
     }
+    this.set(`thiefAllocations.${idx}.points`, pts);
+    this.set(`thiefAllocations.${idx}.chance`, chance);
+    this.set(`thiefAllocations.${idx}.atMax`, chance >= 5);
+    this.set(`thiefAllocations.${idx}.pips`, pips);
+  },
+
+  @action
+  incrementExpertise(skillKey) {
+    if ((this.thiefPointsRemaining || 0) <= 0) { return; }
+    let allocs = this.thiefAllocations || [];
+    let entry = allocs.find(a => a.key === skillKey);
+    if (!entry || entry.atMax) { return; }
+    let pts = parseInt(entry.points, 10) || 0;
+    this.updateThiefAlloc(skillKey, pts + 1);
+  },
+
+  @action
+  decrementExpertise(skillKey) {
+    let allocs = this.thiefAllocations || [];
+    let entry = allocs.find(a => a.key === skillKey);
+    if (!entry) { return; }
+    let pts = parseInt(entry.points, 10) || 0;
+    if (pts <= 0) { return; }
+    this.updateThiefAlloc(skillKey, pts - 1);
   },
 
   @action

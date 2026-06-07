@@ -1,0 +1,362 @@
+/* ---- OSR RPG dice tray (chargen) ---- */
+
+.osr-rpg-roll-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.osr-rpg-roll-count {
+  margin-bottom: 8px;
+}
+
+.osr-rpg-roll-mode .btn {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.03em;
+}
+
+.osr-rpg-server-roll-toggle {
+  color: $faded-text-color;
+  font-size: 0.9rem;
+  margin: 0;
+  cursor: pointer;
+
+  input {
+    margin-right: 6px;
+  }
+}
+
+.osr-rpg-dice-tray {
+  background: linear-gradient(180deg, rgba(42, 35, 24, 0.55) 0%, rgba(26, 22, 16, 0.85) 100%);
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  padding: 14px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.osr-rpg-roll-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.osr-rpg-stat-grid {
+  margin-top: 4px;
+}
+
+.osr-rpg-stat-cell {
+  background: rgba(18, 14, 10, 0.65);
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &.osr-rpg-score-low {
+    border-color: rgba(107, 45, 45, 0.7);
+  }
+
+  &.osr-rpg-score-high {
+    border-color: rgba(201, 168, 76, 0.55);
+  }
+
+  &.osr-rpg-stat-fail {
+    border-color: #8b3a3a;
+    box-shadow: 0 0 0 1px rgba(139, 58, 58, 0.35);
+  }
+
+  &.osr-rpg-stat-prime {
+    .osr-rpg-stat-label {
+      color: $primary-outline-color;
+    }
+  }
+
+  &.osr-rpg-rolling {
+    animation: rpg-roll-pulse 0.35s ease-in-out;
+    border-color: $primary-outline-color;
+    box-shadow: 0 0 12px rgba(201, 168, 76, 0.25);
+  }
+}
+
+@keyframes osr-rpg-roll-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.osr-rpg-stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.osr-rpg-stat-label {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: $text-color;
+}
+
+.osr-rpg-reroll-btn {
+  padding: 0 4px;
+  color: $primary-outline-color;
+  line-height: 1;
+
+  &:hover {
+    color: lighten($primary-outline-color, 10%);
+  }
+}
+
+.osr-rpg-stat-score-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.osr-rpg-stat-input {
+  max-width: 72px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.osr-rpg-stat-value {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.osr-rpg-stat-mod {
+  color: $primary-outline-color;
+  font-size: 0.95rem;
+}
+
+.osr-rpg-dice-breakdown {
+  margin-top: 6px;
+  font-size: 0.82rem;
+  color: $faded-text-color;
+  font-family: 'Crimson Pro', Georgia, serif;
+}
+
+.osr-rpg-stat-hint {
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: #c07070;
+
+  &.osr-rpg-stat-hint-prime {
+    color: $primary-outline-color;
+  }
+}
+
+.osr-rpg-req-warning {
+  color: #d8a8a8;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.osr-rpg-score-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.osr-rpg-pool-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid $border-color;
+  background: rgba(42, 35, 24, 0.8);
+  font-size: 0.88rem;
+  color: $text-color;
+
+  &.osr-rpg-pool-chip-draggable {
+    cursor: grab;
+    user-select: none;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  &.osr-rpg-pool-chip-dragging {
+    opacity: 0.5;
+  }
+}
+
+.osr-rpg-pool-dropzone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  margin-bottom: 6px;
+  padding: 6px 10px;
+  border: 2px dashed rgba($primary-outline-color, 0.35);
+  border-radius: 4px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &.osr-rpg-pool-dropzone-filled {
+    border-style: solid;
+    border-color: $border-color;
+    justify-content: flex-start;
+  }
+
+  &.osr-rpg-drag-over {
+    border-color: $primary-outline-color;
+    box-shadow: 0 0 12px rgba(201, 168, 76, 0.25);
+  }
+}
+
+.osr-rpg-pool-placeholder {
+  color: $faded-text-color;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.osr-rpg-pool-clear {
+  margin-left: auto;
+  padding: 0 4px;
+  color: $faded-text-color;
+  line-height: 1;
+  font-size: 1.1rem;
+
+  &:hover {
+    color: $text-color;
+  }
+}
+
+/* ---- OSR skill expertise (chargen) ---- */
+
+.osr-rpg-expertise-tray {
+  background: linear-gradient(180deg, rgba(42, 35, 24, 0.55) 0%, rgba(26, 22, 16, 0.85) 100%);
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  padding: 14px;
+}
+
+.osr-rpg-expertise-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.osr-rpg-pool-chip-empty {
+  opacity: 0.55;
+}
+
+.osr-rpg-expertise-cell {
+  background: rgba(18, 14, 10, 0.65);
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+
+  &.osr-rpg-expertise-max {
+    border-color: rgba(201, 168, 76, 0.55);
+  }
+}
+
+.osr-rpg-expertise-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.osr-rpg-expertise-stepper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.osr-rpg-chance-badge {
+  min-width: 4.5rem;
+  text-align: center;
+  font-weight: bold;
+  color: $primary-outline-color;
+}
+
+.osr-rpg-expertise-pips {
+  display: flex;
+  gap: 4px;
+}
+
+.osr-rpg-pip {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid $border-color;
+  background: transparent;
+
+  &.osr-rpg-pip-on {
+    background: $primary-outline-color;
+    border-color: $primary-outline-color;
+  }
+}
+
+.osr-rpg-skill-badge {
+  display: inline-block;
+  margin: 2px 6px 2px 0;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid $border-color;
+  font-size: 0.85rem;
+}
+
+/* ---- OSR live scene ---- */
+
+.osr-rpg-live-sheet {
+  padding: 8px 12px;
+  margin: 6px 0;
+  background: rgba(18, 14, 10, 0.5);
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.osr-rpg-combat-tracker {
+  padding: 8px 12px;
+  margin: 6px 0;
+  background: rgba(18, 14, 10, 0.5);
+  border: 1px solid $border-color;
+  border-radius: 4px;
+}
+
+.osr-rpg-combat-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.osr-rpg-combat-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.osr-rpg-init-badge {
+  min-width: 2rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+.osr-rpg-hp-input {
+  width: 3.5rem;
+}
+
+.osr-rpg-leveling-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 12px;
+}
+

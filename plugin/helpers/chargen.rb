@@ -294,6 +294,43 @@ module AresMUSH
         end
       end
 
+      def self.normalize_spell_picks(class_key, raw_spells)
+        casting = Tables.casting_type(class_key)
+        return [] if casting.nil?
+
+        tradition = Tables.spell_tradition(class_key)
+        if casting == 'arcane'
+          valid = (Tables.spells_for_tradition(tradition)['1'] || []).map(&:to_s)
+          raw_spells.map do |raw|
+            key = raw.to_s.strip
+            match = valid.find { |v| v.downcase == key.downcase || v.downcase.gsub(/\s+/, '_') == key.downcase.gsub(/\s+/, '_') }
+            match || key.titleize
+          end
+        elsif casting == 'restricted'
+          Tables.restricted_l1_spells(class_key)
+        else
+          []
+        end
+      end
+
+      def self.set_spell_book(char, raw_spells)
+        class_key = char.osr_class
+        return t('osr_rpg.class_not_set') if class_key.blank?
+
+        casting = Tables.casting_type(class_key)
+        return t('osr_rpg.spell_info_none') if casting.nil?
+        return t('osr_rpg.spell_info_divine', tradition: Tables.spell_tradition(class_key).to_s.titleize) if casting == 'divine'
+
+        picks = normalize_spell_picks(class_key, raw_spells)
+        book = { '1' => picks }
+        alerts = validate_spell_book(class_key, book)
+        return alerts if alerts.any?
+
+        tradition = Tables.spell_tradition(class_key)
+        char.update(osr_spell_book: book, osr_spell_tradition: tradition)
+        true
+      end
+
       def self.validate_thief_allocation(thief_skills, required_points)
         alerts = []
         spent = thief_skills.values.map(&:to_i).sum

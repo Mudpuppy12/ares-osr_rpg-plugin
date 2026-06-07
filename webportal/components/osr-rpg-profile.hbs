@@ -7,6 +7,21 @@
     <p>HP: {{this.sheet.hp}}/{{this.sheet.hp_max}} | THAC0: {{this.sheet.thac0}} | HD: {{this.sheet.hd_display}}</p>
     <p>XP: {{this.sheet.xp}}{{#if this.sheet.xp_to_next_level}} (next level at {{this.sheet.xp_to_next_level}}){{/if}} ({{this.sheet.xp_bonus}}% bonus) | Gold: {{this.sheet.starting_gold}} gp</p>
 
+    {{#if this.isOwnProfile}}
+      <div class="osr-rpg-leveling-bar">
+        {{#if this.sheet.can_level_up}}
+          <button type="button" class="btn btn-sm btn-primary" disabled={{this.isLeveling}} {{on 'click' this.levelUp}}>
+            {{if this.isLeveling 'Leveling…' 'Level Up'}}
+          </button>
+        {{else if this.sheet.xp_to_next_level}}
+          <span class="text-muted">Need {{this.sheet.xp_to_next_level}} XP for next level.</span>
+        {{/if}}
+        {{#if (gt this.sheet.expertise_unspent 0)}}
+          <span class="osr-rpg-pool-chip">{{this.sheet.expertise_unspent}} expertise unspent — use <code>osr_rpg/skills</code></span>
+        {{/if}}
+      </div>
+    {{/if}}
+
     {{#if this.sheet.abilities}}
       <p>
         {{#each this.sheet.abilities as |ab|}}

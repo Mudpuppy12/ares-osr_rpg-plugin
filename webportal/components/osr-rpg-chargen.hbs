@@ -223,15 +223,32 @@
       <div class="form-item">
         <div class="form-item-label"><b>Skill Expertise</b></div>
         <div class="form-item-entry">
-          <p class="cg-tip">Allocate {{this.l1ExpertisePoints}} expertise points (+1-in-6 each, max 5-in-6).</p>
-          <p>Points remaining: <b>{{this.thiefPointsRemaining}}</b></p>
-          {{#each this.thiefAllocations as |alloc|}}
-            <div class="form-inline" style="margin-bottom: 8px;">
-              <label style="width: 200px;">{{alloc.name}}</label>
-              <Input @type="number" @min={{0}} @max={{4}} @value={{alloc.points}} {{on 'input' (fn this.thiefPointChanged alloc.key)}} />
-              <span class="text-muted">→ {{alloc.chance}}-in-6</span>
+          <div class="osr-rpg-expertise-tray">
+            <p class="cg-tip">Allocate {{this.l1ExpertisePoints}} expertise points (+1-in-6 each, max 5-in-6).</p>
+            <div class="osr-rpg-expertise-pool">
+              <span class="osr-rpg-pool-chip">{{this.thiefPointsSpent}} / {{this.l1ExpertisePoints}} spent</span>
+              <span class="osr-rpg-pool-chip {{if (eq this.thiefPointsRemaining 0) 'osr-rpg-pool-chip-empty'}}">{{this.thiefPointsRemaining}} remaining</span>
             </div>
-          {{/each}}
+            <div class="row osr-rpg-expertise-grid">
+              {{#each this.thiefAllocations as |alloc|}}
+                <div class="col-md-6 col-lg-4">
+                  <div class="osr-rpg-expertise-cell {{if alloc.atMax 'osr-rpg-expertise-max'}}">
+                    <div class="osr-rpg-expertise-name">{{alloc.name}}</div>
+                    <div class="osr-rpg-expertise-stepper">
+                      <button type="button" class="btn btn-sm btn-outline-secondary" disabled={{eq alloc.points 0}} {{on 'click' (fn this.decrementExpertise alloc.key)}}>−</button>
+                      <span class="osr-rpg-chance-badge">{{alloc.chance}}-in-6</span>
+                      <button type="button" class="btn btn-sm btn-outline-secondary" disabled={{or alloc.atMax (eq this.thiefPointsRemaining 0)}} {{on 'click' (fn this.incrementExpertise alloc.key)}}>+</button>
+                    </div>
+                    <div class="osr-rpg-expertise-pips">
+                      {{#each alloc.pips as |pip|}}
+                        <span class="osr-rpg-pip {{if pip 'osr-rpg-pip-on'}}"></span>
+                      {{/each}}
+                    </div>
+                  </div>
+                </div>
+              {{/each}}
+            </div>
+          </div>
         </div>
       </div>
     {{/if}}
@@ -291,7 +308,11 @@
         THAC0 {{this.sheetPreview.thac0}}
       </p>
       {{#if this.sheetPreview.thiefSkills.length}}
-        <p>Skills: {{#each this.sheetPreview.thiefSkills as |sk|}}{{sk.name}} {{sk.chance}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+        <p>Skills:
+          {{#each this.sheetPreview.thiefSkills as |sk|}}
+            <span class="osr-rpg-skill-badge">{{sk.name}} {{sk.chance}}</span>
+          {{/each}}
+        </p>
       {{/if}}
       {{#if this.sheetPreview.spellSummary}}
         <p>Spells: {{this.sheetPreview.spellSummary}}</p>
