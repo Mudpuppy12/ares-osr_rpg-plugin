@@ -19,14 +19,14 @@ disabled_plugins:
 From in-game (admin):
 
 ```
-plugin/install https://github.com/OSE/ares-rpg-plugin
+plugin/install https://github.com/Mudpuppy12/ares-rpg-plugin
 ```
 
 Or from the shell on your game server:
 
 ```bash
 cd aresmush
-bundle exec rake add_plugin[https://github.com/OSE/ares-rpg-plugin]
+bundle exec rake add_plugin[https://github.com/Mudpuppy12/ares-rpg-plugin]
 ```
 
 The installer will:
