@@ -602,12 +602,48 @@ a.osr-rpg-skill-chip {
   }
 }
 
+.osr-rpg-shop-save-tip {
+  margin-bottom: 10px;
+}
+
+.osr-rpg-shop-saved-gear {
+  margin-bottom: 12px;
+}
+
+.osr-rpg-shop-saved-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin-bottom: 6px;
+}
+
 .osr-rpg-shop-cart {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px 8px;
   margin-top: 12px;
+}
+
+.osr-rpg-equipment-section {
+  .osr-rpg-equipment-subsection + .osr-rpg-equipment-subsection {
+    margin-top: 12px;
+  }
+}
+
+.osr-rpg-equipment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.osr-rpg-equipment-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
 }
 
 .osr-rpg-cart-remove {

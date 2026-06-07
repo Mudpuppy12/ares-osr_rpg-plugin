@@ -93,7 +93,9 @@ Games that edit `router.js` directly can register the same routes there instead.
 6. Run `load osr_rpg` (or restart the game server).
 
 7. Verify:
-   - Web chargen shows a **Sheet** tab
+   - Web chargen shows a **Sheet** tab with **Equipment & Gear** shop (after class selected)
+   - Chargen **Budget** shows rolled starting gold (30–180 gp); cart saves on a valid full-sheet **Save**
+   - Web profile **Character Sheet** tab shows **Equipment** (Equipped / Carried) with equip buttons on your own sheet
    - `osr_rpg/finish` and `sheet` work on telnet
    - App review includes an **OSR Sheet** section
    - Live scene menu shows OSR rolls
@@ -131,13 +133,17 @@ Then complete steps 2–7 above, add `osr_rpg` to `plugins.extras` in `plugins.y
 - **Class allowlist** — `osr_rpg.allowed_classes` (empty = all classes)
 - **Telnet chargen** — `osr_rpg/class`, `alignment`, `roll`, `ability`, `thief`, `spell`, `finish`, `reset`
 - **Web chargen** — `OsrRpgChargen` with class browser, dice tray, expertise steppers, spell picker
+- **Chargen equipment shop** — buy from catalog against starting gold (`3d6×10`); cart commits to `osr_inventory` on a **valid full-sheet Save** (class, alignment, abilities, thief/spells, budget)
+- **Class change** — changing class in chargen clears cart/inventory, re-rolls starting gold, and resets equipped gear
+- **Shop APIs** — `osrRpgEnsureStartingGold` (roll/bootstrap budget), `osrRpgResetShop` (clear shop on class change)
 
 ### Character sheet
 
 - **In-game** — `sheet [name]` (telnet ERB template)
 - **Web profile** — Purist-layout `OsrRpgProfile` (abilities, saves, combat, exploration, class skills, spells, special abilities)
+- **Web equipment management** — **Equipped** / **Carried** lists on profile sheet; **Equip** / **Unequip** on your own character (`osrRpgEquip`); AC updates live
 - **Live scene** — compact OSR sheet for pose character
-- Displays HP, AC, THAC0, saves, spell slots, prepared spells, equipment, exploration skills (LD/OD/SD/FT), racial/class special abilities
+- Displays HP, AC, THAC0, saves, spell slots, prepared spells, gold, inventory, exploration skills (LD/OD/SD/FT), racial/class special abilities
 
 ### Leveling and XP
 
@@ -194,9 +200,16 @@ Server-side combat roster per scene (`OsrRpgSceneCombat`) — shared between tel
 
 Web live scene **Combat Tracker** reads/writes the same server state.
 
-### Equipment
+### Equipment and inventory
 
-Gear catalog in `osr_equipment.yml` (armor, melee weapons, missile weapons, adventuring gear). Web **Equipment List** under System shows the full reference; telnet `equip` uses armor/melee keys from the same file.
+Gear catalog in `osr_equipment.yml` (armor, melee weapons, missile weapons, adventuring gear). **Ascending AC** (higher is better): unarmored 0, leather 2, chain 4, plate 6, shield +1.
+
+| Context | Behavior |
+|---------|----------|
+| **Chargen (web)** | Equipment & Gear shop after class select; cart → inventory on valid Save; auto-equip best armor/shield/weapon at finalize |
+| **Profile (web)** | Equipped vs Carried sections; equip/unequip buttons on own sheet |
+| **Telnet** | `buy`, `sell`, `equip`, `unequip`, `gear` / `inventory` |
+| **System menu** | Read-only **Equipment List** reference page |
 
 | Command | Description |
 |---------|-------------|
@@ -206,6 +219,8 @@ Gear catalog in `osr_equipment.yml` (armor, melee weapons, missile weapons, adve
 | `osr_rpg/unequip <item>` | Unequip gear back into inventory |
 | `osr_rpg/gear [name]` | Show gold, equipped gear, inventory, and AC |
 | `osr_rpg/inventory [name]` | Alias for `gear` |
+
+Equipped items live in `osr_equipment` and are removed from `osr_inventory` counts (no duplicate display).
 
 ### Staff tools
 
@@ -224,7 +239,7 @@ NPC templates and monster XP-by-HD tables in `osr_npcs.yml` and `osr_treasure.ym
 | Component | Role |
 |-----------|------|
 | `OsrRpgChargen` | Chargen Sheet tab |
-| `OsrRpgProfile` | Profile OSR tab — sheet display, level-up, HP adjust, rest |
+| `OsrRpgProfile` | Profile Character Sheet tab — sheet display, equipment equip/unequip, level-up, HP adjust, rest |
 | `LiveSceneOsrRpg` | Live scene dropdown — rolls, sheet, server combat tracker |
 
 ### System menu reference pages
@@ -234,6 +249,14 @@ NPC templates and monster XP-by-HD tables in `osr_npcs.yml` and `osr_treasure.ym
 | `osr-rpg-spells` | `osrRpgSpells` | Spell lists by tradition (cleric, druid, magic-user, illusionist, necromancer) |
 | `osr-rpg-spell-detail` | `osrRpgSpellDetail` | Spell description and reversal text |
 | `osr-rpg-equipment` | `osrRpgEquipment` | Armor, weapons, missile weapons, adventuring gear |
+
+Chargen and profile web APIs (not routes — called from components):
+
+| API | Purpose |
+|-----|---------|
+| `osrRpgEnsureStartingGold` | Roll/bootstrap chargen starting-gold budget |
+| `osrRpgResetShop` | Clear cart/inventory and re-roll gold when class changes |
+| `osrRpgEquip` | Equip or unequip carried gear; returns refreshed sheet |
 
 ### Config and content
 
@@ -284,9 +307,13 @@ That updates server code and web portal files (components, routes, templates) an
    - `osr_rpg.yml` (`spells_blurb`, `equipment_blurb`, permissions)
    - `osr_spells.yml` (spell list changes)
 4. Confirm `custom-routes.js` still registers the three `osr-rpg-*` routes (the installer never edits this file).
-5. Merge style changes from `styles/osr_rpg_chargen.scss` into `custom_style.scss`.
+5. Merge style changes from `styles/osr_rpg_chargen.scss` into `custom_style.scss` (includes chargen shop, profile equipment rows, spell/equipment reference pages).
 6. Confirm `website.yml` still has Spell Lists and Equipment List under System (if not done at first install).
-7. Spot-check System → Spell Lists and Equipment List in the web portal.
+7. Run `load osr_rpg` after server-side plugin updates.
+8. Spot-check:
+   - Chargen Sheet → Equipment & Gear (budget, cart, save)
+   - Profile Character Sheet → Equipment (equip/unequip on own character)
+   - System → Spell Lists and Equipment List
 
 ## Repository layout
 

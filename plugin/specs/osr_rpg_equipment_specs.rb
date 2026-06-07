@@ -89,6 +89,85 @@ module AresMUSH
           expect(alerts).to include(t('osr_rpg.cart_over_budget', total: 60, budget: 50))
         end
       end
+
+      describe 'migrate_character!' do
+        it 'does not copy equipped items into empty inventory' do
+          updates = {}
+          allow(@char).to receive(:osr_inventory).and_return({})
+          allow(@char).to receive(:osr_equipment).and_return(%w[leather shield])
+          allow(@char).to receive(:update) { |attrs| updates.merge!(attrs) }
+
+          EquipmentHelper.migrate_character!(@char)
+
+          expect(updates).not_to have_key(:osr_inventory)
+        end
+
+        it 'removes equipped items duplicated in carried inventory' do
+          updates = {}
+          allow(@char).to receive(:osr_inventory).and_return({ 'leather' => 1, 'torch' => 2 })
+          allow(@char).to receive(:osr_equipment).and_return(['leather'])
+          allow(@char).to receive(:update) { |attrs| updates.merge!(attrs) }
+
+          EquipmentHelper.migrate_character!(@char)
+
+          expect(updates[:osr_inventory]).to eq({ 'torch' => 2 })
+        end
+
+        it 'dedupes duplicate equipped entries' do
+          updates = {}
+          allow(@char).to receive(:osr_inventory).and_return({})
+          allow(@char).to receive(:osr_equipment).and_return(%w[sword sword])
+          allow(@char).to receive(:update) { |attrs| updates.merge!(attrs) }
+
+          EquipmentHelper.migrate_character!(@char)
+
+          expect(updates[:osr_equipment]).to eq(['sword'])
+        end
+      end
+
+      describe 'inventory_display' do
+        it 'marks armor and weapons as equippable' do
+          allow(@char).to receive(:osr_inventory).and_return({ 'leather' => 1, 'torch' => 2 })
+          rows = EquipmentHelper.inventory_display(@char)
+          leather = rows.find { |r| r[:key] == 'leather' }
+          torch = rows.find { |r| r[:key] == 'torch' }
+          expect(leather[:equippable]).to be true
+          expect(torch[:equippable]).to be false
+        end
+      end
+
+      describe 'EquipRequestHandler' do
+        let(:enactor) { @char }
+
+        before do
+          allow(Website).to receive(:check_login).and_return(nil)
+          allow(Leveling).to receive(:sheet_ready?).and_return(true)
+          allow(Chargen).to receive(:build_sheet_display).and_return({ inventory: [], equipment: [] })
+        end
+
+        it 'equips an owned item' do
+          allow(@char).to receive(:osr_inventory).and_return({ 'leather' => 1 })
+          allow(EquipmentHelper).to receive(:equip_item).and_return({ ac: 2, equipment: ['leather'] })
+          request = double('request', enactor: enactor, args: { 'action' => 'equip', 'item' => 'leather' })
+          result = EquipRequestHandler.new.handle(request)
+          expect(result[:ac]).to eq 2
+          expect(result[:sheet]).not_to be_nil
+        end
+
+        it 'rejects when sheet is not ready' do
+          allow(Leveling).to receive(:sheet_ready?).and_return(false)
+          request = double('request', enactor: enactor, args: { 'action' => 'equip', 'item' => 'leather' })
+          result = EquipRequestHandler.new.handle(request)
+          expect(result[:error]).to eq t('osr_rpg.no_sheet_for_levelup')
+        end
+
+        it 'returns equip helper errors' do
+          allow(EquipmentHelper).to receive(:equip_item).and_return({ error: t('osr_rpg.inventory_not_owned', item: 'sword') })
+          request = double('request', enactor: enactor, args: { 'action' => 'equip', 'item' => 'sword' })
+          result = EquipRequestHandler.new.handle(request)
+          expect(result[:error]).to eq t('osr_rpg.inventory_not_owned', item: 'sword')
+        end
+      end
     end
   end
 end

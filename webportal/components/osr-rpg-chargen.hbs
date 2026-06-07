@@ -296,6 +296,8 @@
       <div class="form-item osr-rpg-chargen-shop">
         <div class="form-item-label"><b>Equipment &amp; Gear</b></div>
         <div class="form-item-entry">
+          <p class="cg-tip osr-rpg-shop-save-tip">Cart items are saved to your inventory when the full sheet is valid and you click Save.</p>
+
           <div class="osr-rpg-shop-gold-bar">
             <span class="osr-rpg-pool-chip">Budget <b>{{this.startingGoldBudget}}</b> gp</span>
             <span class="osr-rpg-pool-chip">Cart <b>{{this.cartTotal}}</b> gp</span>
@@ -304,6 +306,27 @@
               <span class="osr-rpg-pool-chip">Preview AC <b>{{this.previewEquippedAc}}</b></span>
             {{/if}}
           </div>
+
+          {{#if this.hasSavedGear}}
+            <div class="osr-rpg-shop-saved-gear">
+              {{#if this.savedEquipment.length}}
+                <div class="osr-rpg-shop-saved-row">
+                  <span class="osr-rpg-spell-label">Equipped:</span>
+                  {{#each this.savedEquipment as |item|}}
+                    <span class="osr-rpg-skill-chip">{{item.name}}</span>
+                  {{/each}}
+                </div>
+              {{/if}}
+              {{#if this.cartLineItems.length}}
+                <div class="osr-rpg-shop-saved-row">
+                  <span class="osr-rpg-spell-label">Carried:</span>
+                  {{#each this.cartLineItems as |line|}}
+                    <span class="osr-rpg-skill-chip">{{line.name}}{{#if (gt line.qty 1)}} x{{line.qty}}{{/if}}</span>
+                  {{/each}}
+                </div>
+              {{/if}}
+            </div>
+          {{/if}}
 
           {{#if this.osr_rpg.class_equipment_notes}}
             <p class="cg-tip osr-rpg-shop-guidance">Class guidance: {{this.osr_rpg.class_equipment_notes}}</p>
@@ -330,9 +353,9 @@
                     {{#if (eq section.key 'armor')}}<td>{{item.ac_display}}</td>{{/if}}
                     {{#if (or (eq section.key 'weapons') (eq section.key 'missile_weapons'))}}<td>{{item.damage}}</td>{{/if}}
                     <td>{{item.cost}} gp</td>
-                    <td><b>{{this.cartQty item.key}}</b></td>
+                    <td><b>{{or (get this.shopCart item.key) 0}}</b></td>
                     <td class="osr-rpg-shop-actions">
-                      <button type="button" class="btn btn-sm btn-outline-secondary" {{on 'click' (fn this.removeShopItem item.key)}} disabled={{eq (this.cartQty item.key) 0}}>−</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary" {{on 'click' (fn this.removeShopItem item.key)}} disabled={{eq (or (get this.shopCart item.key) 0) 0}}>−</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" {{on 'click' (fn this.addShopItem item.key)}} disabled={{or (lte this.goldRemaining 0) (lt this.goldRemaining item.cost)}}>+</button>
                     </td>
                   </tr>
@@ -383,7 +406,7 @@
         <p>Spells: {{this.sheetPreview.spellSummary}}</p>
       {{/if}}
       {{#if this.sheetPreview.startingGold}}
-        <p>Gold: {{this.sheetPreview.goldRemaining}} gp remaining ({{this.sheetPreview.startingGold}} gp budget{{#if this.sheetPreview.cartSummary}}, cart: {{this.sheetPreview.cartSummary}}{{/if}})</p>
+        <p>Gold: {{this.sheetPreview.goldRemaining}} gp remaining of {{this.sheetPreview.startingGold}} gp budget{{#if this.sheetPreview.cartSummary}} (cart: {{this.sheetPreview.cartSummary}}){{/if}}</p>
       {{/if}}
       {{#if this.sheetPreview.previewAc}}
         <p>Preview AC: {{this.sheetPreview.previewAc}}</p>

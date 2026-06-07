@@ -16,6 +16,31 @@ module AresMUSH
         allow(@char).to receive(:osr_gold).and_return(nil)
       end
 
+      describe 'ensure_starting_gold!' do
+        it 'rolls when starting gold is unset' do
+          updates = {}
+          allow(@char).to receive(:update) { |attrs| updates.merge!(attrs) }
+          gold = Chargen.ensure_starting_gold!(@char)
+          expect(gold).to be >= 30
+          expect(updates[:osr_starting_gold]).to eq(gold)
+        end
+
+        it 'rolls when starting gold is zero' do
+          updates = {}
+          allow(@char).to receive(:osr_starting_gold).and_return(0)
+          allow(@char).to receive(:update) { |attrs| updates.merge!(attrs) }
+          gold = Chargen.ensure_starting_gold!(@char)
+          expect(gold).to be >= 30
+          expect(updates[:osr_starting_gold]).to eq(gold)
+        end
+
+        it 'keeps an existing rolled budget' do
+          allow(@char).to receive(:osr_starting_gold).and_return(120)
+          expect(@char).not_to receive(:update)
+          expect(Chargen.ensure_starting_gold!(@char)).to eq(120)
+        end
+      end
+
       describe 'validate' do
         it 'requires class' do
           alerts = Chargen.validate(@char, nil, 'Law', { 'str' => 10 }, {})
@@ -66,6 +91,18 @@ module AresMUSH
           scores = { 'str' => 10, 'dex' => 10, 'con' => 10, 'int' => 13, 'wis' => 10, 'cha' => 10 }
           alerts = Chargen.validate(@char, 'magic_user', 'Neutrality', scores, {}, {})
           expect(alerts).to include(t('osr_rpg.spell_picks_wrong', required: 1, picked: 0))
+        end
+
+        it 'warns when cart is not saved due to other validation failures' do
+          allow(Global).to receive(:read_config).and_call_original
+          allow(Global).to receive(:read_config).with('osr', 'equipment').and_return({
+            'adventuring_gear' => { 'torch' => { 'name' => 'Torch', 'cost' => 1 } }
+          })
+          allow(@char).to receive(:osr_starting_gold).and_return(100)
+          scores = { 'str' => 13, 'dex' => 10, 'con' => 12 }
+          alerts = Chargen.validate(@char, 'fighter', 'Law', scores, {}, {}, { 'torch' => 1 })
+          expect(alerts).to include(t('osr_rpg.ability_not_set', ability: 'INT'))
+          expect(alerts).to include(t('osr_rpg.cart_not_saved'))
         end
       end
 
@@ -207,6 +244,112 @@ module AresMUSH
           keys = display.map { |sk| sk[:key] }
           expect(keys).not_to include('hear_noise')
           expect(keys).to include('hide_in_shadows')
+        end
+      end
+
+      describe 'reset_shop!' do
+        it 'clears inventory, equipment, and gold budget' do
+          updates = {}
+          allow(@char).to receive(:update) { |attrs| updates.merge!(attrs) }
+          Chargen.reset_shop!(@char)
+          expect(updates[:osr_inventory]).to eq({})
+          expect(updates[:osr_equipment]).to eq([])
+          expect(updates[:osr_starting_gold]).to be_nil
+          expect(updates[:osr_gold]).to be_nil
+        end
+      end
+
+      describe 'save_char' do
+        before do
+          allow(Global).to receive(:read_config).and_call_original
+          allow(Global).to receive(:read_config).with('osr_rpg', 'default_ac').and_return(0)
+          allow(Global).to receive(:read_config).with('osr', 'equipment').and_return({
+            'armor' => {
+              'leather' => { 'name' => 'Leather', 'ac' => 2, 'cost' => 20 },
+              'shield' => { 'name' => 'Shield', 'ac_bonus' => 1, 'cost' => 10 }
+            },
+            'weapons' => {
+              'sword' => { 'name' => 'Sword', 'damage' => '1d8', 'cost' => 10 }
+            },
+            'adventuring_gear' => {
+              'torch' => { 'name' => 'Torch', 'cost' => 1 }
+            }
+          })
+        end
+
+        it 'commits cart to inventory and gold on a valid full sheet save' do
+          scores = {
+            'str' => 13, 'dex' => 10, 'con' => 12,
+            'int' => 10, 'wis' => 10, 'cha' => 10
+          }
+          inventory = { 'leather' => 1, 'torch' => 2 }
+          updates = {}
+          allow(@char).to receive(:osr_starting_gold).and_return(100)
+          allow(@char).to receive(:osr_class).and_return(nil)
+          allow(@char).to receive(:osr_equipment).and_return([])
+          allow(@char).to receive(:update) do |attrs|
+            updates.merge!(attrs)
+            attrs.each { |k, v| allow(@char).to receive(k).and_return(v) }
+          end
+
+          alerts = Chargen.save_char(@char, {
+            'class' => 'fighter',
+            'alignment' => 'Law',
+            'ability_scores' => scores,
+            'thief_skills' => {},
+            'spell_book' => {},
+            'inventory' => inventory
+          })
+
+          expect(alerts).to be_empty
+          expect(updates[:osr_gold]).to eq(78)
+          expect(updates[:osr_inventory]).to eq({ 'torch' => 2 })
+          expect(updates[:osr_equipment]).to include('leather')
+          expect(updates[:osr_ac]).to eq(2)
+        end
+
+        it 'resets shop when class changes before applying a new sheet' do
+          scores = {
+            'str' => 13, 'dex' => 10, 'con' => 12,
+            'int' => 10, 'wis' => 10, 'cha' => 10
+          }
+          updates = {}
+          allow(@char).to receive(:osr_class).and_return('fighter')
+          allow(@char).to receive(:osr_starting_gold).and_return(100)
+          allow(@char).to receive(:osr_inventory).and_return({ 'torch' => 3 })
+          allow(@char).to receive(:osr_equipment).and_return(['leather'])
+          allow(@char).to receive(:update) do |attrs|
+            updates.merge!(attrs)
+            attrs.each { |k, v| allow(@char).to receive(k).and_return(v) }
+          end
+
+          Chargen.save_char(@char, {
+            'class' => 'thief',
+            'alignment' => 'Neutrality',
+            'ability_scores' => scores,
+            'thief_skills' => { 'hide_in_shadows' => 2, 'move_silently' => 1, 'climb_walls' => 1 },
+            'spell_book' => {},
+            'inventory' => { 'torch' => 1 }
+          })
+
+          expect(updates[:osr_inventory]).to eq({ 'torch' => 1 })
+          expect(updates[:osr_starting_gold]).to be >= 30
+        end
+
+        it 'does not commit inventory when validation fails' do
+          updates = {}
+          allow(@char).to receive(:osr_starting_gold).and_return(100)
+          allow(@char).to receive(:update) { |attrs| updates.merge!(attrs) }
+
+          alerts = Chargen.save_char(@char, {
+            'class' => 'fighter',
+            'alignment' => 'Law',
+            'ability_scores' => { 'str' => 13 },
+            'inventory' => { 'torch' => 1 }
+          })
+
+          expect(alerts).not_to be_empty
+          expect(updates).not_to have_key(:osr_inventory)
         end
       end
 

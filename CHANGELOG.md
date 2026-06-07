@@ -1,5 +1,18 @@
 # Changelog
 
+## v3.3.0 — 2026-06-08
+
+Chargen shop hardening, web profile equipment, and inventory fixes.
+
+- Web profile **Equipment** section: Equipped / Carried lists with **Equip** / **Unequip** (`osrRpgEquip`)
+- Chargen shop UX: save tip, Equipped/Carried display after save, `cart_not_saved` validation alert
+- Web APIs: `osrRpgEnsureStartingGold`, `osrRpgResetShop` (class change clears cart and re-rolls gold)
+- Fix starting gold showing 0 (unset/zero budget re-roll; handler namespace fix)
+- Fix chargen `shopCart` template binding error in Ember
+- Fix inventory duplication: equipped items no longer copied into carried inventory on sheet load
+- Class change in chargen resets shop server-side and on save when class differs
+- Specs for `save_char` inventory commit, equip handler, and migrate cleanup
+
 ## v3.2.0 — 2026-06-08
 
 Chargen equipment shop, gold economy, and ascending AC.

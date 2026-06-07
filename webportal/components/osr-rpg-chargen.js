@@ -39,6 +39,7 @@ export default Component.extend({
   abilityRollCount: 0,
   dragOverAbility: null,
   draggingPoolId: null,
+  shopCart: {},
 
   didInsertElement: function() {
     this._super(...arguments);
@@ -58,6 +59,36 @@ export default Component.extend({
     this.initThiefAllocations();
     this.initSpellPicks();
     this.initShopCart();
+    this.bootstrapShopData();
+  },
+
+  didUpdateAttrs() {
+    this._super(...arguments);
+    this.initShopCart();
+    this.bootstrapShopData();
+  },
+
+  async bootstrapShopData() {
+    let budget = this.get('osr_rpg.starting_gold');
+    if (budget != null && budget > 0) {
+      return;
+    }
+    let id = this.get('model.char.id');
+    if (!id) {
+      return;
+    }
+    try {
+      let response = await this.gameApi.requestOne('osrRpgEnsureStartingGold', { id: id });
+      if (response && response.error) {
+        return;
+      }
+      if (response && response.starting_gold > 0) {
+        let osr = { ...(this.get('model.char.osr_rpg') || {}), ...response };
+        this.set('model.char.osr_rpg', osr);
+      }
+    } catch (_e) {
+      // Shop will stay empty until chargen reloads.
+    }
   },
 
   osr_rpg: computed('model.char.osr_rpg', function() {
@@ -255,10 +286,6 @@ export default Component.extend({
     }
   ),
 
-  cartQty(itemKey) {
-    return (this.shopCart || {})[itemKey] || 0;
-  },
-
   allowedAlignments: computed('selectedClass', 'osr_rpg.alignments', function() {
     let cls = this.selectedClass;
     let all = this.get('osr_rpg.alignments') || [];
@@ -310,6 +337,16 @@ export default Component.extend({
 
   startingGoldBudget: computed('osr_rpg.starting_gold', function() {
     return this.get('osr_rpg.starting_gold') || 0;
+  }),
+
+  savedEquipment: computed('osr_rpg.equipment.[]', function() {
+    return this.get('osr_rpg.equipment') || [];
+  }),
+
+  hasSavedGear: computed('savedEquipment.[]', 'osr_rpg.inventory', function() {
+    let equipped = this.savedEquipment || [];
+    let inventory = this.get('osr_rpg.inventory') || {};
+    return equipped.length > 0 || Object.keys(inventory).length > 0;
   }),
 
   shopCatalogSections: computed('osr_rpg.equipment_catalog', function() {
@@ -713,7 +750,9 @@ export default Component.extend({
 
   @action
   classChanged(val) {
-    this.set('osr_rpg.class', val ? val.key : null);
+    let prevClass = this.get('osr_rpg.class');
+    let nextClass = val ? val.key : null;
+    this.set('osr_rpg.class', nextClass);
     if (val && val.alignment_restrictions) {
       let current = this.get('osr_rpg.alignment');
       if (current && !val.alignment_restrictions.includes(current)) {
@@ -722,7 +761,39 @@ export default Component.extend({
     }
     this.initThiefAllocations();
     this.initSpellPicks();
-    this.initShopCart();
+    if (prevClass !== nextClass && prevClass) {
+      this.resetShopForClassChange();
+    } else {
+      this.initShopCart();
+      this.bootstrapShopData();
+    }
+  },
+
+  async resetShopForClassChange() {
+    this.set('shopCart', {});
+    let id = this.get('model.char.id');
+    if (!id) {
+      return;
+    }
+    try {
+      let response = await this.gameApi.requestOne('osrRpgResetShop', { id: id });
+      if (response && response.error) {
+        return;
+      }
+      if (response) {
+        let osr = {
+          ...(this.get('model.char.osr_rpg') || {}),
+          ...response,
+          class: this.get('osr_rpg.class'),
+          inventory: {},
+          equipment: []
+        };
+        this.set('model.char.osr_rpg', osr);
+        this.set('shopCart', {});
+      }
+    } catch (_e) {
+      this.set('shopCart', {});
+    }
   },
 
   @action

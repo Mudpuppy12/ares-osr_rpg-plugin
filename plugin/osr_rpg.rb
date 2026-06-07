@@ -102,6 +102,10 @@ module AresMUSH
       case request.cmd
       when 'osrRpgChargenInfo'
         return ChargenInfoRequestHandler
+      when 'osrRpgEnsureStartingGold'
+        return EnsureStartingGoldRequestHandler
+      when 'osrRpgResetShop'
+        return ResetShopRequestHandler
       when 'osrRpgRollAbilities'
         return RollRequestHandler
       when 'osrRpgSceneSheet'
@@ -124,6 +128,8 @@ module AresMUSH
         return SpellDetailRequestHandler
       when 'osrRpgEquipment'
         return EquipmentListRequestHandler
+      when 'osrRpgEquip'
+        return EquipRequestHandler
       end
       nil
     end

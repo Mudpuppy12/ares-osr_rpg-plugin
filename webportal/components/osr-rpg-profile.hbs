@@ -102,24 +102,51 @@
             <span class="osr-rpg-combat-chip">HD <b>{{this.sheet.hd_display}}</b></span>
           {{/if}}
           {{#if this.sheet.armor}}
-            <span class="osr-rpg-combat-chip">Armor <b>{{this.sheet.armor}}</b></span>
+            <span class="osr-rpg-combat-chip" title="Class armor allowance">Class armor <b>{{this.sheet.armor}}</b></span>
           {{/if}}
           {{#if this.sheet.weapons}}
-            <span class="osr-rpg-combat-chip">Weapons <b>{{this.sheet.weapons}}</b></span>
+            <span class="osr-rpg-combat-chip" title="Class weapon allowance">Class weapons <b>{{this.sheet.weapons}}</b></span>
           {{/if}}
         </div>
       </div>
 
-      {{#if this.sheet.inventory.length}}
-        <div class="osr-rpg-sheet-section">
-          <div class="osr-rpg-sheet-section-title">Inventory</div>
-          <div class="osr-rpg-skill-row">
-            {{#each this.sheet.inventory as |item|}}
-              <span class="osr-rpg-skill-chip">
-                {{item.name}}{{#if (gt item.qty 1)}} x{{item.qty}}{{/if}}
-              </span>
-            {{/each}}
-          </div>
+      {{#if (or this.sheet.equipment.length this.sheet.inventory.length)}}
+        <div class="osr-rpg-sheet-section osr-rpg-equipment-section">
+          <div class="osr-rpg-sheet-section-title">Equipment</div>
+
+          {{#if this.sheet.equipment.length}}
+            <div class="osr-rpg-equipment-subsection">
+              <div class="osr-rpg-spell-label">Equipped</div>
+              <div class="osr-rpg-equipment-list">
+                {{#each this.sheet.equipment as |item|}}
+                  <div class="osr-rpg-equipment-row">
+                    <span class="osr-rpg-skill-chip">{{item.name}}</span>
+                    {{#if this.isOwnProfile}}
+                      <button type="button" class="btn btn-sm btn-outline-secondary" disabled={{this.isBusy}} {{on 'click' (fn this.unequipItem item.key)}}>Unequip</button>
+                    {{/if}}
+                  </div>
+                {{/each}}
+              </div>
+            </div>
+          {{/if}}
+
+          {{#if this.sheet.inventory.length}}
+            <div class="osr-rpg-equipment-subsection">
+              <div class="osr-rpg-spell-label">Carried</div>
+              <div class="osr-rpg-equipment-list">
+                {{#each this.sheet.inventory as |item|}}
+                  <div class="osr-rpg-equipment-row">
+                    <span class="osr-rpg-skill-chip">
+                      {{item.name}}{{#if (gt item.qty 1)}} x{{item.qty}}{{/if}}
+                    </span>
+                    {{#if (and this.isOwnProfile item.equippable)}}
+                      <button type="button" class="btn btn-sm btn-outline-secondary" disabled={{this.isBusy}} {{on 'click' (fn this.equipItem item.key)}}>Equip</button>
+                    {{/if}}
+                  </div>
+                {{/each}}
+              </div>
+            </div>
+          {{/if}}
         </div>
       {{/if}}
 
@@ -181,9 +208,6 @@
                   </span>
                 {{/each}}
               </div>
-            {{/if}}
-            {{#if this.sheet.equipment}}
-              <p class="osr-rpg-spell-note">Gear: {{#each this.sheet.equipment as |item|}}<span class="osr-rpg-skill-chip">{{item.name}}</span>{{/each}}</p>
             {{/if}}
             {{#if this.sheet.spell_book}}
               {{#each-in this.sheet.spell_book as |lvl spells|}}

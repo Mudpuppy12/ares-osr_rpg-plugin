@@ -3,9 +3,12 @@ module AresMUSH
     module Chargen
       def self.save_char(char, data)
         merge_ability_roll_count(char, data['ability_roll_count'])
-        ensure_starting_gold!(char)
 
         class_key = data['class']
+        if char.osr_class.present? && class_key.to_s != char.osr_class.to_s
+          reset_shop!(char)
+        end
+        ensure_starting_gold!(char)
         alignment = data['alignment']
         scores = normalize_scores(data['ability_scores'] || {})
         thief_skills = data['thief_skills'] || {}
@@ -23,8 +26,34 @@ module AresMUSH
         return t('osr_rpg.invalid_class', class: key) if key.blank?
         return t('osr_rpg.invalid_class', class: key) if Tables.class_config(key).nil?
         return t('osr_rpg.class_not_allowed', class: key) unless Tables.class_allowed?(key)
+        old_class = char.osr_class.to_s
+        reset_shop!(char) if old_class.present? && old_class != key.to_s
         char.update(osr_class: key.to_s)
         nil
+      end
+
+      def self.reset_shop!(char)
+        char.update(
+          osr_starting_gold: nil,
+          osr_gold: nil,
+          osr_inventory: {},
+          osr_equipment: [],
+          osr_ac: nil
+        )
+      end
+
+      def self.shop_data_for_web(char)
+        gold = ensure_starting_gold!(char)
+        inventory = EquipmentHelper.normalize_inventory_hash(char.osr_inventory)
+        cart_total = EquipmentHelper.cart_total(inventory)
+        {
+          starting_gold: gold,
+          cart_total: cart_total,
+          gold_remaining: gold - cart_total,
+          inventory: inventory,
+          equipment: EquipmentHelper.gear_display(char),
+          equipment_catalog: ReferenceData.equipment_for_web
+        }
       end
 
       def self.class_change_allowed?(char, class_key)
@@ -252,7 +281,14 @@ module AresMUSH
         end
 
         alerts.concat validate_spell_book(class_key, spell_book)
-        alerts.concat validate_inventory(class_key, inventory, char.osr_starting_gold)
+        inventory_alerts = validate_inventory(class_key, inventory, char.osr_starting_gold)
+        alerts.concat inventory_alerts
+
+        inv = EquipmentHelper.normalize_inventory_hash(inventory)
+        if inv.any? && alerts.any? && (alerts - inventory_alerts).any?
+          cart_msg = t('osr_rpg.cart_not_saved')
+          alerts << cart_msg unless alerts.include?(cart_msg)
+        end
 
         alerts
       end
@@ -385,7 +421,7 @@ module AresMUSH
         final_spell_book = resolve_spell_book(class_key, spell_book)
         tradition = Tables.spell_tradition(class_key)
 
-        starting_gold = char.osr_starting_gold
+        starting_gold = ensure_starting_gold!(char)
         purchase = EquipmentHelper.purchase_items(char, inventory, budget: starting_gold)
         final_inventory = purchase[:inventory] || {}
         gold_remaining = purchase[:error] ? starting_gold : purchase[:gold_remaining]
@@ -432,9 +468,12 @@ module AresMUSH
       end
 
       def self.ensure_starting_gold!(char)
-        return if char.osr_starting_gold
-
-        char.update(osr_starting_gold: Tables.roll_starting_gold)
+        gold = char.osr_starting_gold
+        if gold.nil? || gold.to_i <= 0
+          gold = Tables.roll_starting_gold
+          char.update(osr_starting_gold: gold)
+        end
+        gold
       end
 
       def self.sheet_for_web_editing(char, _enactor)
@@ -451,7 +490,7 @@ module AresMUSH
           all_spells = Tables.spells_for_tradition(tradition)
           spell_lists = { '1' => all_spells['1'] || all_spells[1] || [] }
         end
-        starting_gold = char.osr_starting_gold
+        starting_gold = ensure_starting_gold!(char)
         inventory = EquipmentHelper.normalize_inventory_hash(char.osr_inventory)
         cart_total = EquipmentHelper.cart_total(inventory)
         {
@@ -481,6 +520,7 @@ module AresMUSH
           cart_total: cart_total,
           gold_remaining: starting_gold - cart_total,
           class_equipment_notes: EquipmentHelper.class_equipment_notes(class_key),
+          equipment: EquipmentHelper.gear_display(char),
           sheet: build_sheet_display(char)
         }
       end

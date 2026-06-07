@@ -112,5 +112,41 @@ export default Component.extend({
       .finally(() => {
         this.set('isBusy', false);
       });
+  },
+
+  @action
+  equipItem(itemKey) {
+    if (!this.isOwnProfile || this.isBusy) { return; }
+    this.set('isBusy', true);
+    this.gameApi.requestOne('osrRpgEquip', { action: 'equip', item: itemKey }, null)
+      .then((response) => {
+        if (response.error) {
+          this.flashMessages.danger(response.error);
+          return;
+        }
+        this.updateSheet(response);
+        this.flashMessages.success(response.message || 'Equipped.');
+      })
+      .finally(() => {
+        this.set('isBusy', false);
+      });
+  },
+
+  @action
+  unequipItem(itemKey) {
+    if (!this.isOwnProfile || this.isBusy) { return; }
+    this.set('isBusy', true);
+    this.gameApi.requestOne('osrRpgEquip', { action: 'unequip', item: itemKey }, null)
+      .then((response) => {
+        if (response.error) {
+          this.flashMessages.danger(response.error);
+          return;
+        }
+        this.updateSheet(response);
+        this.flashMessages.success(response.message || 'Unequipped.');
+      })
+      .finally(() => {
+        this.set('isBusy', false);
+      });
   }
 });

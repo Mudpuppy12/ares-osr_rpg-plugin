@@ -63,13 +63,23 @@ module AresMUSH
       def self.migrate_character!(char)
         updates = {}
         inv = normalize_inventory_hash(char.osr_inventory)
+        equipped = (char.osr_equipment || []).map { |k| Tables.normalize_key(k) }
+        unique_equipped = equipped.uniq
+        if unique_equipped != equipped
+          updates[:osr_equipment] = unique_equipped
+          equipped = unique_equipped
+        end
 
-        if inv.empty? && (char.osr_equipment || []).any?
-          inv = (char.osr_equipment || []).each_with_object({}) do |key, h|
-            norm = Tables.normalize_key(key)
-            h[norm] = (h[norm] || 0) + 1
-          end
-          updates[:osr_inventory] = inv
+        cleaned = inv.dup
+        equipped.each do |key|
+          next unless cleaned[key]
+
+          cleaned[key] -= 1
+          cleaned.delete(key) if cleaned[key] <= 0
+        end
+        if cleaned != inv
+          updates[:osr_inventory] = cleaned
+          inv = cleaned
         end
 
         if char.osr_gold.nil? && char.osr_starting_gold
@@ -266,7 +276,8 @@ module AresMUSH
             name: item[:name],
             qty: qty,
             cost: item[:cost],
-            category: item[:category]
+            category: item[:category],
+            equippable: equippable?(key)
           }
         end.compact.sort_by { |row| row[:name].to_s.downcase }
       end
