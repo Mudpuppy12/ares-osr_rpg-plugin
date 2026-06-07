@@ -20,6 +20,10 @@ disabled_plugins:
 
 **Repo name must be `ares-osr_rpg-plugin`** so the Ares installer derives plugin key `osr_rpg`.
 
+> **Important:** `plugin/install` copies plugin files only. It does **not** edit core AresMUSH or web portal files. Web chargen, profile sheet, live-scene rolls, reference pages, and the post-chargen shop **will not work** until you complete the [manual core patches](#step-2--manual-core-ares-patches-required) below. Treat those patches as part of the install, not an optional extra.
+
+### Step 1 — Run the plugin installer
+
 From in-game (admin):
 
 ```
@@ -33,7 +37,7 @@ cd aresmush
 bundle exec rake add_plugin[https://github.com/Mudpuppy12/ares-osr_rpg-plugin]
 ```
 
-### What `plugin/install` does automatically
+#### What `plugin/install` does automatically
 
 | Step | Action |
 |------|--------|
@@ -46,45 +50,134 @@ bundle exec rake add_plugin[https://github.com/Mudpuppy12/ares-osr_rpg-plugin]
 | Plugin registry | Adds `osr_rpg` to `plugins.extras` in `plugins.yml` |
 | Portal build | Rebuilds the web portal |
 
-### What you must do manually
+#### What `plugin/install` does **not** do
 
-The Ares plugin importer cannot modify these files on your game:
+The installer never modifies core game or portal source. You must patch these by hand (see next section):
 
-| Item | File(s) | Why |
-|------|---------|-----|
-| App review hook | `plugins/chargen/custom_app_review.rb` | Core chargen hook — not part of the plugin tree |
-| Chargen controller | `ares-webportal/app/controllers/chargen-char.js` | OSR save payload + review/save guardrails — see `webportal/patches/chargen-char.osr_rpg.md` |
-| Scene create link | `ares-webportal/app/templates/scene-create.hbs` | Equipment Shop banner — see `webportal/patches/scene-create.osr_rpg.md` |
-| Route registration | `ares-webportal/app/custom-routes.js` (or `router.js`) | Installer copies route **files** but does not register them in Ember |
-| Web styles | `aresmush/game/styles/custom_style.scss` | SCSS lives outside the portal `app/` tree |
-| System menu | `game/config/website.yml` | Per-game navbar config |
-| Reload | In-game `load osr_rpg` | Picks up server-side plugin changes |
+- Chargen app review hook (Ruby)
+- Chargen save/review controller logic (JavaScript)
+- Chargen, profile, and live-scene templates (Handlebars)
+- Ember route registration (`custom-routes.js`)
+- Navbar menu entries (`website.yml`)
+- Portal styles (`custom_style.scss`)
+- Optional scene-create / play shop links
 
-### Fresh install checklist
+Patch instructions live in [`webportal/patches/`](webportal/patches/). Copy the described changes into your game's core files.
 
-1. Run `plugin/install` (see above).
-2. Add the app review hook to `custom_app_review.rb`:
+### Step 2 — Manual core Ares patches (required)
+
+These files live **outside** the plugin tree. Ares does not merge them for you on install or upgrade.
+
+#### Server (aresmush)
+
+| File | Required | What to add | If skipped |
+|------|----------|-------------|------------|
+| [`aresmush/plugins/chargen/custom_app_review.rb`](https://github.com/aresmush/aresmush/blob/master/install/game.distr/plugins/chargen/custom_app_review.rb) | **Yes** | Hook that calls `OsrRpg.app_review(char)` when `osr_rpg` is installed | Staff app review has no **OSR Sheet** section |
 
 ```ruby
+# In Chargen.custom_app_review(char):
 if Manage.is_extra_installed?("osr_rpg")
   return OsrRpg.app_review(char)
 end
 ```
 
-3. Patch `ares-webportal/app/controllers/chargen-char.js` per `webportal/patches/chargen-char.osr_rpg.md` (OSR shop data on save/review).
+After editing: `load osr_rpg` (or restart the game server).
 
-4. Register System reference routes in `ares-webportal/app/custom-routes.js`:
+#### Web portal — chargen (required for web sheet + shop cart)
 
-```javascript
-router.route('osr-rpg-spells', { path: '/osr_rpg/spells' });
-router.route('osr-rpg-spell-detail', { path: '/osr_rpg/spells/:tradition/:level/:name' });
-router.route('osr-rpg-equipment', { path: '/osr_rpg/equipment' });
-router.route('osr-rpg-shop', { path: '/osr_rpg/shop' });
+| File | Required | What to add | If skipped |
+|------|----------|-------------|------------|
+| `ares-webportal/app/controllers/chargen-char.js` | **Yes** | OSR payload key, save/review guardrails | Chargen cart/inventory never saves; wrong API field name |
+| `ares-webportal/app/templates/chargen-char.hbs` | **Yes** | **Sheet** tab + `<OsrRpgChargen />` when `rpgExtraInstalled` | No web chargen sheet tab |
+
+**Controller patch (full detail):** [`webportal/patches/chargen-char.osr_rpg.md`](webportal/patches/chargen-char.osr_rpg.md)
+
+Summary of controller changes:
+
+1. `osrRpgUpdateCallback` property; `rpgExtraInstalled` checks `osr_rpg` (not `rpg`)
+2. `buildQueryDataForChar` sends `osr_rpg:` from the callback (not `rpg:`)
+3. **Review:** block on validation `alerts`; reload model before `chargen-review` when OSR installed
+4. **Save:** on validation failure, show alert and **do not** `reloadModel` (keeps shop cart in UI)
+
+**Template patch (`chargen-char.hbs`):** add a nav tab and tab pane (same pattern as Traits/FS3):
+
+```hbs
+{{#if this.rpgExtraInstalled}}
+  <li class="nav-item"><a href="#rpgsheet" data-bs-toggle="tab" class="nav-link">Sheet</a></li>
+{{/if}}
+
+{{#if this.rpgExtraInstalled}}
+  <div role="tabpanel" class="tab-pane" id="rpgsheet">
+    <OsrRpgChargen @model={{this.model}} @updateCallback={{this.osrRpgUpdateCallback}} />
+  </div>
+{{/if}}
 ```
 
-Games that edit `router.js` directly can register the same routes there instead.
+#### Web portal — profile sheet (required)
 
-5. Add System menu entries to `game/config/website.yml` under `website.top_navbar` → System:
+| File | Required | What to add | If skipped |
+|------|----------|-------------|------------|
+| `ares-webportal/app/components/profile-system.js` | **Yes** | `rpgExtraInstalled` computed checking `osr_rpg` in `game.extra_plugins` | Profile never shows OSR tab |
+| `ares-webportal/app/components/profile-system.hbs` | **Yes** | **Sheet** nav tab + `<OsrRpgProfile @char={{this.char}} />` | No web profile sheet, equip, level-up, or HP buttons |
+
+```js
+// profile-system.js
+rpgExtraInstalled: computed('game.extra_plugins', function () {
+  return this.get('game.extra_plugins').some((e) => e == 'osr_rpg');
+}),
+```
+
+```hbs
+{{#if this.rpgExtraInstalled}}
+  <li class="nav-item"><a data-bs-toggle="tab" class="nav-link" href="#systemrpg">Sheet</a></li>
+{{/if}}
+
+{{#if this.rpgExtraInstalled}}
+  <OsrRpgProfile @char={{this.char}} />
+{{/if}}
+```
+
+#### Web portal — live scene rolls (required)
+
+| File | Required | What to add | If skipped |
+|------|----------|-------------|------------|
+| `ares-webportal/app/components/live-scene-control.js` | **Yes** | `rpgExtraInstalled` via `isExtraInstalled('osr_rpg')` | Live scene Play menu has no OSR entries |
+| `ares-webportal/app/components/live-scene-control.hbs` | **Yes** | `<LiveSceneOsrRpg @scene={{this.scene}} />` in Play dropdown | No web attack/save/skill rolls or combat tracker |
+
+```hbs
+{{#if this.rpgExtraInstalled}}
+  <LiveSceneOsrRpg @scene={{this.scene}} />
+{{/if}}
+```
+
+#### Web portal — routes (required for reference pages + shop)
+
+| File | Required | What to add | If skipped |
+|------|----------|-------------|------------|
+| `ares-webportal/app/custom-routes.js` | **Yes** | Register four `osr-rpg-*` routes | Spell/equipment/shop pages 404 |
+
+The installer copies route **files** under `app/routes/` but does **not** register them in Ember.
+
+```javascript
+export default function setupCustomRoutes(router) {
+  router.route('osr-rpg-spells', { path: '/osr_rpg/spells' });
+  router.route('osr-rpg-spell-detail', { path: '/osr_rpg/spells/:tradition/:level/:name' });
+  router.route('osr-rpg-equipment', { path: '/osr_rpg/equipment' });
+  router.route('osr-rpg-shop', { path: '/osr_rpg/shop' });
+}
+```
+
+Games that register routes in `router.js` instead should add the same four entries there.
+
+Rebuild the portal after any `custom-routes.js` change.
+
+#### Game config — navbar (required for menus)
+
+| File | Required | What to add | If skipped |
+|------|----------|-------------|------------|
+| `aresmush/game/config/website.yml` | **Yes** | System + Play menu entries | No nav links to spell/equipment lists or shop |
+
+Under **System**:
 
 ```yaml
 - title: Spell Lists
@@ -93,19 +186,52 @@ Games that edit `router.js` directly can register the same routes there instead.
   route: osr-rpg-equipment
 ```
 
-6. Merge `styles/osr_rpg_chargen.scss` into `aresmush/game/styles/custom_style.scss` (chargen dice tray, profile sheet, spell/equipment reference pages).
+Under **Play** (after **Start New Scene**):
 
-7. Run `load osr_rpg` (or restart the game server).
+```yaml
+- title: Equipment Shop
+  route: osr-rpg-shop
+```
 
-8. Verify:
-   - Web chargen shows a **Sheet** tab with **Equipment & Gear** shop (after class selected)
-   - Chargen **Budget** shows rolled starting gold (30–180 gp); cart saves on a valid full-sheet **Save**
-   - Web profile **Character Sheet** tab shows **Equipment** (Equipped / Carried) with equip buttons on your own sheet
-   - `osr_rpg/finish` and `sheet` work on telnet
-   - App review includes an **OSR Sheet** section
-   - Live scene menu shows OSR rolls
-   - System → **Spell Lists** — tradition tabs; spell links open detail pages
-   - System → **Equipment List** — armor, weapons, and gear tables
+#### Styles (required for usable UI)
+
+| File | Required | What to add | If skipped |
+|------|----------|-------------|------------|
+| `aresmush/game/styles/custom_style.scss` | **Yes** | Merge contents of `styles/osr_rpg_chargen.scss` from this repo | Chargen dice tray, profile sheet, shop, and reference tables look broken |
+
+#### Optional portal patches (recommended)
+
+| File | Patch doc | What it adds |
+|------|-----------|--------------|
+| `ares-webportal/app/templates/scene-create.hbs` | [`webportal/patches/scene-create.osr_rpg.md`](webportal/patches/scene-create.osr_rpg.md) | **Equipment Shop** link on Create Scene page |
+| `ares-webportal/app/templates/play.hbs` | same doc (optional section) | Shop shortcut in Play sidebar |
+
+### Step 3 — Fresh install checklist
+
+Use this after Step 1 and Step 2:
+
+- [ ] `plugin/install` completed
+- [ ] `custom_app_review.rb` calls `OsrRpg.app_review`
+- [ ] `chargen-char.js` patched per [`chargen-char.osr_rpg.md`](webportal/patches/chargen-char.osr_rpg.md)
+- [ ] `chargen-char.hbs` has Sheet tab + `OsrRpgChargen`
+- [ ] `profile-system.js` / `.hbs` have `rpgExtraInstalled` + `OsrRpgProfile`
+- [ ] `live-scene-control.js` / `.hbs` have `rpgExtraInstalled` + `LiveSceneOsrRpg`
+- [ ] `custom-routes.js` registers all four `osr-rpg-*` routes
+- [ ] `website.yml` has System + Play menu entries
+- [ ] `custom_style.scss` includes `osr_rpg_chargen.scss` styles
+- [ ] (Optional) `scene-create.hbs` and `play.hbs` shop links
+- [ ] `load osr_rpg` run on game server
+- [ ] Portal rebuilt if routes or styles changed
+
+**Verify:**
+
+- Web chargen **Sheet** tab with **Equipment & Gear** shop (after class selected)
+- Chargen **Budget** shows rolled starting gold (30–180 gp); cart saves on valid full-sheet **Save**
+- Web profile **Sheet** tab — equipment equip/unequip on your own character
+- Play → **Equipment Shop** (approved characters)
+- Live scene Play menu — OSR rolls and combat tracker
+- System → **Spell Lists** and **Equipment List**
+- Telnet `osr_rpg/finish` and `sheet`; app review shows **OSR Sheet**
 
 ### Manual install (without `plugin/install`)
 
@@ -121,7 +247,7 @@ mkdir -p ares-webportal/public/sounds
 cp ares-osr_rpg-plugin/public/sounds/osr-rpg-dice.mp3 ares-webportal/public/sounds/
 ```
 
-Then complete steps 2–7 above, add `osr_rpg` to `plugins.extras` in `plugins.yml`, and rebuild the portal.
+Add `osr_rpg` to `plugins.extras` in `plugins.yml`, complete **all** manual core patches in Step 2, rebuild the portal, and run `load osr_rpg`.
 
 ---
 
@@ -307,27 +433,24 @@ Re-run the same install command:
 plugin/install https://github.com/Mudpuppy12/ares-osr_rpg-plugin
 ```
 
-That updates server code and web portal files (components, routes, templates) and rebuilds the portal. It **does not overwrite** `game/config/` on re-install, to preserve local edits.
+That updates plugin server code and copied portal files (components, routes, templates) and rebuilds the portal. It **does not overwrite** `game/config/` on re-install, to preserve local edits.
+
+**Manual core patches are not re-applied on upgrade.** Your edits to `custom_app_review.rb`, `chargen-char.js`, `profile-system.*`, `live-scene-control.*`, `custom-routes.js`, `website.yml`, and `custom_style.scss` persist — but you must **re-check** them when a release adds new routes, menu items, or patch doc changes. Compare your files against [`webportal/patches/`](webportal/patches/) and the [install checklist](#step-3--fresh-install-checklist).
 
 ### Upgrade checklist
 
 1. Run `plugin/install` (above).
-2. `load osr_rpg` (or restart the game server).
-3. Merge any new YAML from this repo's `game/config/` into your game — common files to check:
-   - `osr_spell_details.yml` (spell reference descriptions)
-   - `osr_equipment.yml` (expanded gear catalog)
-   - `osr_shop.yml` (post-chargen potions and scrolls)
-   - `osr_rpg.yml` (`spells_blurb`, `equipment_blurb`, permissions)
-   - `osr_spells.yml` (spell list changes)
-4. Confirm `custom-routes.js` still registers the `osr-rpg-*` routes including `osr-rpg-shop` (the installer never edits this file).
-5. Merge style changes from `styles/osr_rpg_chargen.scss` into `custom_style.scss` (includes chargen shop, profile equipment rows, spell/equipment reference pages).
-6. Confirm `website.yml` still has Spell Lists and Equipment List under System (if not done at first install).
-7. Run `load osr_rpg` after server-side plugin updates.
-8. Spot-check:
-   - Chargen Sheet → Equipment & Gear (budget, cart, save)
-   - Profile Character Sheet → Equipment (equip/unequip on own character)
-   - Play → Equipment Shop (approved character buy/sell)
-   - System → Spell Lists and Equipment List
+2. Review [`CHANGELOG.md`](CHANGELOG.md) for new manual steps.
+3. Merge any new YAML from this repo's `game/config/` into your game — common files:
+   - `osr_spell_details.yml`, `osr_equipment.yml`, `osr_shop.yml`, `osr_rpg.yml`, `osr_spells.yml`
+4. Confirm manual patches still in place (installer never touches these):
+   - `custom-routes.js` — all four `osr-rpg-*` routes
+   - `website.yml` — System spell/equipment entries; Play **Equipment Shop**
+   - `custom_style.scss` — merged `osr_rpg_chargen.scss` styles
+   - `chargen-char.js` — per patch doc if chargen behavior changed
+5. `load osr_rpg` (or restart the game server).
+6. Rebuild portal if routes or styles changed.
+7. Spot-check chargen sheet, profile sheet, live scene rolls, shop, and System reference pages.
 
 ## Repository layout
 
@@ -337,12 +460,27 @@ ares-osr_rpg-plugin/
 ├── game/config/         → aresmush/game/config/              (auto, first install only)
 ├── webportal/
 │   ├── components/      → ares-webportal/app/components/     (auto)
-│   ├── routes/        → ares-webportal/app/routes/         (auto; register in custom-routes.js)
-│   └── templates/     → ares-webportal/app/templates/       (auto)
+│   ├── routes/          → ares-webportal/app/routes/         (auto; register in custom-routes.js)
+│   ├── templates/       → ares-webportal/app/templates/       (auto)
+│   └── patches/         → manual edits to CORE portal/game   (you apply by hand)
+│       ├── chargen-char.osr_rpg.md
+│       └── scene-create.osr_rpg.md
 ├── public/sounds/       → ares-webportal/public/sounds/      (auto)
 ├── styles/              → merge into custom_style.scss       (manual)
 └── scripts/             → maintainer tools (not installed)
 ```
+
+**Core files you edit manually (not in this repo):**
+
+| Area | Paths |
+|------|-------|
+| Server | `aresmush/plugins/chargen/custom_app_review.rb` |
+| Chargen | `ares-webportal/app/controllers/chargen-char.js`, `templates/chargen-char.hbs` |
+| Profile | `ares-webportal/app/components/profile-system.js`, `profile-system.hbs` |
+| Live scene | `ares-webportal/app/components/live-scene-control.js`, `live-scene-control.hbs` |
+| Routes | `ares-webportal/app/custom-routes.js` |
+| Nav / shop UX | `aresmush/game/config/website.yml`, optional `templates/scene-create.hbs`, `templates/play.hbs` |
+| Styles | `aresmush/game/styles/custom_style.scss` |
 
 ## Development
 
