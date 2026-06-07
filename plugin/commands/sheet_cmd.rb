@@ -1,5 +1,5 @@
 module AresMUSH
-  module Rpg
+  module OsrRpg
     class SheetCmd
       include CommandHandler
 
@@ -12,8 +12,8 @@ module AresMUSH
       def check_permission
         return nil if self.target == enactor_name
         return nil if enactor.has_permission?('admin')
-        return nil if Global.read_config('rpg', 'public_sheets')
-        return t('rpg.no_permission_to_view_sheet')
+        return nil if Global.read_config('osr_rpg', 'public_sheets')
+        return t('osr_rpg.no_permission_to_view_sheet')
       end
 
       def handle

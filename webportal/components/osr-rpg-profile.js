@@ -4,7 +4,7 @@ import { computed } from '@ember/object';
 export default Component.extend({
   tagName: '',
 
-  sheet: computed('char.rpg', function() {
-    return this.get('char.rpg') || {};
+  sheet: computed('char.osr_rpg', function() {
+    return this.get('char.osr_rpg') || {};
   })
 });

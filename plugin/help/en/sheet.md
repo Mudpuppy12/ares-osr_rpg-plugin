@@ -1,6 +1,6 @@
 ---
 toc: RPG ~ Sheet
-summary: View OSE character sheet.
+summary: View OSR character sheet.
 ---
 # sheet
 
@@ -8,4 +8,4 @@ summary: View OSE character sheet.
 sheet [name]
 ```
 
-Displays the OSE character sheet for you or another character (if public sheets are enabled or you have admin permission).
+Displays the OSR character sheet for you or another character (if public sheets are enabled or you have admin permission).

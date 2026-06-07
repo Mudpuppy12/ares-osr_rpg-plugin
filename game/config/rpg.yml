@@ -1,8 +1,0 @@
----
-rpg:
-  shortcuts:
-    sheet: sheet
-  rpg_blurb: |
-    Create your OSE character sheet. Pick a class (race-as-class), set ability scores
-    (3d6 each), alignment, and thief expertise points if applicable.
-  public_sheets: true

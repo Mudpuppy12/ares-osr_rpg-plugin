@@ -1,5 +1,5 @@
 ---
-ose:
+osr:
   classes:
     dwarf:
       group: demihuman
@@ -147,6 +147,7 @@ ose:
       - hide_in_shadows
       - move_silently
       - pick_pockets
+      l1_expertise_points: 4
       back_stab: true
       blurb: Strong and stealthy; d6 thief skills at 1-in-6.
       progression:

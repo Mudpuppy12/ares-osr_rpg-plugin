@@ -1,0 +1,13 @@
+---
+osr_rpg:
+  shortcuts:
+    sheet: sheet
+  hp_per_level: max
+  require_server_rolls: true
+  allowed_classes: []
+  osr_rpg_blurb: |
+    Create your OSR character sheet. Pick a class (race-as-class), set ability scores
+    (3d6 each), alignment, and skill expertise points if applicable.
+  public_sheets: true
+  permissions:
+    manage_osr_rpg_xp: Award OSR XP and level other characters.

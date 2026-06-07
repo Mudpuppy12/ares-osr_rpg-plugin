@@ -1,5 +1,5 @@
 module AresMUSH
-  module Rpg
+  module OsrRpg
     class SheetTemplate < ErbTemplateRenderer
       attr_accessor :char
 
@@ -10,7 +10,7 @@ module AresMUSH
       end
 
       def title
-        t('rpg.sheet_title', name: char.name)
+        t('osr_rpg.sheet_title', name: char.name)
       end
 
       def sheet

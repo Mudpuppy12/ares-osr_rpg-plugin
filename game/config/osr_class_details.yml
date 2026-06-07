@@ -1,0 +1,245 @@
+---
+# Chargen display metadata from OSE Advanced Fantasy / supplements (Open Brain captures).
+osr:
+  class_details:
+    fighter:
+      languages: [Alignment, Common]
+      weapons: Any
+      armor: Any, incl. shields
+      restrictions: []
+      special_abilities: []
+    cleric:
+      languages: [Alignment, Common]
+      weapons: Any
+      armor: Any, incl. shields
+      restrictions: []
+      special_abilities:
+        - Divine magic (cleric spell list); spells from 2nd level
+        - Turn undead from 2nd level
+    magic_user:
+      languages: [Alignment, Common]
+      weapons: Dagger; staff (optional)
+      armor: none
+      restrictions: []
+      special_abilities:
+        - Arcane magic (spell book required)
+        - Magic item creation at 9th level
+    thief:
+      languages: [Alignment, Common]
+      weapons: Any
+      armor: Leather
+      restrictions: []
+      special_abilities:
+        - Back-stab (+4 to hit, double damage from behind)
+        - Thief skills (percentile); d6 expertise at chargen
+    acrobat:
+      languages: [Alignment, Common]
+      weapons: Any
+      armor: Leather
+      restrictions: []
+      special_abilities:
+        - Climb sheer surfaces
+        - Reduced falling damage
+        - Hide in shadows; move silently; tightrope walking
+    assassin:
+      languages: [Alignment, Common]
+      weapons: Any
+      armor: Leather
+      restrictions:
+        - Cannot be Lawful
+      special_abilities:
+        - Assassination (+4 vs unaware humanoid; death save or die)
+        - Disguise (2% detection per meeting)
+        - Hide in shadows; move silently
+    barbarian:
+      languages: [Alignment, Common]
+      weapons: Any
+      armor: Any, incl. shields
+      restrictions: []
+      special_abilities:
+        - Climb sheer surfaces
+        - Hide in undergrowth; move silently
+    knight:
+      languages: [Alignment, Common]
+      weapons: Any (no missiles)
+      armor: Any, incl. shields
+      restrictions:
+        - Cannot use missile weapons
+        - Must attack the most powerful foe in single combat
+      special_abilities: []
+    bard:
+      languages: [Alignment, Common]
+      weapons: Any
+      armor: Leather
+      restrictions: []
+      special_abilities:
+        - Druid spells from 2nd level (4 spell levels max)
+        - Lore and performance
+    druid:
+      languages: [Alignment, Common, Druidic]
+      weapons: Club, dagger, sling, spear, staff
+      armor: Leather, wooden shields
+      restrictions:
+        - Neutral alignment only
+      special_abilities:
+        - Divine magic (druid spell list); spells from 1st level
+        - +2 saves vs electricity and fire
+        - Shape change at 7th level
+        - Path-finding (party less likely to get lost in woodland)
+    illusionist:
+      languages: [Alignment, Common]
+      weapons: Dagger; staff (optional)
+      armor: none
+      restrictions: []
+      special_abilities:
+        - Arcane illusion magic (spell book required)
+        - Magic item creation at 9th level
+    paladin:
+      languages: [Alignment, Common]
+      weapons: Any
+      armor: Any, incl. shields
+      restrictions:
+        - Lawful alignment only
+      special_abilities:
+        - Turn undead from 3rd level
+        - Cleric spells from 9th level (3 spell levels max)
+        - Excellent saving throws
+    ranger:
+      languages: [Alignment, Common]
+      weapons: Any
+      armor: Any, incl. shields
+      restrictions:
+        - Lawful or Neutral alignment only
+      special_abilities:
+        - Tracking 20% at 1st level (+10% per level; 100% at 9th)
+        - Druid spells from 8th level
+    dwarf:
+      languages: [Alignment, Common, Dwarvish, Gnomish, Goblin, Kobold]
+      weapons: Small or normal sized (no longbows/two-handed swords)
+      armor: Any, incl. shields
+      restrictions: []
+      special_abilities:
+        - Infravision 60'
+        - Detect construction tricks 2-in-6
+        - Detect room traps 2-in-6
+        - Listen at doors 2-in-6
+        - Excellent saving throws
+    elf:
+      languages: [Alignment, Common, Elvish, Gnoll, Hobgoblin, Orcish]
+      weapons: Any
+      armor: Any, incl. shields
+      restrictions: []
+      special_abilities:
+        - Arcane magic (MU spell list); spell book; 1 spell at 1st level
+        - Infravision 60'
+        - Detect secret doors 2-in-6 (active)
+        - Immunity to ghoul paralysis
+        - Listen at doors 2-in-6
+        - Magic item creation at 9th level
+    halfling:
+      languages: [Alignment, Common, Halfling]
+      weapons: Any appropriate to size (no longbows/two-handed swords)
+      armor: Any appropriate to size, incl. shields
+      restrictions:
+        - Lawful or Neutral alignment only
+      special_abilities:
+        - Hide in woods/undergrowth 90%
+        - Hide in dungeons 2-in-6 (motionless)
+        - Listen at doors 2-in-6
+        - +1 missile attack rolls
+        - +2 AC vs large opponents
+        - Excellent saving throws
+    half_orc:
+      languages: [Alignment, Common, Orcish]
+      weapons: Any
+      armor: Leather, chainmail, shields
+      restrictions: []
+      special_abilities:
+        - Infravision 60'
+        - Back-stab (+4 to hit, double damage from behind)
+        - Thief skills (hide in shadows, move silently, pick pockets)
+        - Retainer loyalty reduced by 1
+    drow:
+      languages: [Alignment, Common, Deepcommon, Elvish, Gnomish, secret language of spiders]
+      weapons: Any
+      armor: Any, incl. shields
+      restrictions: []
+      special_abilities:
+        - Divine magic (cleric list); darkness only at 1st level; web from 3rd
+        - Infravision 90'
+        - Light sensitivity (−2 attack, −1 AC in bright light)
+        - Detect secret doors 2-in-6
+        - Immunity to ghoul paralysis
+        - Spider affinity (+1 reaction; speak to spiders)
+        - Listen at doors 2-in-6
+    duergar:
+      languages: [Alignment, Common, Deepcommon, Dwarvish, Gnomish, Goblin, Kobold]
+      weapons: Small or normal sized (no longbows/two-handed swords)
+      armor: Any, incl. shields
+      restrictions: []
+      special_abilities:
+        - Infravision 90'
+        - Light sensitivity (−2 attack, −1 AC in daylight)
+        - Detect construction tricks 2-in-6
+        - Detect room traps 2-in-6
+        - Stealth underground 3-in-6
+        - Mental powers 1/day/level (enlarge, invisibility, shrink, heat)
+    gnome:
+      languages: [Alignment, Common, Gnomish, Dwarvish, Kobold, secret language of burrowing mammals]
+      weapons: Any appropriate to size (no longbows/two-handed swords)
+      armor: Leather, shields (gnome-sized)
+      restrictions: []
+      special_abilities:
+        - Arcane magic (illusionist spell list); spell book
+        - Infravision 90'
+        - Detect construction tricks 2-in-6
+        - Hide in woodland 90%; in dungeons 2-in-6 (motionless)
+        - +2 AC vs large opponents
+        - Speak with burrowing mammals
+        - Magic item creation at 8th level
+    half_elf:
+      languages: [Alignment, Common, Elvish]
+      weapons: Any
+      armor: Any, incl. shields
+      restrictions: []
+      special_abilities:
+        - Arcane magic (MU list) from 2nd level; spell book
+        - Infravision 60'
+        - Detect secret doors 2-in-6 (active)
+    svirfneblin:
+      languages: [Alignment, Common, Deepcommon, Gnomish, Dwarvish, Kobold, language of earth elementals]
+      weapons: Any appropriate to size (no longbows/two-handed swords)
+      armor: Any appropriate to size, incl. shields
+      restrictions: []
+      special_abilities:
+        - Infravision 90'
+        - Light sensitivity (−2 attack, −1 AC in daylight)
+        - Blend into stone 4-in-6 (gloomy) / 2-in-6 (lit)
+        - Detect construction tricks 2-in-6
+        - +2 saves vs illusions
+        - Speak with earth elementals; stone murmurs 2-in-6
+        - +2 AC vs large opponents
+    wood_elf:
+      languages: [Alignment, Common, Elvish, Bugbear, Dryad, Gnoll]
+      weapons: Any
+      armor: Leather, shields
+      restrictions: []
+      special_abilities:
+        - Divine magic (druid spell list); spells from 1st level
+        - Awareness (surprised only on 1; act in surprise round)
+        - Foraging 2-in-6; hunting 5-in-6 with wood elf in party
+        - Hide in woods/undergrowth 90%
+        - Immunity to ghoul paralysis
+        - Infravision; detect secret doors
+        - Magic item creation at 9th level
+    necromancer:
+      languages: [Alignment, Common]
+      weapons: Dagger; staff (optional)
+      armor: none
+      restrictions:
+        - Usually Neutral or Chaotic alignment
+        - Cannot use charm/control magic items
+      special_abilities:
+        - Arcane necromancy (spell book required)
+        - Domains — undead, offence, control
+        - Stronghold at 11th level (playtest)

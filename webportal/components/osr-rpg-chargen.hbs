@@ -1,0 +1,302 @@
+<div class="card card-default">
+  <div class="card-heading">OSR Character Sheet</div>
+  <div class="card-body">
+
+    <p class="cg-tip"><AnsiFormat @text={{this.model.cgInfo.osr_rpg_blurb}} /></p>
+
+    <div class="form-item">
+      <div class="form-item-label"><b>Class</b></div>
+      <div class="form-item-entry">
+        <PowerSelect
+          @selected={{this.selectedClass}}
+          @options={{this.allClasses}}
+          @searchEnabled={{true}}
+          @searchField="displayName"
+          @onChange={{this.classChanged}}
+          @placeholder="Select class..."
+          as |cls|
+        >
+          {{cls.displayName}}
+        </PowerSelect>
+        {{#if this.classDetailFacts}}
+          <div class="osr-rpg-class-detail">
+            {{#if this.classDetailFacts.blurb}}
+              <p class="osr-rpg-class-detail-blurb">{{this.classDetailFacts.blurb}}</p>
+            {{/if}}
+            <dl class="osr-rpg-class-detail-facts">
+              {{#each this.classDetailFacts.facts as |fact|}}
+                <dt>{{fact.label}}</dt>
+                <dd>{{fact.value}}</dd>
+              {{/each}}
+              {{#if this.classDetailFacts.languages}}
+                <dt>Languages</dt>
+                <dd>{{this.classDetailFacts.languages}}</dd>
+              {{/if}}
+            </dl>
+            {{#if this.classDetailFacts.restrictions.length}}
+              <div class="osr-rpg-class-detail-section">
+                <div class="osr-rpg-class-detail-heading">Restrictions</div>
+                <ul class="osr-rpg-class-detail-list">
+                  {{#each this.classDetailFacts.restrictions as |rule|}}
+                    <li>{{rule}}</li>
+                  {{/each}}
+                </ul>
+              </div>
+            {{/if}}
+            {{#if this.classDetailFacts.specialAbilities.length}}
+              <div class="osr-rpg-class-detail-section">
+                <div class="osr-rpg-class-detail-heading">Special Abilities</div>
+                <ul class="osr-rpg-class-detail-list">
+                  {{#each this.classDetailFacts.specialAbilities as |ability|}}
+                    <li>{{ability}}</li>
+                  {{/each}}
+                </ul>
+              </div>
+            {{/if}}
+          </div>
+        {{/if}}
+        {{#if this.selectedClass.playtest}}
+          <p class="cg-tip text-warning">Playtest class — rules may change.</p>
+        {{/if}}
+      </div>
+    </div>
+
+    <div class="form-item">
+      <div class="form-item-label"><b>Alignment</b></div>
+      <div class="form-item-entry">
+        <PowerSelect
+          @selected={{this.osr_rpg.alignment}}
+          @options={{this.allowedAlignments}}
+          @searchEnabled={{false}}
+          @onChange={{this.alignmentChanged}}
+          @placeholder="Select alignment..."
+          as |align|
+        >
+          {{align}}
+        </PowerSelect>
+      </div>
+    </div>
+
+    <div class="form-item">
+      <div class="form-item-label"><b>Ability Scores</b></div>
+      <div class="form-item-entry">
+
+        <div class="osr-rpg-roll-controls">
+          <div class="btn-group rpg-roll-mode" role="group">
+            <button
+              type="button"
+              class="btn btn-sm {{if (eq this.rollMode 'order') 'btn-primary' 'btn-secondary'}}"
+              disabled={{this.isRolling}}
+              {{on 'click' (fn this.rollModeChanged 'order')}}
+            >In order</button>
+            <button
+              type="button"
+              class="btn btn-sm {{if (eq this.rollMode 'pool') 'btn-primary' 'btn-secondary'}}"
+              disabled={{this.isRolling}}
+              {{on 'click' (fn this.rollModeChanged 'pool')}}
+            >Pool + assign</button>
+          </div>
+          {{#unless this.requireServerRolls}}
+            <label class="osr-rpg-server-roll-toggle">
+              <input type="checkbox" checked={{this.useServerRolls}} {{on 'change' this.useServerRollsChanged}} />
+              Use server rolls
+            </label>
+          {{else}}
+            <span class="cg-tip">Ability rolls are generated on the server. Scores can only be changed by rolling.</span>
+          {{/unless}}
+          {{#if (and this.lockAbilityScores (not this.requireServerRolls))}}
+            <span class="cg-tip">Scores can only be changed by rolling.</span>
+          {{/if}}
+        </div>
+
+        <div class="osr-rpg-dice-tray">
+          <div class="osr-rpg-roll-count">
+            <span class="cg-tip">Ability rolls: <b>{{this.abilityRollCount}}</b></span>
+          </div>
+          {{#if this.isPoolMode}}
+            <div class="osr-rpg-roll-toolbar">
+              <button class="btn btn-primary btn-sm" type="button" disabled={{this.isRolling}} {{on 'click' this.rollPool}}>
+                <i class="fa fa-dice-d6" aria-hidden="true"></i>
+                {{if this.isRolling 'Rolling...' 'Roll Pool'}}
+              </button>
+              <span class="cg-tip">Roll six 3d6 scores, then drag each onto an ability.</span>
+            </div>
+            {{#if this.scorePool}}
+              <div class="osr-rpg-score-pool">
+                {{#each this.unassignedPoolChips as |entry|}}
+                  <span
+                    class="osr-rpg-pool-chip rpg-pool-chip-draggable {{if (eq this.draggingPoolId entry.id) 'rpg-pool-chip-dragging'}}"
+                    draggable="true"
+                    title="{{entry.label}}"
+                    {{on 'dragstart' (fn this.poolChipDragStart entry)}}
+                    {{on 'dragend' this.poolChipDragEnd}}
+                  >
+                    {{entry.label}}
+                  </span>
+                {{/each}}
+              </div>
+            {{/if}}
+          {{else}}
+            <div class="osr-rpg-roll-toolbar">
+              <button class="btn btn-primary btn-sm" type="button" disabled={{this.isRolling}} {{on 'click' this.rollAllAbilities}}>
+                <i class="fa fa-dice-d6" aria-hidden="true"></i>
+                {{if this.isRolling 'Rolling...' 'Roll All'}}
+              </button>
+              <span class="cg-tip">3d6 each, in order.</span>
+            </div>
+          {{/if}}
+
+          {{#if this.selectedClass}}
+            {{#if this.unmetRequirementCount}}
+              <p class="osr-rpg-req-warning">{{this.unmetRequirementCount}} ability requirement(s) not met for {{this.selectedClass.name}}.</p>
+            {{/if}}
+          {{/if}}
+
+          <div class="row rpg-stat-grid">
+            {{#each this.abilityStats as |stat|}}
+              <div class="col-md-4 col-sm-6">
+                <div class="osr-rpg-stat-cell {{stat.cellClass}}" title={{stat.tooltip}}>
+                  <div class="osr-rpg-stat-header">
+                    <span class="osr-rpg-stat-label">{{stat.label}}</span>
+                    {{#unless this.isPoolMode}}
+                      <button
+                        type="button"
+                        class="btn btn-link btn-sm rpg-reroll-btn"
+                        title="Reroll {{stat.fullName}}"
+                        disabled={{this.isRolling}}
+                        {{on 'click' (fn this.rollOneAbility stat.key)}}
+                      >
+                        <i class="fa fa-dice-d6" aria-hidden="true"></i>
+                      </button>
+                    {{/unless}}
+                  </div>
+                  {{#if this.isPoolMode}}
+                    <div
+                      class="osr-rpg-pool-dropzone {{if stat.poolAssigned 'rpg-pool-dropzone-filled'}} {{if (eq this.dragOverAbility stat.key) 'rpg-drag-over'}}"
+                      {{on 'dragover' (fn this.abilityDragOver stat.key)}}
+                      {{on 'dragleave' (fn this.abilityDragLeave stat.key)}}
+                      {{on 'drop' (fn this.abilityDrop stat.key)}}
+                    >
+                      {{#if stat.score}}
+                        <span class="osr-rpg-stat-value">{{stat.score}}</span>
+                        {{#if stat.modStr}}
+                          <span class="osr-rpg-stat-mod">({{stat.modStr}})</span>
+                        {{/if}}
+                        <button type="button" class="btn btn-link btn-sm rpg-pool-clear" title="Clear assignment" {{on 'click' (fn this.clearPoolAssignmentAction stat.key)}}>×</button>
+                      {{else}}
+                        <span class="osr-rpg-pool-placeholder">Drop score here</span>
+                      {{/if}}
+                    </div>
+                  {{else}}
+                    <div class="osr-rpg-stat-score-row">
+                      {{#if this.lockAbilityScores}}
+                        <span class="osr-rpg-stat-value">{{if stat.score stat.score "—"}}</span>
+                        {{#if stat.modStr}}
+                          <span class="osr-rpg-stat-mod">({{stat.modStr}})</span>
+                        {{/if}}
+                      {{else}}
+                        <Input @type="number" @min={{3}} @max={{18}} class="form-control form-control-sm rpg-stat-input" @value={{stat.score}} {{on 'input' (fn this.abilityChanged stat.key)}} />
+                        {{#if stat.modStr}}
+                          <span class="osr-rpg-stat-mod">({{stat.modStr}})</span>
+                        {{/if}}
+                      {{/if}}
+                    </div>
+                  {{/if}}
+                  {{#if stat.breakdown}}
+                    <div class="osr-rpg-dice-breakdown">{{stat.breakdown}}</div>
+                  {{/if}}
+                  {{#if stat.failsMin}}
+                    <div class="osr-rpg-stat-hint">Min {{stat.min}} for class</div>
+                  {{/if}}
+                  {{#if stat.isPrime}}
+                    <div class="osr-rpg-stat-hint rpg-stat-hint-prime">Prime</div>
+                  {{/if}}
+                </div>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {{#if this.showThiefAllocator}}
+      <div class="form-item">
+        <div class="form-item-label"><b>Skill Expertise</b></div>
+        <div class="form-item-entry">
+          <p class="cg-tip">Allocate {{this.l1ExpertisePoints}} expertise points (+1-in-6 each, max 5-in-6).</p>
+          <p>Points remaining: <b>{{this.thiefPointsRemaining}}</b></p>
+          {{#each this.thiefAllocations as |alloc|}}
+            <div class="form-inline" style="margin-bottom: 8px;">
+              <label style="width: 200px;">{{alloc.name}}</label>
+              <Input @type="number" @min={{0}} @max={{4}} @value={{alloc.points}} {{on 'input' (fn this.thiefPointChanged alloc.key)}} />
+              <span class="text-muted">→ {{alloc.chance}}-in-6</span>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if this.showDivineSpellInfo}}
+      <div class="form-item">
+        <div class="form-item-label"><b>Spells</b></div>
+        <div class="form-item-entry">
+          <p class="cg-tip">Divine caster — full {{this.divineTraditionLabel}} spell list; prepare from list each day.</p>
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if this.showRestrictedSpellInfo}}
+      <div class="form-item">
+        <div class="form-item-label"><b>Spells</b></div>
+        <div class="form-item-entry">
+          <p class="cg-tip">L1 spell: <b>{{this.restrictedL1SpellLabel}}</b></p>
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if this.showSpellPicker}}
+      <div class="form-item">
+        <div class="form-item-label"><b>Spell Book (L1)</b></div>
+        <div class="form-item-entry">
+          <p class="cg-tip">Pick {{this.requiredSpellPicks}} level-1 spell(s) from your tradition.</p>
+          <p>Slots filled: <b>{{this.spellPicksFilled}}</b> / {{this.requiredSpellPicks}}</p>
+          {{#each this.spellPickSlots as |slot|}}
+            <div class="form-inline" style="margin-bottom: 8px;">
+              <label style="width: 120px;">Spell {{slot.index}}</label>
+              <select class="form-control form-control-sm" {{on 'change' (fn this.spellPickChanged slot.index)}}>
+                <option value="">— select —</option>
+                {{#each this.spellOptions as |spell|}}
+                  <option value={{spell}} selected={{eq slot.spell spell}}>{{spell}}</option>
+                {{/each}}
+              </select>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if this.sheetPreview}}
+      <hr>
+      <h4>Preview (Level 1)</h4>
+      <p>
+        <b>{{this.sheetPreview.className}}</b> ({{this.sheetPreview.race}})
+        —
+        {{#if this.sheetPreview.hpLabel}}
+          {{this.sheetPreview.hpLabel}},
+        {{else if this.sheetPreview.hp}}
+          HP {{this.sheetPreview.hp}}/{{this.sheetPreview.hpMax}},
+        {{else}}
+          HP —,
+        {{/if}}
+        THAC0 {{this.sheetPreview.thac0}}
+      </p>
+      {{#if this.sheetPreview.thiefSkills.length}}
+        <p>Skills: {{#each this.sheetPreview.thiefSkills as |sk|}}{{sk.name}} {{sk.chance}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+      {{/if}}
+      {{#if this.sheetPreview.spellSummary}}
+        <p>Spells: {{this.sheetPreview.spellSummary}}</p>
+      {{/if}}
+    {{/if}}
+
+  </div>
+</div>

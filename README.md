@@ -1,11 +1,11 @@
-# ares-rpg-plugin
+# ares-osr_rpg-plugin
 
-OSE (Old School Essentials) character creation for [AresMUSH](https://aresmush.com/) — race-as-class chargen with 24 Advanced Fantasy classes, d6 thief skills, web portal Sheet tab, and in-game `sheet` command.
+OSR RPG character creation for [AresMUSH](https://aresmush.com/) — race-as-class chargen with 24 Advanced Fantasy classes, d6 skill expertise, spell choices, class allowlists, web portal Sheet tab, and in-game `sheet` command.
 
 ## Requirements
 
 - AresMUSH 2.x with the web portal installed
-- For OSE games, disable FS3 skills/combat (recommended):
+- For OSR games, disable FS3 skills/combat (recommended):
 
 ```yaml
 # game/config/plugins.yml
@@ -16,25 +16,27 @@ disabled_plugins:
 
 ## Install
 
+**Repo name must be `ares-osr_rpg-plugin`** so the Ares installer derives plugin key `osr_rpg`.
+
 From in-game (admin):
 
 ```
-plugin/install https://github.com/Mudpuppy12/ares-rpg-plugin
+plugin/install https://github.com/Mudpuppy12/ares-osr_rpg-plugin
 ```
 
 Or from the shell on your game server:
 
 ```bash
 cd aresmush
-bundle exec rake add_plugin[https://github.com/Mudpuppy12/ares-rpg-plugin]
+bundle exec rake add_plugin[https://github.com/Mudpuppy12/ares-osr_rpg-plugin]
 ```
 
 The installer will:
 
-1. Copy `plugin/` → `aresmush/plugins/rpg/`
+1. Copy `plugin/` → `aresmush/plugins/osr_rpg/`
 2. Copy `game/config/` → `aresmush/game/config/` (first install only)
 3. Copy `webportal/` → your web portal `app/` directory
-4. Add `rpg` to `plugins.extras` in `plugins.yml`
+4. Add `osr_rpg` to `plugins.extras` in `plugins.yml`
 5. Rebuild the web portal
 
 ## Manual steps
@@ -46,59 +48,79 @@ These cannot be automated by the plugin importer.
 Edit `aresmush/plugins/chargen/custom_app_review.rb` and add at the top of `custom_app_review`:
 
 ```ruby
-if Manage.is_extra_installed?("rpg")
-  return Rpg.app_review(char)
+if Manage.is_extra_installed?("osr_rpg")
+  return OsrRpg.app_review(char)
 end
 ```
 
 ### 2. Reload
 
 ```
-load rpg
+load osr_rpg
 ```
 
 Or restart the game server.
 
-### 3. Verify
+### 3. Dice roll sound (web chargen)
 
-- Web chargen shows a **Sheet** tab (with `rpg` in extras)
+Copy the bundled sound into your web portal public directory:
+
+```bash
+mkdir -p ares-webportal/public/sounds
+cp ares-osr_rpg-plugin/public/sounds/osr-rpg-dice.mp3 ares-webportal/public/sounds/
+```
+
+The web chargen dice tray plays this clip when rolling abilities.
+
+### 4. Verify
+
+- Web chargen shows a **Sheet** tab (with `osr_rpg` in extras)
 - Save a character with class, alignment, and ability scores
-- In-game: `sheet` displays the OSE character sheet
-- App review includes an **OSE Sheet** section
+- In-game: `osr_rpg/roll`, `osr_rpg/finish`, and `sheet` work for telnet chargen
+- App review includes an **OSR Sheet** section
 
 ## What's included
 
 | Component | Description |
 |-----------|-------------|
 | **24 classes** | 13 human, 10 demihuman, 1 supplemental (Necromancer) |
-| **OSE config** | `ose.yml` + split class/spell YAML (deep-merged at boot) |
-| **Web UI** | `RpgChargen` and `RpgProfile` Ember components |
-| **Commands** | `sheet [name]` |
-| **d6 thief skills** | Thief L1 expertise allocator; base 1-in-6 for skill classes |
+| **OSR config** | `osr.yml` + split class/spell YAML (deep-merged at boot) |
+| **Class allowlist** | `osr_rpg.allowed_classes` in `osr_rpg.yml` (empty = all) |
+| **Spell choices** | Arcane L1 spell picker; divine full-list access; Drow auto-Darkness |
+| **d6 skill expertise** | L1 allocator for Thief, Acrobat, Assassin, Half-Orc; `osr_rpg/skills` for level-up |
+| **Web UI** | `OsrRpgChargen` and `OsrRpgProfile` Ember components |
+| **Commands** | `osr_rpg/*` chargen commands, `sheet [name]` |
 
 ## Customization
 
-- **`game/config/rpg.yml`** — `rpg_blurb`, `public_sheets`, shortcuts
-- **`game/config/ose*.yml`** — class progressions, spells, house rules
-- Regenerate config (maintainers): `ruby scripts/generate_ose_config.rb`
+- **`game/config/osr_rpg.yml`** — `osr_rpg_blurb`, `allowed_classes`, `public_sheets`, `hp_per_level`, `require_server_rolls`, shortcuts, permissions
+- **`game/config/osr*.yml`** — class progressions, spells, house rules
+- Regenerate config (maintainers): `ruby scripts/generate_osr_config.rb`
+
+## Upgrading from ares-rpg-plugin (OSE)
+
+If upgrading from the legacy `rpg` / OSE plugin:
+
+1. Remove `rpg` from `plugins.extras` and delete `aresmush/plugins/rpg/` if present
+2. Install this plugin and run `load osr_rpg`
+3. Run game migrations (or restart) so `ose_*` character fields copy to `osr_*`
+4. Rebuild the web portal
 
 ## Upgrading
 
 Re-running `plugin/install` updates `plugin/` and `webportal/` but **does not overwrite** `game/config/` if the plugin was previously installed (to preserve local edits).
 
-To pick up new OSE YAML on upgrade:
-
-1. Compare release notes / diff `game/config/` in this repo
-2. Manually merge changes into your game's `aresmush/game/config/ose*.yml`
+To pick up new OSR YAML on upgrade, manually merge changes from this repo's `game/config/` into your game.
 
 ## Repository layout
 
 ```
-ares-rpg-plugin/
-├── plugin/           → aresmush/plugins/rpg/
+ares-osr_rpg-plugin/
+├── plugin/           → aresmush/plugins/osr_rpg/
 ├── game/config/      → aresmush/game/config/
 ├── webportal/        → ares-webportal/app/
-└── scripts/          → maintainer tools (generate_ose_config.rb)
+├── public/sounds/    → ares-webportal/public/sounds/
+└── scripts/          → maintainer tools (generate_osr_config.rb)
 ```
 
 ## Development
@@ -108,7 +130,7 @@ Source game / reference implementation: [ose-ares](https://github.com/OSE/ose-ar
 Sync from ose-ares dev workspace:
 
 ```bash
-./scripts/sync_rpg_plugin_repo.sh /path/to/ares-rpg-plugin
+./scripts/sync_osr_rpg_plugin_repo.sh /path/to/ares-osr_rpg-plugin
 ```
 
 ## License

@@ -4,7 +4,7 @@
 %xb<%= sheet[:class_name] %>%xn (<%= sheet[:race] %>) - Level <%= sheet[:level] %>
 Alignment: <%= sheet[:alignment] %>
 HP: <%= sheet[:hp] %>/<%= sheet[:hp_max] %>  THAC0: <%= sheet[:thac0] %>  HD: <%= sheet[:hd_display] %>
-XP: <%= sheet[:xp] %> (<%= sheet[:xp_bonus] %>% bonus)  Gold: <%= sheet[:starting_gold] %> gp
+XP: <%= sheet[:xp] %><% if sheet[:xp_to_next_level] %> (next level at <%= sheet[:xp_to_next_level] %>)<% end %> (<%= sheet[:xp_bonus] %>% bonus)  Gold: <%= sheet[:starting_gold] %> gp
 <% sheet[:abilities].each do |a| %>
 <%= a[:name] %> <%= a[:score] %> (<%= a[:modifier] >= 0 ? '+' : '' %><%= a[:modifier] %>)
 <% end %>
@@ -14,10 +14,22 @@ Saves: Death <%= sheet[:saves]['death'] %>, Wands <%= sheet[:saves]['wands'] %>,
 <% if sheet[:spell_slots] && !sheet[:spell_slots].empty? %>
 Spell Slots: <% sheet[:spell_slots].each do |lvl, n| %>L<%= lvl %>:<%= n %> <% end %>
 <% end %>
+<% if sheet[:casting_type] == 'divine' && sheet[:spell_tradition] %>
+Spells: Full <%= sheet[:spell_tradition] %> list access
+<% end %>
+<% if sheet[:spell_book] && !sheet[:spell_book].empty? %>
+<% l1 = sheet[:spell_book]['1'] || sheet[:spell_book][1] %>
+<% if l1 && !l1.empty? %>
+<% if sheet[:casting_type] == 'arcane' %>Spell Book L1: <% else %>L1 Spell: <% end %><%= l1.join(', ') %>
+<% end %>
+<% end %>
+<% if sheet[:expertise_unspent].to_i > 0 %>
+Skill expertise unspent: <%= sheet[:expertise_unspent] %>
+<% end %>
 <% if sheet[:thief_skills] && !sheet[:thief_skills].empty? %>
 Skills: <% sheet[:thief_skills].each do |sk| %><%= sk[:name] %> <%= sk[:chance] %><% end %>
 <% end %>
 <% else %>
-No OSE sheet configured.
+No OSR sheet configured.
 <% end %>
 %lf

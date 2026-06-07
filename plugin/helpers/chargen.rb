@@ -1,18 +1,200 @@
 module AresMUSH
-  module Rpg
+  module OsrRpg
     module Chargen
       def self.save_char(char, data)
-        alerts = []
+        merge_ability_roll_count(char, data['ability_roll_count'])
+
         class_key = data['class']
         alignment = data['alignment']
         scores = normalize_scores(data['ability_scores'] || {})
         thief_skills = data['thief_skills'] || {}
+        spell_book = data['spell_book'] || {}
 
-        alerts.concat validate(class_key, alignment, scores, thief_skills)
+        alerts = validate(char, class_key, alignment, scores, thief_skills, spell_book)
         return alerts if alerts.any?
 
-        apply_sheet(char, class_key, alignment, scores, thief_skills)
+        apply_sheet(char, class_key, alignment, scores, thief_skills, spell_book)
         []
+      end
+
+      def self.set_class(char, key)
+        return t('osr_rpg.invalid_class', class: key) if key.blank?
+        return t('osr_rpg.invalid_class', class: key) if Tables.class_config(key).nil?
+        return t('osr_rpg.class_not_allowed', class: key) unless Tables.class_allowed?(key)
+        char.update(osr_class: key.to_s)
+        nil
+      end
+
+      def self.class_change_allowed?(char, class_key)
+        return true if Tables.class_allowed?(class_key)
+        char.osr_class.to_s == class_key.to_s
+      end
+
+      def self.set_alignment(char, value)
+        return t('osr_rpg.alignment_not_set') if value.blank?
+        char.update(osr_alignment: value.to_s)
+        nil
+      end
+
+      def self.increment_ability_roll_count(char, by: 1)
+        count = (char.osr_ability_roll_count || 0) + by
+        char.update(osr_ability_roll_count: count)
+        count
+      end
+
+      def self.merge_ability_roll_count(char, submitted)
+        return if submitted.nil?
+
+        current = char.osr_ability_roll_count || 0
+        new_count = [submitted.to_i, current].max
+        char.update(osr_ability_roll_count: new_count) if new_count > current
+      end
+
+      def self.roll_abilities(char, abilities = nil)
+        increment_ability_roll_count(char)
+        to_roll = abilities || Tables.abilities
+        scores = (char.osr_ability_scores || {}).dup
+        rolled = {}
+        to_roll.each do |ab|
+          key = ab.to_s
+          score = Tables.roll_3d6
+          scores[key] = score
+          rolled[key] = score
+        end
+        char.update(osr_ability_scores: scores)
+        rolled
+      end
+
+      def self.set_abilities(char, scores_hash)
+        scores = (char.osr_ability_scores || {}).dup
+        errors = []
+        scores_hash.each do |ab, val|
+          key = ab.to_s
+          unless Tables.abilities.include?(key)
+            errors << t('osr_rpg.invalid_ability', ability: ab)
+            next
+          end
+          score = val.to_i
+          if score < 3 || score > 18
+            errors << t('osr_rpg.invalid_ability_score', ability: key.upcase, score: score)
+            next
+          end
+          scores[key] = score
+        end
+        return errors if errors.any?
+        char.update(osr_ability_scores: scores)
+        []
+      end
+
+      def self.set_thief_allocations(char, allocations)
+        cfg = Tables.class_config(char.osr_class)
+        return [t('osr_rpg.thief_class_required')] unless cfg && Tables.val(cfg, 'skill_system') == 'd6'
+
+        allowed = Tables.skill_set_for_class(char.osr_class)
+        stored = (char.osr_thief_skills || {}).dup
+        errors = []
+
+        allocations.each do |skill, points|
+          key = Tables.normalize_key(skill)
+          unless allowed.include?(key)
+            errors << t('osr_rpg.invalid_thief_skill', skill: skill)
+            next
+          end
+          pts = points.to_i
+          if pts < 0 || pts > 4
+            errors << t('osr_rpg.invalid_thief_points', skill: key, points: pts)
+            next
+          end
+          stored[key] = pts
+        end
+
+        return errors if errors.any?
+        char.update(osr_thief_skills: stored)
+        []
+      end
+
+      def self.finish_char(char)
+        class_key = char.osr_class
+        alignment = char.osr_alignment
+        scores = normalize_scores(char.osr_ability_scores || {})
+        thief_skills = thief_allocations_for_finish(char)
+        spell_book = char.osr_spell_book || {}
+
+        alerts = validate(char, class_key, alignment, scores, thief_skills, spell_book)
+        return alerts if alerts.any?
+
+        apply_sheet(char, class_key, alignment, scores, thief_skills, spell_book)
+        []
+      end
+
+      def self.reset_char(char)
+        char.update(
+          osr_class: nil,
+          osr_level: 1,
+          osr_xp: 0,
+          osr_alignment: nil,
+          osr_ability_scores: {},
+          osr_hp: nil,
+          osr_hp_max: nil,
+          osr_thac0: nil,
+          osr_saving_throws: {},
+          osr_spell_slots: {},
+          osr_spell_book: {},
+          osr_spell_tradition: nil,
+          osr_thief_skills: {},
+          osr_thief_expertise_unspent: 0,
+          osr_starting_gold: nil,
+          osr_xp_bonus: 0,
+          osr_ability_roll_count: 0
+        )
+      end
+
+      def self.spend_expertise(char, allocations)
+        cfg = Tables.class_config(char.osr_class)
+        return [t('osr_rpg.thief_class_required')] unless cfg && Tables.val(cfg, 'skill_system') == 'd6'
+        return [t('osr_rpg.no_sheet_for_levelup')] unless CommandHelpers.sheet_applied?(char)
+
+        allowed = Tables.skill_set_for_class(char.osr_class)
+        stored = (char.osr_thief_skills || {}).dup
+        unspent = char.osr_thief_expertise_unspent || 0
+        errors = []
+        cost = 0
+
+        allocations.each do |skill, points|
+          key = Tables.normalize_key(skill)
+          unless allowed.include?(key)
+            errors << t('osr_rpg.invalid_thief_skill', skill: skill)
+            next
+          end
+          pts = points.to_i
+          if pts < 0
+            errors << t('osr_rpg.invalid_thief_points', skill: key, points: pts)
+            next
+          end
+          cost += pts
+          next if pts == 0
+          current = stored[key].to_i
+          if current + pts > Tables.max_thief_chance
+            errors << t('osr_rpg.thief_skill_too_high', skill: key.titleize, max: Tables.max_thief_chance)
+            next
+          end
+          stored[key] = current + pts
+        end
+
+        return errors if errors.any?
+        return [t('osr_rpg.expertise_unspent_insufficient', unspent: unspent, cost: cost)] if cost > unspent
+
+        char.update(osr_thief_skills: stored, osr_thief_expertise_unspent: unspent - cost)
+        []
+      end
+
+      def self.thief_allocations_for_finish(char)
+        return {} if char.osr_thief_skills.blank?
+        if CommandHelpers.sheet_applied?(char)
+          thief_allocations_from_stored(char)
+        else
+          char.osr_thief_skills.transform_values { |v| v.to_i }
+        end
       end
 
       def self.normalize_scores(raw)
@@ -21,34 +203,37 @@ module AresMUSH
         end
       end
 
-      def self.validate(class_key, alignment, scores, thief_skills)
+      def self.validate(char, class_key, alignment, scores, thief_skills, spell_book = {})
         alerts = []
         cfg = Tables.class_config(class_key)
 
         if class_key.blank?
-          alerts << t('rpg.class_not_set')
+          alerts << t('osr_rpg.class_not_set')
           return alerts
         end
         if cfg.nil?
-          alerts << t('rpg.invalid_class', class: class_key)
+          alerts << t('osr_rpg.invalid_class', class: class_key)
           return alerts
         end
+        unless class_change_allowed?(char, class_key)
+          alerts << t('osr_rpg.class_not_allowed', class: class_key)
+        end
         if alignment.blank?
-          alerts << t('rpg.alignment_not_set')
+          alerts << t('osr_rpg.alignment_not_set')
         elsif !Tables.allowed_alignments(class_key).include?(alignment)
-          alerts << t('rpg.invalid_alignment', alignment: alignment)
+          alerts << t('osr_rpg.invalid_alignment', alignment: alignment)
         end
 
         Tables.abilities.each do |ab|
           if scores[ab].nil? || scores[ab] == 0
-            alerts << t('rpg.ability_not_set', ability: ab.upcase)
+            alerts << t('osr_rpg.ability_not_set', ability: ab.upcase)
           end
         end
 
         (Tables.val(cfg, 'min_scores') || {}).each do |ab, min|
           score = scores[ab].to_i
           if score > 0 && score < min.to_i
-            alerts << t('rpg.min_score_failed', ability: ab.upcase, score: score, min: min, class: Tables.val(cfg, 'name'))
+            alerts << t('osr_rpg.min_score_failed', ability: ab.upcase, score: score, min: min, class: Tables.val(cfg, 'name'))
           end
         end
 
@@ -56,48 +241,103 @@ module AresMUSH
           alerts.concat validate_thief_allocation(thief_skills, Tables.val(cfg, 'l1_expertise_points').to_i)
         end
 
+        alerts.concat validate_spell_book(class_key, spell_book)
+
         alerts
+      end
+
+      def self.validate_spell_book(class_key, spell_book)
+        alerts = []
+        casting = Tables.casting_type(class_key)
+        book = spell_book || {}
+        l1_picks = book['1'] || book[1] || []
+
+        case casting
+        when 'arcane'
+          required = Tables.l1_spell_slot_count(class_key)
+          picks = Array(l1_picks).map(&:to_s).reject(&:blank?)
+          if picks.length != required
+            alerts << t('osr_rpg.spell_picks_wrong', required: required, picked: picks.length)
+          end
+          tradition = Tables.spell_tradition(class_key)
+          valid = (Tables.spells_for_tradition(tradition)['1'] || []).map(&:to_s)
+          picks.each do |name|
+            alerts << t('osr_rpg.invalid_spell', spell: name) unless valid.include?(name)
+          end
+          if picks.uniq.length != picks.length
+            alerts << t('osr_rpg.duplicate_spell_pick')
+          end
+        when 'restricted'
+          required = Tables.restricted_l1_spells(class_key)
+          picks = Array(l1_picks).map(&:to_s)
+          if picks.sort != required.sort
+            alerts << t('osr_rpg.restricted_spells_wrong', required: required.join(', '))
+          end
+        when 'divine', nil
+          if l1_picks.present?
+            alerts << t('osr_rpg.spell_book_not_allowed')
+          end
+        end
+        alerts
+      end
+
+      def self.resolve_spell_book(class_key, spell_book)
+        casting = Tables.casting_type(class_key)
+        case casting
+        when 'restricted'
+          { '1' => Tables.restricted_l1_spells(class_key) }
+        when 'arcane'
+          book = spell_book || {}
+          { '1' => (book['1'] || book[1] || []).map(&:to_s) }
+        else
+          {}
+        end
       end
 
       def self.validate_thief_allocation(thief_skills, required_points)
         alerts = []
         spent = thief_skills.values.map(&:to_i).sum
         if spent != required_points
-          alerts << t('rpg.thief_points_wrong', points: required_points, spent: spent)
+          alerts << t('osr_rpg.thief_points_wrong', points: required_points, spent: spent)
         end
         base = Tables.base_thief_chance
         max = Tables.max_thief_chance
         thief_skills.each do |skill, points|
           chance = base + points.to_i
           if chance > max
-            alerts << t('rpg.thief_skill_too_high', skill: skill.titleize, max: max)
+            alerts << t('osr_rpg.thief_skill_too_high', skill: skill.titleize, max: max)
           end
         end
         alerts
       end
 
-      def self.apply_sheet(char, class_key, alignment, scores, thief_skills)
+      def self.apply_sheet(char, class_key, alignment, scores, thief_skills, spell_book = {})
         cfg = Tables.class_config(class_key)
         row = Tables.progression_row(class_key, 1)
         con_mod = Tables.ability_modifier(scores['con'])
-        hp = Tables.roll_hd(Tables.val(cfg, 'hd'), con_mod)
+        hp = Tables.hp_gain(Tables.val(cfg, 'hd'), con_mod)
 
         final_thief_skills = build_thief_skills(class_key, thief_skills)
+        final_spell_book = resolve_spell_book(class_key, spell_book)
+        tradition = Tables.spell_tradition(class_key)
 
         char.update(
-          ose_class: class_key,
-          ose_level: 1,
-          ose_xp: 0,
-          ose_alignment: alignment,
-          ose_ability_scores: scores,
-          ose_hp: hp,
-          ose_hp_max: hp,
-          ose_thac0: row ? Tables.val(row, 'thac0') : nil,
-          ose_saving_throws: row ? (Tables.val(row, 'saves') || {}) : {},
-          ose_spell_slots: row ? (Tables.val(row, 'spell_slots') || {}) : {},
-          ose_thief_skills: final_thief_skills,
-          ose_xp_bonus: Tables.prime_req_xp_bonus(class_key, scores),
-          ose_starting_gold: char.ose_starting_gold || Tables.roll_starting_gold
+          osr_class: class_key,
+          osr_level: 1,
+          osr_xp: 0,
+          osr_alignment: alignment,
+          osr_ability_scores: scores,
+          osr_hp: hp,
+          osr_hp_max: hp,
+          osr_thac0: row ? Tables.val(row, 'thac0') : nil,
+          osr_saving_throws: row ? (Tables.val(row, 'saves') || {}) : {},
+          osr_spell_slots: row ? (Tables.val(row, 'spell_slots') || {}) : {},
+          osr_spell_book: final_spell_book,
+          osr_spell_tradition: tradition,
+          osr_thief_skills: final_thief_skills,
+          osr_thief_expertise_unspent: 0,
+          osr_xp_bonus: Tables.prime_req_xp_bonus(class_key, scores),
+          osr_starting_gold: char.osr_starting_gold || Tables.roll_starting_gold
         )
       end
 
@@ -117,27 +357,49 @@ module AresMUSH
 
       def self.sheet_for_web_editing(char, _enactor)
         scores = Tables.abilities.each_with_object({}) do |ab, h|
-          h[ab] = char.ose_ability_scores[ab]
+          h[ab] = char.osr_ability_scores[ab]
+        end
+        class_key = char.osr_class
+        tradition = class_key ? Tables.spell_tradition(class_key) : nil
+        casting = class_key ? Tables.casting_type(class_key) : nil
+        spell_lists = {}
+        if tradition && casting == 'arcane'
+          all_spells = Tables.spells_for_tradition(tradition)
+          spell_lists = { '1' => all_spells['1'] || all_spells[1] || [] }
         end
         {
-          class: char.ose_class,
-          alignment: char.ose_alignment,
+          class: class_key,
+          alignment: char.osr_alignment,
           ability_scores: scores,
-          thief_skills: char.ose_thief_skills,
+          thief_skills: char.osr_thief_skills,
           thief_skill_allocations: thief_allocations_from_stored(char),
+          spell_book: char.osr_spell_book || {},
+          casting_type: casting,
+          l1_spell_slots: class_key ? Tables.l1_spell_slot_count(class_key) : 0,
+          l1_spells: class_key ? Tables.restricted_l1_spells(class_key) : [],
+          spell_lists: spell_lists,
           class_groups: Tables.grouped_classes_for_web,
           alignments: Tables.alignments,
           abilities: Tables.abilities,
           thief_skill_defs: thief_skill_defs,
           l1_expertise_points: Tables.l1_expertise_points,
+          ability_modifiers: Global.read_config('osr', 'ability_modifiers') || {},
+          require_server_rolls: Global.read_config('osr_rpg', 'require_server_rolls') != false,
+          ability_roll_count: char.osr_ability_roll_count || 0,
+          hp_per_level: Tables.hp_per_level_mode,
           sheet: build_sheet_display(char)
         }
       end
 
       def self.thief_allocations_from_stored(char)
-        base = Tables.base_thief_chance
-        char.ose_thief_skills.each_with_object({}) do |(skill, chance), h|
-          h[skill] = [chance.to_i - base, 0].max
+        return {} if char.osr_thief_skills.blank?
+        if CommandHelpers.sheet_applied?(char)
+          base = Tables.base_thief_chance
+          char.osr_thief_skills.each_with_object({}) do |(skill, chance), h|
+            h[skill] = [chance.to_i - base, 0].max
+          end
+        else
+          char.osr_thief_skills.transform_values { |v| v.to_i }
         end
       end
 
@@ -152,18 +414,18 @@ module AresMUSH
       end
 
       def self.build_sheet_display(char)
-        class_key = char.ose_class
+        class_key = char.osr_class
         cfg = Tables.class_config(class_key)
-        row = Tables.progression_row(class_key, char.ose_level || 1)
-        tradition = Tables.spell_tradition(class_key)
+        row = Tables.progression_row(class_key, char.osr_level || 1)
+        tradition = char.osr_spell_tradition || Tables.spell_tradition(class_key)
+        casting = Tables.casting_type(class_key)
+        spell_book = char.osr_spell_book || {}
         spells = tradition ? Tables.spells_for_tradition(tradition) : {}
 
-        thief_display = char.ose_thief_skills.map do |skill, chance|
-          { key: skill, name: skill.titleize.gsub('In ', 'in '), chance: "#{chance}-in-6" }
-        end
+        thief_display = build_thief_display(char)
 
         ability_display = Tables.abilities.map do |ab|
-          score = char.ose_ability_scores[ab].to_i
+          score = char.osr_ability_scores[ab].to_i
           {
             key: ab,
             name: ab.upcase,
@@ -172,30 +434,56 @@ module AresMUSH
           }
         end
 
+        xp_status = Leveling.xp_status(char)
+
         {
           class_key: class_key,
           class_name: cfg ? Tables.val(cfg, 'name') : nil,
           race: cfg ? Tables.val(cfg, 'race') : nil,
           group: cfg ? Tables.val(cfg, 'group') : nil,
-          level: char.ose_level || 1,
-          xp: char.ose_xp || 0,
-          xp_bonus: char.ose_xp_bonus || 0,
-          alignment: char.ose_alignment,
+          level: char.osr_level || 1,
+          xp: char.osr_xp || 0,
+          xp_bonus: char.osr_xp_bonus || 0,
+          max_level: xp_status[:max_level],
+          xp_to_next_level: xp_status[:xp_to_next_level],
+          can_level_up: xp_status[:can_level_up],
+          alignment: char.osr_alignment,
           hd: cfg ? Tables.val(cfg, 'hd') : nil,
-          hp: char.ose_hp,
-          hp_max: char.ose_hp_max,
-          thac0: char.ose_thac0,
-          saves: char.ose_saving_throws,
-          spell_slots: char.ose_spell_slots,
+          hp: char.osr_hp,
+          hp_max: char.osr_hp_max,
+          thac0: char.osr_thac0,
+          saves: char.osr_saving_throws,
+          spell_slots: char.osr_spell_slots,
           spell_tradition: tradition,
+          casting_type: casting,
+          spell_book: spell_book,
+          expertise_unspent: char.osr_thief_expertise_unspent || 0,
           spells: spells,
           thief_skills: thief_display,
           abilities: ability_display,
-          starting_gold: char.ose_starting_gold,
+          starting_gold: char.osr_starting_gold,
           blurb: cfg ? Tables.val(cfg, 'blurb') : nil,
           playtest: cfg ? Tables.val(cfg, 'playtest') : nil,
           hd_display: row ? Tables.val(row, 'hd') : nil
         }
+      end
+
+      def self.build_thief_display(char)
+        return [] if char.osr_thief_skills.blank?
+
+        base = Tables.base_thief_chance
+        char.osr_thief_skills.map do |skill, value|
+          chance = if CommandHelpers.sheet_applied?(char)
+                     value.to_i
+                   else
+                     base + value.to_i
+                   end
+          {
+            key: skill,
+            name: skill.titleize.gsub('In ', 'in '),
+            chance: "#{chance}-in-6"
+          }
+        end
       end
 
       def self.app_review(char)
@@ -203,13 +491,13 @@ module AresMUSH
         sheet = build_sheet_display(char)
 
         if sheet[:class_name].blank?
-          return AresMUSH::Chargen.format_review_status 'OSE Sheet', t('rpg.class_not_set')
+          return AresMUSH::Chargen.format_review_status 'OSR Sheet', t('osr_rpg.class_not_set')
         end
 
         lines << "%xg#{sheet[:class_name]}%xn (#{sheet[:race]}) - Level #{sheet[:level]}"
         lines << "Alignment: #{sheet[:alignment] || 'Not set'}"
-        lines << "HP: #{sheet[:hp]}/#{sheet[:hp_max]}  THAC0: #{sheet[:thac0]}  XP Bonus: #{sheet[:xp_bonus]}%"
-        lines << "Gold: #{sheet[:starting_gold]} gp"
+        lines << "HP: #{sheet[:hp] || '?'}/#{sheet[:hp_max] || '?'}  THAC0: #{sheet[:thac0] || '?'}  XP Bonus: #{sheet[:xp_bonus]}%"
+        lines << "Gold: #{sheet[:starting_gold] || '?'} gp"
 
         if sheet[:abilities]
           ab_line = sheet[:abilities].map do |a|
@@ -230,13 +518,26 @@ module AresMUSH
           lines << "Spell slots: #{slots}"
         end
 
+        if sheet[:casting_type] == 'arcane' && sheet[:spell_book].present?
+          l1 = sheet[:spell_book]['1'] || sheet[:spell_book][1] || []
+          lines << "Spell book L1: #{l1.join(', ')}" if l1.any?
+        elsif sheet[:casting_type] == 'divine' && sheet[:spell_tradition]
+          lines << "Divine caster — full #{sheet[:spell_tradition].to_s.titleize} list"
+        elsif sheet[:casting_type] == 'restricted' && sheet[:spell_book].present?
+          l1 = sheet[:spell_book]['1'] || sheet[:spell_book][1] || []
+          lines << "L1 spell: #{l1.join(', ')}" if l1.any?
+        end
+
         if sheet[:thief_skills] && !sheet[:thief_skills].empty?
           skills = sheet[:thief_skills].map { |sk| "#{sk[:name]} #{sk[:chance]}" }.join(', ')
           lines << "Skills: #{skills}"
         end
 
+        roll_count = char.osr_ability_roll_count || 0
+        lines << "Ability rolls used: #{roll_count}" if roll_count > 0
+
         status = lines.join('%r')
-        AresMUSH::Chargen.format_review_status 'OSE Sheet', status
+        AresMUSH::Chargen.format_review_status 'OSR Sheet', status
       end
     end
   end

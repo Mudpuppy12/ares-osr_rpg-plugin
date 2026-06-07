@@ -1,5 +1,5 @@
 ---
-ose:
+osr:
   classes:
     fighter:
       group: human
@@ -756,6 +756,7 @@ ose:
       - hide_in_shadows
       - move_silently
       - tightrope_walking
+      l1_expertise_points: 4
       blurb: Agile performer and climber.
       progression:
       - :level: 1
@@ -910,6 +911,7 @@ ose:
       skill_set:
       - hide_in_shadows
       - move_silently
+      l1_expertise_points: 4
       alignment_restrictions:
       - Neutrality
       - Chaos

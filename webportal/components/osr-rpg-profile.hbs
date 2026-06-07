@@ -1,11 +1,11 @@
 <div id="systemrpg" class="tab-pane fade">
-  <div class="tab-cover">OSE Sheet</div>
+  <div class="tab-cover">OSR Sheet</div>
 
   {{#if this.sheet.class_name}}
     <h4>{{this.sheet.class_name}} ({{this.sheet.race}})</h4>
     <p>Level {{this.sheet.level}} | Alignment: {{this.sheet.alignment}}</p>
     <p>HP: {{this.sheet.hp}}/{{this.sheet.hp_max}} | THAC0: {{this.sheet.thac0}} | HD: {{this.sheet.hd_display}}</p>
-    <p>XP: {{this.sheet.xp}} ({{this.sheet.xp_bonus}}% bonus) | Gold: {{this.sheet.starting_gold}} gp</p>
+    <p>XP: {{this.sheet.xp}}{{#if this.sheet.xp_to_next_level}} (next level at {{this.sheet.xp_to_next_level}}){{/if}} ({{this.sheet.xp_bonus}}% bonus) | Gold: {{this.sheet.starting_gold}} gp</p>
 
     {{#if this.sheet.abilities}}
       <p>
@@ -27,6 +27,35 @@
       </p>
     {{/if}}
 
+    {{#if (eq this.sheet.casting_type "divine")}}
+      <p>Spells: Full {{this.sheet.spell_tradition}} list access</p>
+    {{/if}}
+
+    {{#if this.sheet.spell_book}}
+      {{#each-in this.sheet.spell_book as |lvl spells|}}
+        {{#if (eq lvl "1")}}
+          {{#if (eq this.sheet.casting_type "arcane")}}
+            <p>Spell Book L1:
+              {{#each spells as |spell|}}
+                {{spell}}{{#unless @last}}, {{/unless}}
+              {{/each}}
+            </p>
+          {{/if}}
+          {{#if (eq this.sheet.casting_type "restricted")}}
+            <p>L1 Spell:
+              {{#each spells as |spell|}}
+                {{spell}}{{#unless @last}}, {{/unless}}
+              {{/each}}
+            </p>
+          {{/if}}
+        {{/if}}
+      {{/each-in}}
+    {{/if}}
+
+    {{#if (gt this.sheet.expertise_unspent 0)}}
+      <p>Skill expertise unspent: {{this.sheet.expertise_unspent}}</p>
+    {{/if}}
+
     {{#if this.sheet.thief_skills}}
       <p>Skills:
         {{#each this.sheet.thief_skills as |sk|}}
@@ -39,6 +68,6 @@
       <p class="text-warning"><i>Playtest class</i></p>
     {{/if}}
   {{else}}
-    <p><i>No OSE sheet configured.</i></p>
+    <p><i>No OSR sheet configured.</i></p>
   {{/if}}
 </div>
