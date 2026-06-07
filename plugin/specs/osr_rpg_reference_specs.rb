@@ -21,7 +21,11 @@ module AresMUSH
           '1' => { 'magic_missile' => { 'name' => 'Magic Missile', 'description' => '1d6+1 unerring damage.' } }
         })
         allow(Global).to receive(:read_config).with('osr', 'equipment').and_return({
-          'armor' => { 'leather' => { 'name' => 'Leather', 'ac' => 7, 'cost' => 20 } },
+          'armor' => {
+            'none' => { 'name' => 'Unarmored', 'ac' => 0, 'cost' => 0 },
+            'leather' => { 'name' => 'Leather', 'ac' => 2, 'cost' => 20 },
+            'shield' => { 'name' => 'Shield', 'ac_bonus' => 1, 'cost' => 10 }
+          },
           'weapons' => { 'sword' => { 'name' => 'Sword', 'damage' => '1d8', 'cost' => 10 } },
           'missile_weapons' => { 'short_bow' => { 'name' => 'Short Bow', 'damage' => '1d6', 'cost' => 15 } },
           'adventuring_gear' => { 'torch' => { 'name' => 'Torch', 'cost' => 1 } }
@@ -86,9 +90,12 @@ module AresMUSH
       end
 
       describe 'ReferenceData.equipment_for_web' do
-        it 'returns categorized equipment lists' do
+        it 'returns categorized equipment lists with ascending AC display' do
           result = ReferenceData.equipment_for_web
-          expect(result[:armor].first[:name]).to eq 'Leather'
+          expect(result[:armor].map { |a| a[:name] }).to eq ['Unarmored', 'Leather', 'Shield']
+          expect(result[:armor].first[:ac_display]).to eq '0'
+          expect(result[:armor][1][:ac_display]).to eq '2'
+          expect(result[:armor].last[:ac_display]).to eq '+1'
           expect(result[:weapons].first[:damage]).to eq '1d8'
           expect(result[:missile_weapons].first[:name]).to eq 'Short Bow'
           expect(result[:adventuring_gear].first[:name]).to eq 'Torch'

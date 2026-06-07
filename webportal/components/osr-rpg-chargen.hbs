@@ -327,7 +327,7 @@
                   {{#unless (eq item.key 'none')}}
                   <tr>
                     <td>{{item.name}}</td>
-                    {{#if (eq section.key 'armor')}}<td>{{item.ac}}{{#if item.ac_bonus}}+{{item.ac_bonus}}{{/if}}</td>{{/if}}
+                    {{#if (eq section.key 'armor')}}<td>{{item.ac_display}}</td>{{/if}}
                     {{#if (or (eq section.key 'weapons') (eq section.key 'missile_weapons'))}}<td>{{item.damage}}</td>{{/if}}
                     <td>{{item.cost}} gp</td>
                     <td><b>{{this.cartQty item.key}}</b></td>

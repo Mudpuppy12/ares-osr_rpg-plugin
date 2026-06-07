@@ -80,24 +80,41 @@ module AresMUSH
         end
       end
 
+      def self.format_ac_display(entry)
+        ac = entry['ac'] || entry[:ac]
+        return ac.to_s unless ac.nil?
+
+        bonus = entry['ac_bonus'] || entry[:ac_bonus]
+        return nil if bonus.nil?
+
+        bonus = bonus.to_i
+        bonus >= 0 ? "+#{bonus}" : bonus.to_s
+      end
+
       def self.build_equipment_list(hash, sort_by_ac: false)
         return [] unless hash
 
         rows = hash.map do |key, data|
           entry = data.is_a?(Hash) ? data : {}
+          ac = entry['ac'] || entry[:ac]
+          ac_bonus = entry['ac_bonus'] || entry[:ac_bonus]
           {
             key: key.to_s,
             name: entry['name'] || key.to_s.titleize,
             cost: entry['cost'],
             damage: entry['damage'],
-            ac: entry['ac'],
-            ac_bonus: entry['ac_bonus'],
+            ac: ac,
+            ac_bonus: ac_bonus,
+            ac_display: format_ac_display(entry),
             notes: entry['notes']
           }
         end
 
         if sort_by_ac
-          rows.sort_by { |row| [row[:ac].nil? ? 999 : row[:ac].to_i, row[:name].to_s.downcase] }
+          rows.sort_by do |row|
+            sort_ac = row[:ac].nil? ? (row[:ac_bonus] ? 50 : 999) : row[:ac].to_i
+            [sort_ac, row[:name].to_s.downcase]
+          end
         else
           rows.sort_by { |row| row[:name].to_s.downcase }
         end

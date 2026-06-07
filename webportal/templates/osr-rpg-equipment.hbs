@@ -20,9 +20,7 @@
     {{#each this.model.armor as |item|}}
     <tr>
       <td>{{item.name}}</td>
-      <td>
-        {{#if item.ac}}{{item.ac}}{{else}}{{#if item.ac_bonus}}{{item.ac_bonus}}{{else}}—{{/if}}{{/if}}
-      </td>
+      <td>{{#if item.ac_display}}{{item.ac_display}}{{else}}—{{/if}}</td>
       <td>{{#if item.cost}}{{item.cost}}{{else}}—{{/if}}</td>
       <td>{{item.notes}}</td>
     </tr>
