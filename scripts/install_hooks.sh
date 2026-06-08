@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Install OSR RPG Ares custom hook files (V2 install). Run after plugin/install.
+# Install OSR RPG Ares custom hook files. Run after plugin/install.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

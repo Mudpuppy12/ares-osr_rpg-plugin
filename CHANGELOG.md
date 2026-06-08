@@ -2,13 +2,12 @@
 
 ## Unreleased
 
-V2 hook-based install — fewer core file edits.
+Hook-based install — fewer core file edits.
 
 - **`scripts/install_hooks.sh`** — installs Ares custom hook files (server + portal), styles, and `custom-routes.js` entries
 - **`webportal/hooks/`** and **`game/hooks/`** — live scene Play menu, chargen/profile/char-card tabs, `custom_char_fields`, `custom_char_card`, `custom_app_review`
 - Components accept sheet data via `char.osr_rpg` or `char.custom.osr_rpg`; live scene Character Sheet opens via `sceneCard` when not wired to parent
-- **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)** — V2 hook install first; V1 legacy manual patches deprecated
-- Branch **`release/v1-manual-install`** — frozen V1 manual-patch baseline (`a04bb8d`)
+- **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)** — hook install guide; manual core patches kept as reference appendix
 - Example [`game/config/website.osr_rpg.example.yml`](game/config/website.osr_rpg.example.yml)
 
 ## v3.5.0 — 2026-06-08

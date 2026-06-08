@@ -20,14 +20,7 @@ disabled_plugins:
 
 **Repo name must be `ares-osr_rpg-plugin`** so the Ares installer derives plugin key `osr_rpg`.
 
-> **Important:** `plugin/install` copies plugin files only. After Step 1, run **`scripts/install_hooks.sh`** (V2 install) or apply manual core patches from **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)** (V1 legacy). Without one of these, web chargen, profile sheet, live-scene rolls, and reference pages will not work.
-
-### Install versions
-
-| Version | Branch | Method |
-|---------|--------|--------|
-| **V2** (recommended) | `main` | `plugin/install` + `scripts/install_hooks.sh` — uses [Ares custom hook files](https://aresmush.com/tutorials/code/hooks/) |
-| **V1** (frozen) | `release/v1-manual-install` | `plugin/install` + manual edits per [CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md) (legacy) |
+> **Important:** `plugin/install` copies plugin files only. After Step 1, run **`scripts/install_hooks.sh`** so web chargen, profile sheet, live-scene rolls, and reference pages work. See **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)**.
 
 ### Step 1 — Run the plugin installer
 
@@ -61,7 +54,7 @@ bundle exec rake add_plugin[https://github.com/Mudpuppy12/ares-osr_rpg-plugin]
 
 The installer does not copy Ares **custom hook files**, merge routes/styles, or edit `website.yml`. Step 2 handles that.
 
-### Step 2 — Install hooks (V2, recommended)
+### Step 2 — Install hooks
 
 From your game server, after `plugin/install`:
 
@@ -85,10 +78,6 @@ Backs up non-empty hook files before overwriting. Then `load osr_rpg` and rebuil
 
 **Still manual (game-specific):** merge [`game/config/website.osr_rpg.example.yml`](game/config/website.osr_rpg.example.yml) into `website.yml`; set `demographics.yml` and gallery groups. Optional: `scene-create.hbs` / `play.hbs` shop links — see [CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md).
 
-### Step 2 (alternate) — V1 manual core patches
-
-Games on branch **`release/v1-manual-install`** or those that prefer editing core files: follow the **Legacy manual patches** section in **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)**.
-
 ### Manual install (without `plugin/install`)
 
 If you clone the repo by hand:
@@ -103,7 +92,7 @@ mkdir -p ares-webportal/public/sounds
 cp ares-osr_rpg-plugin/public/sounds/osr-rpg-dice.mp3 ares-webportal/public/sounds/
 ```
 
-Add `osr_rpg` to `plugins.extras` in `plugins.yml`, run `scripts/install_hooks.sh` (or apply V1 patches from [CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)), rebuild the portal, and run `load osr_rpg`.
+Add `osr_rpg` to `plugins.extras` in `plugins.yml`, run `scripts/install_hooks.sh`, rebuild the portal, and run `load osr_rpg`.
 
 ---
 
@@ -291,7 +280,7 @@ plugin/install https://github.com/Mudpuppy12/ares-osr_rpg-plugin
 
 That updates plugin server code and copied portal files (components, routes, templates) and rebuilds the portal. It **does not overwrite** `game/config/` on re-install, to preserve local edits.
 
-**Manual core patches are not re-applied on upgrade.** Your edits persist, but you must **re-check** them when a release adds new routes, menu items, or patch changes. Re-run `scripts/install_hooks.sh` after `plugin/install` on upgrade. Review [`CHANGELOG.md`](CHANGELOG.md) and [CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md) for hook or legacy patch changes.
+Re-run `scripts/install_hooks.sh` after `plugin/install` on upgrade. Review [`CHANGELOG.md`](CHANGELOG.md) and [CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md) for hook or config changes.
 
 Merge any new YAML from this repo's `game/config/` into your game on upgrade (installer skips `game/config/` on re-install) — common files: `osr_spell_details.yml`, `osr_equipment.yml`, `osr_shop.yml`, `osr_rpg.yml`, `osr_spells.yml`.
 
@@ -310,12 +299,12 @@ ares-osr_rpg-plugin/
 ├── game/hooks/          → server hook Ruby files (install_hooks.sh)
 ├── public/sounds/       → ares-webportal/public/sounds/      (auto)
 ├── styles/              → game/styles/ via install_hooks.sh
-├── scripts/install_hooks.sh → V2 hook installer
-├── CORE_ARES_PATCHES.md → V2 hook install + V1 legacy patches
+├── scripts/install_hooks.sh → hook installer
+├── CORE_ARES_PATCHES.md → hook install + manual patch reference
 └── scripts/             → maintainer tools
 ```
 
-Install details: **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)**. V1 frozen branch: **`release/v1-manual-install`**.
+Install details: **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)**.
 
 ## Development
 
