@@ -3,7 +3,7 @@ module AresMUSH
     module Combat
       def self.for_scene(scene)
         return nil unless scene
-        record = OsrRpgSceneCombat.all.find { |r| r.scene_id == scene.id }
+        record = OsrRpgSceneCombat.find(scene_id: scene.id).first
         return record if record
 
         OsrRpgSceneCombat.create(scene: scene, active: false, combatants: [])

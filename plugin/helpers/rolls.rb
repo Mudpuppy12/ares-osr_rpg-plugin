@@ -29,6 +29,10 @@ module AresMUSH
         end
       end
 
+      def self.format_modifier(mod)
+        mod >= 0 ? " + #{mod}" : " - #{mod.abs}"
+      end
+
       def self.roll_attack(char, target_ac: nil)
         roll = rand(1..20)
         thac0 = char.osr_thac0
@@ -128,7 +132,7 @@ module AresMUSH
                      name: char.name,
                      ability: ab.upcase,
                      roll: roll,
-                     mod: mod >= 0 ? "+#{mod}" : mod.to_s,
+                     mod: format_modifier(mod),
                      total: total,
                      target: target,
                      result: result_text)

@@ -98,6 +98,22 @@ module AresMUSH
           expect(result[:modifier]).to eq 1
           expect(result[:total]).to eq result[:roll] + 1
         end
+
+        it 'formats scene message without OSR prefix and with spaced modifier' do
+          result = Rolls.roll_ability_check(@char, 'str', 11)
+          expect(result[:message]).not_to include('OSR Roll')
+          expect(result[:message]).to match(/\ATester STR check: d20\(\d+\) \+ 1 = \d+ vs 11 - (SUCCESS|FAILURE)\z/)
+        end
+      end
+
+      describe 'format_modifier' do
+        it 'formats positive modifiers with leading space' do
+          expect(Rolls.format_modifier(1)).to eq ' + 1'
+        end
+
+        it 'formats negative modifiers with leading space' do
+          expect(Rolls.format_modifier(-2)).to eq ' - 2'
+        end
       end
 
       describe 'roll_generic' do

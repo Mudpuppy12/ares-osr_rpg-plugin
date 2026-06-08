@@ -308,6 +308,36 @@
   font-size: 0.85rem;
 }
 
+/* ---- Live scene: system rolls (OOC-like box with System badge) ---- */
+
+#live-scene-log .scene-system-pose {
+  background-color: $box-background-color;
+  color: $text-color;
+  padding: 5px;
+  margin: 0 0 10px 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-style: normal;
+
+  &::before {
+    content: "System";
+    flex-shrink: 0;
+    background-color: $secondary-color;
+    border: 1px solid $border-color;
+    border-radius: 50rem;
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+    font-weight: 700;
+    margin: 0.4em 0.5em 0 0;
+    line-height: 1;
+  }
+
+  p {
+    margin: 5px;
+  }
+}
+
 /* ---- OSR live scene ---- */
 
 .osr-rpg-scene-dice-tray {

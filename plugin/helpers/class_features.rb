@@ -133,7 +133,7 @@ module AresMUSH
           message: t('osr_rpg.scene_roll_track',
                      name: char.name,
                      roll: roll,
-                     mod: mod >= 0 ? "+#{mod}" : mod.to_s,
+                     mod: Rolls.format_modifier(mod),
                      total: total,
                      target: target,
                      result: success ? t('osr_rpg.roll_success') : t('osr_rpg.roll_failure'))
