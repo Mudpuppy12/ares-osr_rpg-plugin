@@ -96,3 +96,9 @@
     </div>
   </div>
 </BsModalSimple>
+
+<BsModalSimple @title="Character Sheet" @closeTitle="Close" @open={{this.showCharCardModal}} @onHide={{this.hideCharCardModal}}>
+  {{#if this.characterCardChar}}
+    <CharCardOsrRpg @char={{this.characterCardChar}} />
+  {{/if}}
+</BsModalSimple>

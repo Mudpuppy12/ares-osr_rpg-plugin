@@ -1,0 +1,17 @@
+# Merge these entries into aresmush/game/config/website.yml (game-specific).
+# Set gallery groups to match your demographics.yml group names.
+---
+website:
+  character_gallery_group: Kingdom
+  character_gallery_subgroup: Region
+  top_navbar:
+  - title: Play
+    menu:
+    - title: Equipment Shop
+      route: osr-rpg-shop
+  - title: System
+    menu:
+    - title: Spell Lists
+      route: osr-rpg-spells
+    - title: Equipment List
+      route: osr-rpg-equipment

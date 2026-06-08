@@ -1,19 +1,79 @@
-# Core Ares Patches for OSR RPG
-
-`plugin/install` copies plugin files only. It **never** edits core AresMUSH or web portal source. Apply every patch in this document by hand after running the installer.
+# Core Ares Integration for OSR RPG
 
 **Prerequisite:** complete [Step 1 in README.md](README.md#install) (`plugin/install`).
 
-**After patching:**
-
-| Change type | Command |
-|-------------|---------|
-| Server Ruby files | `load osr_rpg` in-game, or restart the game server |
-| Portal JS/HBS/routes/styles | `cd ares-webportal && bin/deploy` (or your game's portal rebuild) |
+| Install version | Branch | Method |
+|-----------------|--------|--------|
+| **V2** (recommended) | `main` | `scripts/install_hooks.sh` — [V2 hook install](#v2-hook-install-recommended) |
+| **V1** (legacy) | `release/v1-manual-install` | Hand-edit core files — [Legacy manual patches](#legacy-manual-patches-v1) |
 
 ---
 
-## File index
+## V2 hook install (recommended)
+
+Uses [Ares custom hook files](https://aresmush.com/tutorials/code/hooks/) (the same extension points documented for char-cards, scene Play menu, and custom char fields). No edits to core `chargen-char.hbs`, `profile-system.*`, `live-scene-control.*`, or `char-card.hbs`.
+
+### Run the installer
+
+```bash
+ARESMUSH_PATH=/path/to/aresmush WEBPORTAL_PATH=/path/to/ares-webportal ./scripts/install_hooks.sh
+```
+
+Run from this plugin repo after `plugin/install`. Re-run after plugin upgrades (backs up non-empty existing hook files).
+
+### What the script installs
+
+| Destination | Plugin source |
+|-------------|---------------|
+| `aresmush/plugins/chargen/custom_app_review.rb` | `game/hooks/chargen/` |
+| `aresmush/plugins/profile/custom_char_fields.rb` | `game/hooks/profile/` |
+| `aresmush/plugins/scenes/custom_char_card.rb` | `game/hooks/scenes/` |
+| `ares-webportal/app/components/live-scene-custom-play.*` | `webportal/hooks/` |
+| `ares-webportal/app/components/chargen-custom*` | `webportal/hooks/` |
+| `ares-webportal/app/components/profile-custom*` | `webportal/hooks/` |
+| `ares-webportal/app/components/char-card-custom-tabs*` | `webportal/hooks/` |
+| `aresmush/game/styles/osr_rpg_chargen.scss` | `styles/` |
+| `custom-routes.js` (four `osr-rpg-*` routes) | merged if missing |
+
+### Still manual (game-specific)
+
+| File | Action |
+|------|--------|
+| `game/config/website.yml` | Merge [website.osr_rpg.example.yml](game/config/website.osr_rpg.example.yml); set `character_gallery_group` / `character_gallery_subgroup` to match `demographics.yml` |
+| `game/config/demographics.yml` | OSE example groups (Kingdom, Region, Profession) — your setting |
+| `chargen-char.js` | Optional: save/review guardrails so shop cart survives validation failures ([legacy section](#portal--chargen-controller)) |
+| `scene-create.hbs` / `play.hbs` | Optional shop shortcut links |
+
+### After hooks
+
+| Change type | Command |
+|-------------|---------|
+| Server hook Ruby files | `load osr_rpg` or restart game server |
+| Portal hooks / routes / styles | `cd ares-webportal && bin/deploy` |
+
+### V2 checklist
+
+- [ ] `plugin/install` completed
+- [ ] `scripts/install_hooks.sh` completed without errors
+- [ ] `website.yml` System + Play menus; gallery groups match demographics
+- [ ] `load osr_rpg` on game server
+- [ ] Portal rebuilt
+- [ ] Web chargen **Sheet** tab (custom hook); profile **Sheet** tab; live scene Play menu; Character Card sheet tab
+- [ ] System → Spell Lists, Equipment List; Play → Equipment Shop
+
+### Multi-plugin games
+
+`custom_char_fields.rb` and `custom_char_card.rb` are single files per game. If you already use them for another system, merge OSR logic from `game/hooks/` into your existing hooks instead of overwriting blindly (the install script backs up files over 200 bytes).
+
+---
+
+## Legacy manual patches (V1)
+
+> **Deprecated** for new installs. Frozen on branch **`release/v1-manual-install`**. Use when you cannot use hook files or need the old core-integration style.
+
+`plugin/install` does not edit core AresMUSH or web portal source. Apply every patch below by hand.
+
+### V1 file index
 
 | Core file | Required | If skipped |
 |-----------|----------|------------|
@@ -441,9 +501,9 @@ Replace the FS3 **sheet** review step with OSR guidance:
 
 ---
 
-## Fresh install checklist
+## V1 fresh install checklist
 
-After `plugin/install` and all required patches above:
+After `plugin/install` and all required legacy patches above:
 
 - [ ] `custom_app_review.rb` calls `OsrRpg.app_review`
 - [ ] `chargen/helpers.rb` calls `OsrRpg.save_char`
@@ -477,7 +537,9 @@ After `plugin/install` and all required patches above:
 
 ## Upgrade re-check
 
-`plugin/install` updates plugin code and copied portal files but **does not** re-apply or overwrite manual core patches. On upgrade:
+**V2:** Re-run `plugin/install`, then `scripts/install_hooks.sh`. Merge `game/config/` YAML manually on re-install (installer skips config overwrite).
+
+**V1 legacy:** `plugin/install` updates plugin code but **does not** re-apply manual core patches. On upgrade:
 
 1. Run `plugin/install` (see [Upgrading](README.md#upgrading) in README).
 2. Review [CHANGELOG.md](CHANGELOG.md) for new manual steps.

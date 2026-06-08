@@ -12,16 +12,18 @@ const SAVE_CATEGORIES = [
 export default Component.extend({
   tagName: '',
 
-  sheet: computed('char.osr_rpg', function() {
-    return this.get('char.osr_rpg') || {};
+  sheet: computed('char.osr_rpg', 'char.custom.osr_rpg', function() {
+    return this.get('char.osr_rpg') || this.get('char.custom.osr_rpg') || {};
   }),
 
-  equipmentList: computed('char.osr_rpg.equipment.[]', function() {
-    return this.get('char.osr_rpg.equipment') || [];
+  equipmentList: computed('char.osr_rpg', 'char.custom.osr_rpg', 'char.osr_rpg.equipment.[]', 'char.custom.osr_rpg.equipment.[]', function() {
+    let sheet = this.get('char.osr_rpg') || this.get('char.custom.osr_rpg') || {};
+    return sheet.equipment || [];
   }),
 
-  inventoryList: computed('char.osr_rpg.inventory.[]', function() {
-    return this.get('char.osr_rpg.inventory') || [];
+  inventoryList: computed('char.osr_rpg', 'char.custom.osr_rpg', 'char.osr_rpg.inventory.[]', 'char.custom.osr_rpg.inventory.[]', function() {
+    let sheet = this.get('char.osr_rpg') || this.get('char.custom.osr_rpg') || {};
+    return sheet.inventory || [];
   }),
 
   hasEquipmentSection: computed('equipmentList.[]', 'inventoryList.[]', function() {

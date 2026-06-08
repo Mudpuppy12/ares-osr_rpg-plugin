@@ -20,7 +20,14 @@ disabled_plugins:
 
 **Repo name must be `ares-osr_rpg-plugin`** so the Ares installer derives plugin key `osr_rpg`.
 
-> **Important:** `plugin/install` copies plugin files only. It does **not** edit core AresMUSH or web portal files. Web chargen, profile sheet, live-scene rolls, Character Card sheet, reference pages, and the post-chargen shop **will not work** until you complete **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)**. Treat those patches as part of the install, not an optional extra.
+> **Important:** `plugin/install` copies plugin files only. After Step 1, run **`scripts/install_hooks.sh`** (V2 install) or apply manual core patches from **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)** (V1 legacy). Without one of these, web chargen, profile sheet, live-scene rolls, and reference pages will not work.
+
+### Install versions
+
+| Version | Branch | Method |
+|---------|--------|--------|
+| **V2** (recommended) | `main` | `plugin/install` + `scripts/install_hooks.sh` — uses [Ares custom hook files](https://aresmush.com/tutorials/code/hooks/) |
+| **V1** (frozen) | `release/v1-manual-install` | `plugin/install` + manual edits per [CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md) (legacy) |
 
 ### Step 1 — Run the plugin installer
 
@@ -52,24 +59,35 @@ bundle exec rake add_plugin[https://github.com/Mudpuppy12/ares-osr_rpg-plugin]
 
 #### What `plugin/install` does **not** do
 
-The installer never modifies core game or portal source. You must patch these by hand — see **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)** for every file, exact snippets, and a verification checklist.
+The installer does not copy Ares **custom hook files**, merge routes/styles, or edit `website.yml`. Step 2 handles that.
 
-| Area | Core files (summary) |
-|------|----------------------|
-| Server | Chargen hooks (`custom_app_review.rb`, `helpers.rb`, web request handlers), scene `web_data.rb` |
-| Portal | Chargen controller/template, profile, live scene, Character Card, `custom-routes.js` |
-| Game config | `website.yml`, `demographics.yml` (game-specific) |
-| Styles | Merge `styles/osr_rpg_chargen.scss` into `custom_style.scss` |
-| Optional UX | `scene-create.hbs`, `play.hbs`, `chargen.yml` review step |
+### Step 2 — Install hooks (V2, recommended)
 
-### Step 2 — Apply core Ares patches (required)
+From your game server, after `plugin/install`:
 
-Open **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)** and apply every required patch. That guide includes:
+```bash
+cd ares-osr_rpg-plugin   # or clone the repo beside aresmush/
+ARESMUSH_PATH=/path/to/aresmush WEBPORTAL_PATH=/path/to/ares-webportal ./scripts/install_hooks.sh
+```
 
-- A file index (required vs optional, symptoms if skipped)
-- Copy-paste snippets for each core file
-- Post-patch commands (`load osr_rpg`, `bin/deploy`)
-- Fresh-install checklist and upgrade re-check list
+The script installs:
+
+| Target | Source |
+|--------|--------|
+| `plugins/chargen/custom_app_review.rb` | `game/hooks/chargen/` |
+| `plugins/profile/custom_char_fields.rb` | `game/hooks/profile/` |
+| `plugins/scenes/custom_char_card.rb` | `game/hooks/scenes/` |
+| Portal hook components (`live-scene-custom-play`, `chargen-custom`, `profile-custom`, `char-card-custom-tabs`, …) | `webportal/hooks/` |
+| `game/styles/osr_rpg_chargen.scss` + `@import` in `custom_style.scss` | `styles/` |
+| Four `osr-rpg-*` routes in `custom-routes.js` | merged if missing |
+
+Backs up non-empty hook files before overwriting. Then `load osr_rpg` and rebuild the portal if routes/styles changed.
+
+**Still manual (game-specific):** merge [`game/config/website.osr_rpg.example.yml`](game/config/website.osr_rpg.example.yml) into `website.yml`; set `demographics.yml` and gallery groups. Optional: `scene-create.hbs` / `play.hbs` shop links — see [CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md).
+
+### Step 2 (alternate) — V1 manual core patches
+
+Games on branch **`release/v1-manual-install`** or those that prefer editing core files: follow the **Legacy manual patches** section in **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)**.
 
 ### Manual install (without `plugin/install`)
 
@@ -85,7 +103,7 @@ mkdir -p ares-webportal/public/sounds
 cp ares-osr_rpg-plugin/public/sounds/osr-rpg-dice.mp3 ares-webportal/public/sounds/
 ```
 
-Add `osr_rpg` to `plugins.extras` in `plugins.yml`, complete **all** patches in [CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md), rebuild the portal, and run `load osr_rpg`.
+Add `osr_rpg` to `plugins.extras` in `plugins.yml`, run `scripts/install_hooks.sh` (or apply V1 patches from [CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)), rebuild the portal, and run `load osr_rpg`.
 
 ---
 
@@ -273,7 +291,7 @@ plugin/install https://github.com/Mudpuppy12/ares-osr_rpg-plugin
 
 That updates plugin server code and copied portal files (components, routes, templates) and rebuilds the portal. It **does not overwrite** `game/config/` on re-install, to preserve local edits.
 
-**Manual core patches are not re-applied on upgrade.** Your edits persist, but you must **re-check** them when a release adds new routes, menu items, or patch changes. Follow the *Upgrade re-check* section in **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)** and review [`CHANGELOG.md`](CHANGELOG.md) for new manual steps.
+**Manual core patches are not re-applied on upgrade.** Your edits persist, but you must **re-check** them when a release adds new routes, menu items, or patch changes. Re-run `scripts/install_hooks.sh` after `plugin/install` on upgrade. Review [`CHANGELOG.md`](CHANGELOG.md) and [CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md) for hook or legacy patch changes.
 
 Merge any new YAML from this repo's `game/config/` into your game on upgrade (installer skips `game/config/` on re-install) — common files: `osr_spell_details.yml`, `osr_equipment.yml`, `osr_shop.yml`, `osr_rpg.yml`, `osr_spells.yml`.
 
@@ -285,16 +303,19 @@ ares-osr_rpg-plugin/
 ├── game/config/         → aresmush/game/config/              (auto, first install only)
 ├── webportal/
 │   ├── components/      → ares-webportal/app/components/     (auto)
-│   ├── routes/          → ares-webportal/app/routes/         (auto; register in custom-routes.js)
+│   ├── hooks/           → Ares custom hook files (install_hooks.sh)
+│   ├── routes/          → ares-webportal/app/routes/         (auto)
 │   ├── templates/       → ares-webportal/app/templates/       (auto)
 │   └── patches/         → stubs linking to CORE_ARES_PATCHES.md
+├── game/hooks/          → server hook Ruby files (install_hooks.sh)
 ├── public/sounds/       → ares-webportal/public/sounds/      (auto)
-├── styles/              → merge into custom_style.scss       (manual — see CORE_ARES_PATCHES.md)
-├── CORE_ARES_PATCHES.md → manual core Ares edits (required install step)
-└── scripts/             → maintainer tools (not installed)
+├── styles/              → game/styles/ via install_hooks.sh
+├── scripts/install_hooks.sh → V2 hook installer
+├── CORE_ARES_PATCHES.md → V2 hook install + V1 legacy patches
+└── scripts/             → maintainer tools
 ```
 
-All core file paths and patch content live in **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)**.
+Install details: **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)**. V1 frozen branch: **`release/v1-manual-install`**.
 
 ## Development
 

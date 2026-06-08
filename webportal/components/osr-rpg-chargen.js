@@ -68,6 +68,18 @@ export default Component.extend({
     this.bootstrapShopData();
   },
 
+  setOsrRpgData(osr) {
+    if (this.get('model.char.custom')) {
+      this.set('model.char.custom.osr_rpg', osr);
+    } else {
+      this.set('model.char.osr_rpg', osr);
+    }
+  },
+
+  currentOsrRpgData() {
+    return this.get('model.char.osr_rpg') || this.get('model.char.custom.osr_rpg') || {};
+  },
+
   async bootstrapShopData() {
     let budget = this.get('osr_rpg.starting_gold');
     if (budget != null && budget > 0) {
@@ -83,16 +95,20 @@ export default Component.extend({
         return;
       }
       if (response && response.starting_gold > 0) {
-        let osr = { ...(this.get('model.char.osr_rpg') || {}), ...response };
-        this.set('model.char.osr_rpg', osr);
+        let osr = { ...this.currentOsrRpgData(), ...response };
+        this.setOsrRpgData(osr);
       }
     } catch (_e) {
       // Shop will stay empty until chargen reloads.
     }
   },
 
-  osr_rpg: computed('model.char.osr_rpg', function() {
-    return this.get('model.char.osr_rpg') || {};
+  osr_rpg: computed('model.char.osr_rpg', 'model.char.custom.osr_rpg', function() {
+    return this.get('model.char.osr_rpg') || this.get('model.char.custom.osr_rpg') || {};
+  }),
+
+  osrRpgBlurb: computed('model.cgInfo.osr_rpg_blurb', 'osr_rpg.osr_rpg_blurb', function() {
+    return this.get('model.cgInfo.osr_rpg_blurb') || this.get('osr_rpg.osr_rpg_blurb') || '';
   }),
 
   requireServerRolls: computed('osr_rpg.require_server_rolls', function() {
@@ -809,13 +825,13 @@ export default Component.extend({
       }
       if (response) {
         let osr = {
-          ...(this.get('model.char.osr_rpg') || {}),
+          ...this.currentOsrRpgData(),
           ...response,
           class: this.get('osr_rpg.class'),
           inventory: {},
           equipment: []
         };
-        this.set('model.char.osr_rpg', osr);
+        this.setOsrRpgData(osr);
         this.set('shopCart', {});
       }
     } catch (_e) {

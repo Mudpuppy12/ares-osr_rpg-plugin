@@ -24,6 +24,8 @@ export default Component.extend({
   showAbilityRoll: false,
   showGenericRoll: false,
   showCombatTracker: false,
+  showCharCardModal: false,
+  characterCardChar: null,
 
   sheet: null,
   combat: null,
@@ -194,7 +196,23 @@ export default Component.extend({
     }
     if (this.onShowCharCard) {
       this.onShowCharCard(name);
+      return;
     }
+    this.gameApi.requestOne('sceneCard', { char: name }, null)
+      .then((response) => {
+        if (response.error) {
+          this.flashMessages.danger(response.error);
+          return;
+        }
+        this.set('characterCardChar', response);
+        this.set('showCharCardModal', true);
+      });
+  },
+
+  @action
+  hideCharCardModal() {
+    this.set('showCharCardModal', false);
+    this.set('characterCardChar', null);
   },
 
   @action
