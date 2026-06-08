@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+Easier hook install — portal hooks auto-deployed, in-game installer.
+
+- Portal hook components moved to `webportal/components/` — `plugin/install` copies them automatically
+- **`osr_rpg/install`** — in-game admin command installs server hooks, routes, styles, and merges `website.yml` nav
+- **`osr_rpg/install_check`** — verify hook install from in-game
+- **`scripts/install_all.sh`** — `--check` and `--deploy` flags; `check_hooks.sh` for shell verification
+- **Sidebar hook** — `sidebar-custom.hbs` + `custom_web_data.rb` for OSR quick links (no core `play.hbs` edits)
+- **`demographics.osr_rpg.example.yml`** — OSE example groups aligned with website config
+- `install_hooks.sh` auto-merges `website.yml` Play/System nav entries
+
 Hook-first install documentation — no core Ares edits required.
 
 - **[INSTALL.md](INSTALL.md)** — slim hook install + game config guide (replaces manual core patch appendix)

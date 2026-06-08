@@ -20,7 +20,7 @@ disabled_plugins:
 
 **Repo name must be `ares-osr_rpg-plugin`** so the Ares installer derives plugin key `osr_rpg`.
 
-OSR RPG uses [Ares custom hook files](https://aresmush.com/tutorials/code/hooks/) — **do not edit core Ares or web portal source** (`live-scene-control`, `chargen-char`, `profile-system`, `char-card`, `chargen/helpers.rb`, etc.). Hooks only; duplicate blocks cause double menus and tabs.
+OSR RPG uses [Ares custom hook files](https://aresmush.com/tutorials/code/custom-hooks.html) — **do not edit core Ares or web portal source** (`live-scene-control`, `chargen-char`, `profile-system`, `char-card`, `chargen/helpers.rb`, etc.). Hooks only; duplicate blocks cause double menus and tabs.
 
 Full details: **[INSTALL.md](INSTALL.md)**.
 
@@ -39,29 +39,36 @@ cd aresmush
 bundle exec rake add_plugin[https://github.com/Mudpuppy12/ares-osr_rpg-plugin]
 ```
 
-This copies server code, web components/routes/templates, sounds, and game config (first install only), registers the plugin, and rebuilds the portal.
+This copies server code, portal hook components (`chargen-custom*`, `profile-custom*`, etc.), routes/templates, sounds, and game config (first install only), registers the plugin, and rebuilds the portal.
 
-### Step 2 — Hooks, routes, and styles
+### Step 2 — Server hooks, routes, and config
 
-After `plugin/install`, from this repo:
+After `plugin/install`, in-game:
+
+```
+osr_rpg/install
+```
+
+Or from shell:
 
 ```bash
 ARESMUSH_PATH=/path/to/aresmush WEBPORTAL_PATH=/path/to/ares-webportal ./scripts/install_all.sh
 ```
 
-`install_all.sh` runs `install_hooks.sh`, which copies server and portal hook files, merges `custom-routes.js`, and installs styles. Required for web chargen, profile sheet, live-scene rolls, and reference pages.
+This installs server hooks, merges `custom-routes.js` and `website.yml` nav entries, and installs styles. Portal hook components were already copied in Step 1.
 
-### Step 3 — Game config
+### Step 3 — Demographics
 
-Merge [`game/config/website.osr_rpg.example.yml`](game/config/website.osr_rpg.example.yml) into `website.yml` and align gallery groups with `demographics.yml`. See [INSTALL.md](INSTALL.md).
+Verify [`demographics.yml`](game/config/demographics.osr_rpg.example.yml) groups match your `website.yml` gallery settings. See [INSTALL.md](INSTALL.md).
 
 ### Step 4 — Load and verify
 
 ```
 load osr_rpg
+osr_rpg/install_check
 ```
 
-Rebuild the portal if hooks or routes changed (`cd ares-webportal && bin/deploy`). Confirm chargen Sheet tab, profile Sheet tab, live scene Play menu, and System reference pages.
+Rebuild the portal if routes or styles changed (`cd ares-webportal && bin/deploy`, or `install_all.sh --deploy`).
 
 ---
 
@@ -249,7 +256,7 @@ plugin/install https://github.com/Mudpuppy12/ares-osr_rpg-plugin
 
 That updates plugin server code and copied portal files (components, routes, templates) and rebuilds the portal. It **does not overwrite** `game/config/` on re-install, to preserve local edits.
 
-Re-run `scripts/install_hooks.sh` (or `install_all.sh`) after `plugin/install` on upgrade. Review [`CHANGELOG.md`](CHANGELOG.md) and [INSTALL.md](INSTALL.md) for hook or config changes.
+Re-run `osr_rpg/install` (or `install_all.sh`) after `plugin/install` on upgrade. Review [`CHANGELOG.md`](CHANGELOG.md) and [INSTALL.md](INSTALL.md) for hook or config changes.
 
 Merge any new YAML from this repo's `game/config/` into your game on upgrade (installer skips `game/config/` on re-install) — common files: `osr_spell_details.yml`, `osr_equipment.yml`, `osr_shop.yml`, `osr_rpg.yml`, `osr_spells.yml`.
 
@@ -260,15 +267,15 @@ ares-osr_rpg-plugin/
 ├── plugin/              → aresmush/plugins/osr_rpg/          (auto)
 ├── game/config/         → aresmush/game/config/              (auto, first install only)
 ├── webportal/
-│   ├── components/      → ares-webportal/app/components/     (auto)
-│   ├── hooks/           → Ares custom hook files (install_hooks.sh)
+│   ├── components/      → OSR components + portal hook files (auto)
 │   ├── routes/          → ares-webportal/app/routes/         (auto)
 │   └── templates/       → ares-webportal/app/templates/       (auto)
-├── game/hooks/          → server hook Ruby files (install_hooks.sh)
+├── game/hooks/          → server hook Ruby sources (osr_rpg/install)
+├── plugin/install/      → bundled hook assets for osr_rpg/install
 ├── public/sounds/       → ares-webportal/public/sounds/      (auto)
-├── styles/              → game/styles/ via install_hooks.sh
-├── scripts/install_hooks.sh → hook installer
-├── scripts/install_all.sh   → post-install wrapper
+├── styles/              → game/styles/ via osr_rpg/install
+├── scripts/install_hooks.sh → shell hook installer
+├── scripts/install_all.sh   → post-install wrapper (--check, --deploy)
 ├── INSTALL.md           → hook install + game config guide
 └── scripts/             → maintainer tools
 ```

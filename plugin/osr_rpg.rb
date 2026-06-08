@@ -84,6 +84,10 @@ module AresMUSH
           return TreasureCmd
         when 'npc'
           return NpcCmd
+        when 'install'
+          return InstallCmd
+        when 'install_check'
+          return InstallCheckCmd
         when 'xp'
           return XpCmd if cmd.args.blank?
           return XpAwardCmd

@@ -1,0 +1,12 @@
+{{#if this.custom.osr_rpg_enabled}}
+  <div class="sidebar-box {{this.boxStyle}}">
+    <div class="sidebar-heading">
+      <h2>OSR RPG <i class="fa fa-dice" aria-hidden="true"></i></h2>
+    </div>
+    <p>
+      <LinkTo @route="osr-rpg-shop">Equipment Shop</LinkTo><br>
+      <LinkTo @route="osr-rpg-spells">Spell Lists</LinkTo><br>
+      <LinkTo @route="osr-rpg-equipment">Equipment List</LinkTo>
+    </p>
+  </div>
+{{/if}}

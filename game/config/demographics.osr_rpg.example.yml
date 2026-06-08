@@ -1,0 +1,31 @@
+# Merge these group names into aresmush/game/config/demographics.yml.
+# Align with website.osr_rpg.example.yml gallery settings (Kingdom / Region).
+---
+demographics:
+  groups:
+    Kingdom:
+      desc: Realm of origin or allegiance.
+      wiki: ''
+      values:
+        Aldoria: A prosperous human kingdom of farms and trade roads.
+        Mordhaven: A mist-shrouded borderland of ruins and old magic.
+        Stonehold: Dwarven holds beneath the northern mountains.
+        Sylvanmere: Elven woods and river towns of the deep forest.
+    Region:
+      desc: Where your character grew up or is known.
+      wiki: ''
+      values:
+        Borderlands: Frontier settlements and adventuring towns.
+        Heartlands: Civilized towns and temple-cities.
+        Underdark: Subterranean communities and dwarf roads.
+        Wild Coast: Pirate coves, fishing villages, and wild hills.
+    Profession:
+      desc: Trade or background before adventuring.
+      wiki: ''
+      values:
+        Adventurer: Professional delver, sword-for-hire, or treasure-seeker.
+        Craftsman: Smith, mason, scribe, or artisan.
+        Merchant: Trader, factor, or caravan guard.
+        Scholar: Sage, acolyte, or apprentice mage.
+        Soldier: Mercenary, town guard, or veteran.
+        Other: Any other background.

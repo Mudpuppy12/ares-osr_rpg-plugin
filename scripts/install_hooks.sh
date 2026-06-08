@@ -38,6 +38,19 @@ copy_with_backup() {
   echo "Installed: ${dest}"
 }
 
+PORTAL_HOOK_FILES=(
+  chargen-custom-tabs.hbs
+  chargen-custom.hbs
+  chargen-custom.js
+  profile-custom-tabs.hbs
+  profile-custom.hbs
+  live-scene-custom-play.hbs
+  live-scene-custom-play.js
+  char-card-custom-tabs.hbs
+  char-card-custom-tabs-content.hbs
+  sidebar-custom.hbs
+)
+
 echo "==> Server hooks (aresmush)"
 copy_with_backup \
   "${PLUGIN_ROOT}/game/hooks/chargen/custom_app_review.rb" \
@@ -48,11 +61,17 @@ copy_with_backup \
 copy_with_backup \
   "${PLUGIN_ROOT}/game/hooks/scenes/custom_char_card.rb" \
   "${ARESMUSH_PATH}/plugins/scenes/custom_char_card.rb"
+copy_with_backup \
+  "${PLUGIN_ROOT}/game/hooks/website/custom_web_data.rb" \
+  "${ARESMUSH_PATH}/plugins/website/custom_web_data.rb"
 
-echo "==> Web portal hooks (ares-webportal/app/components)"
-for f in "${PLUGIN_ROOT}/webportal/hooks/"*; do
-  base="$(basename "${f}")"
-  copy_with_backup "${f}" "${WEBPORTAL_PATH}/app/components/${base}"
+echo "==> Web portal hook components (fallback; plugin/install copies from webportal/components/)"
+PORTAL_SRC="${PLUGIN_ROOT}/webportal/components"
+for name in "${PORTAL_HOOK_FILES[@]}"; do
+  src="${PORTAL_SRC}/${name}"
+  if [[ -f "${src}" ]]; then
+    copy_with_backup "${src}" "${WEBPORTAL_PATH}/app/components/${name}"
+  fi
 done
 
 echo "==> Styles"
@@ -100,6 +119,16 @@ PY
   fi
 fi
 
+echo "==> Website config"
+WEBSITE_YML="${ARESMUSH_PATH}/game/config/website.yml"
+if [[ ! -f "${WEBSITE_YML}" ]]; then
+  echo "WARNING: ${WEBSITE_YML} not found — merge website.osr_rpg.example.yml manually." >&2
+else
+  ruby "${SCRIPT_DIR}/merge_website_config.rb" "${WEBSITE_YML}" "${PLUGIN_ROOT}/game/config/website.osr_rpg.example.yml"
+fi
+
 echo ""
 echo "Done. Backups (if any): ${BACKUP_DIR}"
 echo "Next: load osr_rpg (or restart game server), then rebuild portal (bin/deploy)."
+echo "Or run: osr_rpg/install_check"
+echo "Docs: https://aresmush.com/tutorials/code/custom-hooks.html"
