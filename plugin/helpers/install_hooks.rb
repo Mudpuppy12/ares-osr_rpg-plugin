@@ -72,8 +72,16 @@ module AresMUSH
         end
       end
 
+      def self.portal_app_path
+        File.join(AresMUSH.website_code_path, 'app')
+      end
+
       def self.portal_components_path
-        File.join(AresMUSH.website_code_path, 'app', 'components')
+        File.join(portal_app_path, 'components')
+      end
+
+      def self.custom_routes_path
+        File.join(portal_app_path, 'custom-routes.js')
       end
 
       def self.portal_hooks_source
@@ -121,7 +129,7 @@ module AresMUSH
       end
 
       def self.install_routes(backup_root, messages)
-        routes_file = File.join(AresMUSH.website_code_path, 'custom-routes.js')
+        routes_file = custom_routes_path
         unless File.exist?(routes_file)
           messages << t('osr_rpg.install_routes_missing', path: routes_file)
           return
@@ -235,7 +243,7 @@ module AresMUSH
           issues << t('osr_rpg.install_check_missing', path: path) unless File.exist?(path)
         end
 
-        routes_file = File.join(AresMUSH.website_code_path, 'custom-routes.js')
+        routes_file = custom_routes_path
         if !File.exist?(routes_file) || !File.read(routes_file).include?('osr-rpg-shop')
           issues << t('osr_rpg.install_check_routes')
         end
