@@ -1,11 +1,11 @@
 <li><button {{on 'click' this.showCharacterCard}} class="dropdown-item">Character Sheet</button></li>
+<li><button {{on 'click' (fn this.setShowGenericRoll true)}} class="dropdown-item">Roll Dice</button></li>
 <li><button {{on 'click' (fn this.setShowAttackRoll true)}} class="dropdown-item">Roll Attack</button></li>
 <li><button {{on 'click' (fn this.setShowSaveRoll true)}} class="dropdown-item">Roll Save</button></li>
 {{#if this.skillOptions.length}}
   <li><button {{on 'click' (fn this.setShowSkillRoll true)}} class="dropdown-item">Roll Skill</button></li>
 {{/if}}
 <li><button {{on 'click' (fn this.setShowAbilityRoll true)}} class="dropdown-item">Ability Check</button></li>
-<li><button {{on 'click' (fn this.setShowGenericRoll true)}} class="dropdown-item">Roll Dice</button></li>
 <li><button {{on 'click' this.toggleCombatTracker}} class="dropdown-item">Combat Tracker</button></li>
 
 {{#if this.showCombatTracker}}
@@ -71,6 +71,28 @@
   <p><label>Target (optional):</label> <Input @type="number" @value={{this.abilityTarget}} {{on 'input' this.abilityTargetChanged}} /></p>
 </BsModalSimple>
 
-<BsModalSimple @title="Roll Dice" @closeTitle="Cancel" @submitTitle="Roll" @open={{this.showGenericRoll}} @onSubmit={{this.rollGeneric}} @onHide={{(fn this.setShowGenericRoll false)}}>
-  <Input @type="text" @value={{this.diceString}} {{on 'input' this.diceStringChanged}} placeholder="e.g. 2d6" />
+<BsModalSimple @title="Roll Dice" @closeTitle="Cancel" @submitTitle="Roll" @open={{this.showGenericRoll}} @onSubmit={{this.rollGeneric}} @onHide={{this.hideGenericRoll}}>
+  <div class="osr-rpg-scene-dice-tray">
+    <div class="osr-rpg-scene-dice-grid">
+      {{#each this.diceTypes as |sides|}}
+        <div class="osr-rpg-scene-die-tile">
+          <div class="osr-rpg-scene-die-label">d{{sides}}</div>
+          <div class="osr-rpg-scene-die-controls">
+            <button type="button" class="btn btn-sm btn-outline-secondary osr-rpg-scene-die-btn" disabled={{eq (get this.diceCounts sides) 0}} {{on 'click' (fn this.removeDie sides)}} aria-label="Remove d{{sides}}">−</button>
+            <span class="osr-rpg-scene-die-count">{{get this.diceCounts sides}}</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary osr-rpg-scene-die-btn" disabled={{gte (get this.diceCounts sides) 10}} {{on 'click' (fn this.addDie sides)}} aria-label="Add d{{sides}}">+</button>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+
+    <div class="osr-rpg-scene-dice-pool">
+      {{#if this.hasDicePool}}
+        <span class="osr-rpg-pool-chip osr-rpg-scene-dice-pool-chip">{{this.dicePoolDisplay}}</span>
+        <button type="button" class="btn btn-link btn-sm osr-rpg-scene-dice-clear" {{on 'click' this.clearDicePoolAction}}>Clear all</button>
+      {{else}}
+        <span class="text-muted osr-rpg-scene-dice-pool-empty">Tap + to add dice to your roll.</span>
+      {{/if}}
+    </div>
+  </div>
 </BsModalSimple>

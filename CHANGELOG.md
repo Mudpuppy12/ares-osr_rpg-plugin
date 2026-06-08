@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+Documentation restructure for install clarity.
+
+- **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)** — single canonical guide for all manual core Ares edits (exact file paths, snippets, checklist, upgrade re-check)
+- **README.md** — install section split: automatic `plugin/install` steps vs manual patches (linked to CORE doc)
+- **`webportal/patches/*.md`** — thin stubs pointing to CORE_ARES_PATCHES.md sections
+- Newly documented required server hooks: `chargen/helpers.rb`, `chargen_char_request_handler.rb`, `chargen_info_request_handler.rb`, `web_data.rb`, `char-card.hbs`
+
 ## v3.4.0 — 2026-06-08
 
 Post-chargen web equipment shop with magic items.

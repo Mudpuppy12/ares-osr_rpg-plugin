@@ -135,13 +135,34 @@ module AresMUSH
         }
       end
 
-      def self.roll_generic(name, dice_str)
-        args = ArgParser.parse(/(?<num>[\d]*)[dD](?<sides>[\d]+$)/, dice_str)
-        num = (args.num || '0').to_i
-        sides = (args.sides || '0').to_i
-        message = Utils.roll_dice(name, num, sides)
-        return { error: t('dice.invalid_dice_string') } unless message
+      def self.random_die(sides)
+        rand(sides) + 1
+      end
 
+      def self.roll_dice_values(num, sides)
+        return nil if num > 10 || num <= 0 || sides <= 0 || sides > 100
+
+        num.times.map { random_die(sides) }
+      end
+
+      def self.roll_generic(name, dice_str)
+        parts = dice_str.to_s.split('+').map(&:strip).reject(&:empty?)
+        return { error: t('dice.invalid_dice_string') } if parts.empty?
+
+        all_results = []
+        messages = parts.map do |part|
+          args = ArgParser.parse(/(?<num>[\d]*)[dD](?<sides>[\d]+$)/, part)
+          num = (args.num || '0').to_i
+          sides = (args.sides || '0').to_i
+          results = roll_dice_values(num, sides)
+          return { error: t('dice.invalid_dice_string') } unless results
+
+          all_results.concat(results)
+          t('dice.rolls_dice', name: name, dice: "#{num}d#{sides}", results: results.join(', '))
+        end
+
+        total = all_results.sum
+        message = "#{messages.join(' ')} #{t('osr_rpg.dice_roll_total', total: total)}"
         { message: message }
       end
 

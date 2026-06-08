@@ -60,6 +60,7 @@ en:
     scene_roll_attack_vs: "OSR Roll - %{name} attacks: d20 = %{roll} vs AC %{ac} (need %{needed}+) — %{result}"
     roll_hit: "HIT"
     roll_miss: "MISS"
+    dice_roll_total: "Total: %{total}."
     scene_roll_save: "OSR Roll - %{name} %{category} save: d20 = %{roll} vs %{target} — %{result}"
     scene_roll_skill: "OSR Roll - %{name} %{skill}: d6 = %{roll} vs %{chance}-in-6 — %{result}"
     scene_roll_ability: "OSR Roll - %{name} %{ability} check: d20(%{roll})%{mod} = %{total}"

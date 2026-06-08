@@ -310,6 +310,99 @@
 
 /* ---- OSR live scene ---- */
 
+.osr-rpg-scene-dice-tray {
+  background: linear-gradient(180deg, rgba(42, 35, 24, 0.55) 0%, rgba(26, 22, 16, 0.85) 100%);
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  padding: 14px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.osr-rpg-scene-dice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+
+  @media (max-width: 400px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.osr-rpg-scene-die-tile {
+  background: rgba(18, 14, 10, 0.65);
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  padding: 10px 8px;
+  text-align: center;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    border-color: rgba($primary-outline-color, 0.45);
+  }
+}
+
+.osr-rpg-scene-die-label {
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: $primary-outline-color;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.osr-rpg-scene-die-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.osr-rpg-scene-die-btn {
+  min-width: 2rem;
+  padding: 2px 8px;
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+.osr-rpg-scene-die-count {
+  min-width: 1.75rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: $text-color;
+  text-align: center;
+}
+
+.osr-rpg-scene-dice-pool {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  min-height: 2rem;
+}
+
+.osr-rpg-scene-dice-pool-chip {
+  font-size: 0.95rem;
+}
+
+.osr-rpg-scene-dice-pool-empty {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.osr-rpg-scene-dice-clear {
+  padding: 0;
+  font-size: 0.85rem;
+  color: $faded-text-color;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: $primary-outline-color;
+    text-decoration: underline;
+  }
+}
+
 .osr-rpg-combat-tracker {
   padding: 8px 12px;
   margin: 6px 0;

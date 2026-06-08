@@ -11,6 +11,8 @@ const SAVE_CATEGORIES = [
   { key: 'spells', label: 'Spells', abbr: 'S' }
 ];
 
+const DICE_TYPES = [4, 6, 8, 10, 12, 20];
+
 export default Component.extend({
   tagName: '',
   gameApi: service(),
@@ -30,10 +32,19 @@ export default Component.extend({
   abilityKey: 'str',
   abilityTarget: '',
   attackTargetAc: '',
-  diceString: '1d20',
   isRolling: false,
   isCombatLoading: false,
   _lastPoseCharId: null,
+
+  diceTypes: DICE_TYPES,
+  diceCounts: {
+    4: 0,
+    6: 0,
+    8: 0,
+    10: 0,
+    12: 0,
+    20: 0
+  },
 
   didInsertElement() {
     this._super(...arguments);
@@ -62,6 +73,41 @@ export default Component.extend({
   sortedCombatants: computed('combat.combatants.@each.initiative', function() {
     return (this.combat && this.combat.combatants) || [];
   }),
+
+  dicePoolSummary: computed(
+    'diceCounts.4',
+    'diceCounts.6',
+    'diceCounts.8',
+    'diceCounts.10',
+    'diceCounts.12',
+    'diceCounts.20',
+    function() {
+      let parts = [];
+      DICE_TYPES.forEach((sides) => {
+        let count = this.get(`diceCounts.${sides}`) || 0;
+        if (count > 0) {
+          parts.push(`${count}d${sides}`);
+        }
+      });
+      return parts.join('+');
+    }
+  ),
+
+  dicePoolDisplay: computed('dicePoolSummary', function() {
+    let summary = this.dicePoolSummary;
+    if (!summary) { return ''; }
+    return summary.replace(/\+/g, ' + ');
+  }),
+
+  hasDicePool: computed('dicePoolSummary', function() {
+    return !!this.dicePoolSummary;
+  }),
+
+  clearDicePool() {
+    DICE_TYPES.forEach((sides) => {
+      this.set(`diceCounts.${sides}`, 0);
+    });
+  },
 
   playDiceSound() {
     if (!this._diceAudio) {
@@ -173,7 +219,37 @@ export default Component.extend({
 
   @action
   setShowGenericRoll(value) {
+    if (value) {
+      this.clearDicePool();
+    }
     this.set('showGenericRoll', value);
+  },
+
+  @action
+  hideGenericRoll() {
+    this.clearDicePool();
+    this.set('showGenericRoll', false);
+  },
+
+  @action
+  addDie(sides) {
+    let count = this.get(`diceCounts.${sides}`) || 0;
+    if (count < 10) {
+      this.set(`diceCounts.${sides}`, count + 1);
+    }
+  },
+
+  @action
+  removeDie(sides) {
+    let count = this.get(`diceCounts.${sides}`) || 0;
+    if (count > 0) {
+      this.set(`diceCounts.${sides}`, count - 1);
+    }
+  },
+
+  @action
+  clearDicePoolAction() {
+    this.clearDicePool();
   },
 
   @action
@@ -219,8 +295,14 @@ export default Component.extend({
 
   @action
   rollGeneric() {
+    if (!this.hasDicePool) {
+      this.flashMessages.danger('Select at least one die to roll.');
+      return;
+    }
+    let diceString = this.dicePoolSummary;
     this.set('showGenericRoll', false);
-    this.sceneRoll('generic', { dice_string: this.diceString });
+    this.clearDicePool();
+    this.sceneRoll('generic', { dice_string: diceString });
   },
 
   @action
@@ -246,11 +328,6 @@ export default Component.extend({
   @action
   attackTargetAcChanged(event) {
     this.set('attackTargetAc', event.target.value);
-  },
-
-  @action
-  diceStringChanged(event) {
-    this.set('diceString', event.target.value);
   },
 
   @action

@@ -99,6 +99,29 @@ module AresMUSH
           expect(result[:total]).to eq result[:roll] + 1
         end
       end
+
+      describe 'roll_generic' do
+        it 'rolls a single dice expression with total' do
+          allow(Rolls).to receive(:random_die).with(6).and_return(3, 5)
+          result = Rolls.roll_generic('Tester', '2d6')
+          expect(result[:message]).to include('Tester rolls 2d6: 3, 5.')
+          expect(result[:message]).to include('Total: 8.')
+        end
+
+        it 'rolls compound dice expressions with combined total' do
+          allow(Rolls).to receive(:random_die).with(6).and_return(3, 5)
+          allow(Rolls).to receive(:random_die).with(20).and_return(14)
+          result = Rolls.roll_generic('Tester', '2d6+1d20')
+          expect(result[:message]).to include('Tester rolls 2d6: 3, 5.')
+          expect(result[:message]).to include('Tester rolls 1d20: 14.')
+          expect(result[:message]).to include('Total: 22.')
+        end
+
+        it 'rejects invalid dice strings' do
+          expect(Rolls.roll_generic('Tester', '')).to have_key(:error)
+          expect(Rolls.roll_generic('Tester', 'bad')).to have_key(:error)
+        end
+      end
     end
   end
 end
