@@ -2,13 +2,14 @@
 
 ## Unreleased
 
-Hook-based install — fewer core file edits.
+Hook-first install documentation — no core Ares edits required.
 
-- **`scripts/install_hooks.sh`** — installs Ares custom hook files (server + portal), styles, and `custom-routes.js` entries
-- **`webportal/hooks/`** and **`game/hooks/`** — live scene Play menu, chargen/profile/char-card tabs, `custom_char_fields`, `custom_char_card`, `custom_app_review`
-- Components accept sheet data via `char.osr_rpg` or `char.custom.osr_rpg`; live scene Character Sheet opens via `sceneCard` when not wired to parent
-- **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)** — hook install guide; manual core patches kept as reference appendix
-- Example [`game/config/website.osr_rpg.example.yml`](game/config/website.osr_rpg.example.yml)
+- **[INSTALL.md](INSTALL.md)** — slim hook install + game config guide (replaces manual core patch appendix)
+- **[CORE_ARES_PATCHES.md](CORE_ARES_PATCHES.md)** — redirect stub to INSTALL.md
+- **README.md** — single hook-first install flow (`plugin/install` → `install_all.sh` → `website.yml` → `load osr_rpg`); manual install section removed
+- **`scripts/install_all.sh`** — post-`plugin/install` wrapper (runs `install_hooks.sh`, prints next steps)
+- Removed **`webportal/patches/*.md`** stubs that pointed at manual core edits
+- Components read sheet data via `char.custom.osr_rpg` only (server hooks: `custom_char_fields`, `custom_char_card`, `custom_app_review`)
 
 ## v3.5.0 — 2026-06-08
 
