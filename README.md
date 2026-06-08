@@ -26,33 +26,20 @@ Full details: **[INSTALL.md](INSTALL.md)**.
 
 ### Step 1 — Plugin installer
 
-From in-game (admin):
+In-game (admin):
 
 ```
 plugin/install https://github.com/Mudpuppy12/ares-osr_rpg-plugin
 ```
 
-Or from the shell:
-
-```bash
-cd aresmush
-bundle exec rake add_plugin[https://github.com/Mudpuppy12/ares-osr_rpg-plugin]
-```
-
-This copies server code, portal hook components (`chargen-custom*`, `profile-custom*`, etc.), routes/templates, sounds, and game config (first install only), registers the plugin, and rebuilds the portal.
+This copies server code, portal hook components (`chargen-custom*`, `profile-custom*`, etc.), routes/templates, sounds, and game config (first install only), registers the plugin, and restarts the web portal.
 
 ### Step 2 — Server hooks, routes, and config
 
-After `plugin/install`, in-game:
+After `plugin/install`:
 
 ```
 osr_rpg/install
-```
-
-Or from shell:
-
-```bash
-ARESMUSH_PATH=/path/to/aresmush WEBPORTAL_PATH=/path/to/ares-webportal ./scripts/install_all.sh
 ```
 
 This installs server hooks, merges `custom-routes.js` and `website.yml` nav entries, and installs styles. Portal hook components were already copied in Step 1.
@@ -68,7 +55,7 @@ load osr_rpg
 osr_rpg/install_check
 ```
 
-Rebuild the portal if routes or styles changed (`cd ares-webportal && bin/deploy`, or `install_all.sh --deploy`).
+If routes or styles changed, restart the web portal.
 
 ---
 
@@ -254,9 +241,9 @@ Re-run the same install command:
 plugin/install https://github.com/Mudpuppy12/ares-osr_rpg-plugin
 ```
 
-That updates plugin server code and copied portal files (components, routes, templates) and rebuilds the portal. It **does not overwrite** `game/config/` on re-install, to preserve local edits.
+That updates plugin server code and copied portal files (components, routes, templates) and restarts the web portal. It **does not overwrite** `game/config/` on re-install, to preserve local edits.
 
-Re-run `osr_rpg/install` (or `install_all.sh`) after `plugin/install` on upgrade. Review [`CHANGELOG.md`](CHANGELOG.md) and [INSTALL.md](INSTALL.md) for hook or config changes.
+Re-run `osr_rpg/install` after `plugin/install` on upgrade. Review [`CHANGELOG.md`](CHANGELOG.md) and [INSTALL.md](INSTALL.md) for hook or config changes.
 
 Merge any new YAML from this repo's `game/config/` into your game on upgrade (installer skips `game/config/` on re-install) — common files: `osr_spell_details.yml`, `osr_equipment.yml`, `osr_shop.yml`, `osr_rpg.yml`, `osr_spells.yml`.
 
@@ -274,10 +261,8 @@ ares-osr_rpg-plugin/
 ├── plugin/install/      → bundled hook assets for osr_rpg/install
 ├── public/sounds/       → ares-webportal/public/sounds/      (auto)
 ├── styles/              → game/styles/ via osr_rpg/install
-├── scripts/install_hooks.sh → shell hook installer
-├── scripts/install_all.sh   → post-install wrapper (--check, --deploy)
-├── INSTALL.md           → hook install + game config guide
-└── scripts/             → maintainer tools
+├── INSTALL.md           → in-game install guide
+└── scripts/             → maintainer tools (not required for install)
 ```
 
 Install details: **[INSTALL.md](INSTALL.md)**.

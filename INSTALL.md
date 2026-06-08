@@ -28,21 +28,13 @@ Plugin components (`OsrRpgChargen`, `OsrRpgProfile`, `LiveSceneOsrRpg`, etc.) an
 
 ## Step 2 — Install server hooks, routes, and config
 
-**In-game (recommended):**
+In-game (admin):
 
 ```
 osr_rpg/install
 ```
 
-**From shell** (plugin repo or clone):
-
-```bash
-ARESMUSH_PATH=/path/to/aresmush WEBPORTAL_PATH=/path/to/ares-webportal ./scripts/install_all.sh
-```
-
-Add `--deploy` to rebuild the portal, or `--check` to verify without installing.
-
-`install_all.sh` / `osr_rpg/install` will:
+`osr_rpg/install` will:
 
 - Copy 4 server hook Ruby files (chargen, profile, scenes, website sidebar)
 - Merge OSR routes into `custom-routes.js` (idempotent)
@@ -55,7 +47,7 @@ Re-run after plugin upgrades. Existing hook files over 200 bytes are backed up b
 
 ## Step 3 — Demographics (one-time)
 
-`install_hooks` auto-merges `website.yml` nav entries. Verify gallery group names match your game:
+`osr_rpg/install` auto-merges `website.yml` nav entries. Verify gallery group names match your game:
 
 | File | Action |
 |------|--------|
@@ -65,12 +57,12 @@ On first install, `plugin/install` copies `game/config/*.yml` into your game. On
 
 ---
 
-## Step 4 — Load, rebuild, and verify
+## Step 4 — Load, restart, and verify
 
 | Change type | Command |
 |-------------|---------|
 | Server hooks / plugin code | `load osr_rpg` or restart game server |
-| Portal routes / styles | `cd ares-webportal && bin/deploy` |
+| Portal routes / styles | Restart the web portal |
 
 Verify:
 
@@ -78,17 +70,15 @@ Verify:
 osr_rpg/install_check
 ```
 
-Or: `./scripts/install_all.sh --check`
-
 ---
 
 ## Install checklist
 
 - [ ] `plugin/install` completed (portal hook components copied automatically)
-- [ ] `osr_rpg/install` or `install_all.sh` completed without errors
+- [ ] `osr_rpg/install` completed without errors
 - [ ] `demographics.yml` groups match `website.yml` gallery settings
 - [ ] `load osr_rpg` on game server
-- [ ] Portal rebuilt
+- [ ] Web portal restarted
 - [ ] `osr_rpg/install_check` passes
 - [ ] Web chargen **Sheet** tab; profile **Sheet** tab; live scene Play menu; Character Card sheet tab
 - [ ] Sidebar **OSR RPG** box; System → Spell Lists, Equipment List; Play → Equipment Shop
@@ -97,15 +87,15 @@ Or: `./scripts/install_all.sh --check`
 
 ## Multi-plugin games
 
-`custom_char_fields.rb`, `custom_char_card.rb`, and `custom_web_data.rb` are single files per game. If you already use them for another system, merge OSR logic from `game/hooks/` into your existing hooks instead of overwriting blindly (the install script backs up files over 200 bytes).
+`custom_char_fields.rb`, `custom_char_card.rb`, and `custom_web_data.rb` are single files per game. If you already use them for another system, merge OSR logic from `game/hooks/` into your existing hooks instead of overwriting blindly (`osr_rpg/install` backs up files over 200 bytes).
 
 ---
 
 ## Upgrading
 
 1. `plugin/install https://github.com/Mudpuppy12/ares-osr_rpg-plugin`
-2. `osr_rpg/install` or re-run `install_all.sh`
+2. `osr_rpg/install`
 3. Review [CHANGELOG.md](CHANGELOG.md) for hook or config changes
 4. Merge any new YAML from `game/config/` into your game
-5. `load osr_rpg` and rebuild portal if routes or styles changed
+5. `load osr_rpg` and restart the web portal if routes or styles changed
 6. `osr_rpg/install_check`

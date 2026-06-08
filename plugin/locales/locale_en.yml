@@ -146,7 +146,7 @@ en:
     install_website_gallery_subgroup_set: "Set character_gallery_subgroup to Region (was blank)."
     install_website_merged: "Merged OSR nav entries into website.yml"
     install_done: "Install complete. Backups (if any): %{backup}"
-    install_next_steps: "Next: load osr_rpg, then rebuild portal (bin/deploy)."
+    install_next_steps: "Next: load osr_rpg, then restart the web portal."
     install_check_ok: "OSR RPG install check passed."
     install_check_warning: "Warning"
     install_check_missing: "Missing: %{path}"
